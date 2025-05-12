@@ -2,17 +2,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fantasy Calculator</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fantasy Calculator</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Fantasy Calculator</h1>
-  <label for="league-select">Select League:</label>
-  <select id="league-select"></select>
-  <div id="stat-inputs"></div>
-  <button id="calculate-btn">Calculate Fantasy Score</button>
-  <p><strong>Total Score:</strong> <span id="total-score">0.00</span></p>
-  <script src="script.js"></script>
+    <div class="container">
+        <h1>Fantasy Calculator</h1>
+        <div class="stat-row">
+            <label>Points <span>1 pt</span></label>
+            <input type="number" id="points" />
+        </div>
+        <div class="stat-row">
+            <label>Rebound <span>1.2 pts</span></label>
+            <input type="number" id="rebound" />
+        </div>
+        <div class="stat-row">
+            <label>Assist <span>1.5 pts</span></label>
+            <input type="number" id="assist" />
+        </div>
+        <div class="stat-row">
+            <label>Block <span>3 pts</span></label>
+            <input type="number" id="block" />
+        </div>
+        <div class="stat-row">
+            <label>Steal <span>3 pts</span></label>
+            <input type="number" id="steal" />
+        </div>
+        <div class="stat-row">
+            <label>Turnover <span>-1 pt</span></label>
+            <input type="number" id="turnover" />
+        </div>
+        <div class="buttons">
+            <button onclick="calculateScore()">Go</button>
+            <button onclick="clearInputs()" class="clear">Clear</button>
+            <button onclick="alert('Enter stats, press Go.')">Help</button>
+        </div>
+        <h2>TOTAL: Fantasy Score</h2>
+        <textarea id="result" readonly rows="6"></textarea>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

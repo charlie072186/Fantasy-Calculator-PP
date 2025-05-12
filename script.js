@@ -1,45 +1,30 @@
 
-let leaguesData = {};
-const leagueSelect = document.getElementById("league-select");
-const inputArea = document.getElementById("stat-inputs");
+function calculateScore() {
+    const weights = {
+        points: 1,
+        rebound: 1.2,
+        assist: 1.5,
+        block: 3,
+        steal: 3,
+        turnover: -1
+    };
 
-fetch('leagues.json')
-  .then(res => res.json())
-  .then(data => {
-    leaguesData = data;
-    populateLeagues();
-  });
+    let total = 0;
+    let breakdown = [];
 
-function populateLeagues() {
-  for (let league in leaguesData) {
-    const option = document.createElement("option");
-    option.value = league;
-    option.textContent = league;
-    leagueSelect.appendChild(option);
-  }
-  renderInputs(leagueSelect.value);
+    for (let stat in weights) {
+        let value = parseFloat(document.getElementById(stat).value) || 0;
+        let score = value * weights[stat];
+        total += score;
+        breakdown.push(`${stat}: ${value} × ${weights[stat]} = ${score.toFixed(2)}`);
+    }
+
+    document.getElementById("result").value = breakdown.join("\n") + `\n\nTotal Score: ${total.toFixed(2)}`;
 }
 
-leagueSelect.addEventListener("change", () => {
-  renderInputs(leagueSelect.value);
-});
-
-function renderInputs(league) {
-  inputArea.innerHTML = "";
-  const stats = leaguesData[league];
-  for (let stat in stats) {
-    const div = document.createElement("div");
-    div.innerHTML = `<label>${stat}: <input type="number" id="${stat}" value="0"></label>`;
-    inputArea.appendChild(div);
-  }
+function clearInputs() {
+    ['points','rebound','assist','block','steal','turnover'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById("result").value = '';
 }
-
-document.getElementById("calculate-btn").addEventListener("click", () => {
-  const stats = leaguesData[leagueSelect.value];
-  let score = 0;
-  for (let stat in stats) {
-    const val = parseFloat(document.getElementById(stat).value) || 0;
-    score += val * stats[stat];
-  }
-  document.getElementById("total-score").textContent = score.toFixed(2);
-});
