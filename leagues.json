@@ -33,5 +33,41 @@
     "Set Loss": -3,
     "Ace": 0.5,
     "Double Fault": -0.5
+  },
+  "mma": {
+    "Significant Strikes": 0.5,
+    "Submission Attempt": 4,
+    "Takedown": 5,
+    "Knockdown": 10,
+    "1st Round Win": 50,
+    "2nd Round Win": 40,
+    "3rd Round Win": 30,
+    "4th/5th Round Win": 20,
+    "Decision Win": 10,
+    "Draw": 0
+  },
+  "boxing": {
+    "Punch Landed": 0.5,
+    "Knockdown on Opponent": 12,
+    "Being Knocked by Opponent": -12,
+    "Win Rounds 1-2": 100,
+    "Win Rounds 3-6": 75,
+    "Win Rounds 7-10": 50,
+    "Win Rounds 11-12": 25,
+    "Decision Win": 20
+  },
+  "nfl_cfb": {
+    "Passing Yards": 0.04,
+    "Passing TDs": 4,
+    "Interceptions": -1,
+    "Rushing Yards": 0.1,
+    "Rushing TDs": 6,
+    "Receiving Yards": 0.1,
+    "Receiving TDs": 6,
+    "Receptions": 1,
+    "Fumbles Lost": -1,
+    "2 Point Conversion": 2,
+    "Offensive Fumble Recovery TD": 6,
+    "Kick/Punt/Field Goal Return TD": 6
   }
 }
