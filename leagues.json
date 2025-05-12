@@ -46,5 +46,22 @@
       "Ace": 0.5,
       "Double Fault": -0.5
     }
-  }
+  },
+  "MMA": {
+    "name": "MMA FS",
+    "stats": {
+        "Significant Strikes":	0.5,
+        "Submission Attempt":	4,	
+        "Takedown":	5,
+        "Knockdown":	10,	
+        
+        "Fight Conclusion Bonuses",
+        "1st Round Win":	50,	
+        "2nd Round Win":	40,	
+        "3rd Round Win":	30,	
+        "4th/5th Round Win":	20,	
+        "Decision Win":	10,	
+        "Draw"	0
+    }
+  },
 }
