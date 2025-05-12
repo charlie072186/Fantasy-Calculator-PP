@@ -1,73 +1,50 @@
+
 {
   "basketball": {
-    "Points": 1,
-    "Rebound": 1.2,
-    "Assist": 1.5,
-    "Block": 3,
-    "Steal": 3,
-    "Turnover": -1
+    "name": "Basketball FS",
+    "stats": {
+      "Points": 1,
+      "Rebound": 1.2,
+      "Assist": 1.5,
+      "Block": 3,
+      "Steal": 3,
+      "Turnover": -1
+    }
   },
   "mlb_pitcher": {
-    "Win": 6,
-    "Quality Start": 4,
-    "Earned Run": -3,
-    "Strikeout": 3,
-    "Innings Pitched": 3
+    "name": "MLB Pitcher FS",
+    "stats": {
+      "Win": 6,
+      "Quality Start": 4,
+      "Earned Run": -3,
+      "Strikeout": 3,
+      "Innings Pitched": 3
+    }
   },
   "mlb_hitter": {
-    "Single": 3,
-    "Double": 5,
-    "Triple": 8,
-    "Home Run": 10,
-    "Run": 2,
-    "RBI": 2,
-    "BB": 2,
-    "HBP": 2,
-    "SB": 5
+    "name": "MLB Hitter FS",
+    "stats": {
+      "Single": 3,
+      "Double": 5,
+      "Triple": 8,
+      "Home Run": 10,
+      "Run": 2,
+      "RBI": 2,
+      "BB": 2,
+      "HBP": 2,
+      "SB": 5
+    }
   },
   "tennis": {
-    "Match Played": 10,
-    "Game Won": 1,
-    "Game Loss": -1,
-    "Set Won": 3,
-    "Set Loss": -3,
-    "Ace": 0.5,
-    "Double Fault": -0.5
-  },
-  "mma": {
-    "Significant Strikes": 0.5,
-    "Submission Attempt": 4,
-    "Takedown": 5,
-    "Knockdown": 10,
-    "1st Round Win": 50,
-    "2nd Round Win": 40,
-    "3rd Round Win": 30,
-    "4th/5th Round Win": 20,
-    "Decision Win": 10,
-    "Draw": 0
-  },
-  "boxing": {
-    "Punch Landed": 0.5,
-    "Knockdown on Opponent": 12,
-    "Being Knocked by Opponent": -12,
-    "Win Rounds 1-2": 100,
-    "Win Rounds 3-6": 75,
-    "Win Rounds 7-10": 50,
-    "Win Rounds 11-12": 25,
-    "Decision Win": 20
-  },
-  "nfl_cfb": {
-    "Passing Yards": 0.04,
-    "Passing TDs": 4,
-    "Interceptions": -1,
-    "Rushing Yards": 0.1,
-    "Rushing TDs": 6,
-    "Receiving Yards": 0.1,
-    "Receiving TDs": 6,
-    "Receptions": 1,
-    "Fumbles Lost": -1,
-    "2 Point Conversion": 2,
-    "Offensive Fumble Recovery TD": 6,
-    "Kick/Punt/Field Goal Return TD": 6
+    "name": "Tennis FS",
+    "stats": {
+      "Match Played": 10,
+      "Game Won": 1,
+      "Game Loss": -1,
+      "Set Won": 3,
+      "Set Loss": -3,
+      "Ace": 0.5,
+      "Double Fault": -0.5
+    }
   }
 }

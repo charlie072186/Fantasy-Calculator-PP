@@ -1,31 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fantasy Score Calculator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Fantasy Score Calculator</h1>
   <div class="card">
     <label for="league">Select League:</label>
-    <select id="league">
-      <option value="basketball">Basketball FS</option>
-      <option value="mlb_pitcher">MLB Pitcher FS</option>
-      <option value="mlb_hitter">MLB Hitter FS</option>
-      <option value="tennis">Tennis FS</option>
-    </select>
+    <select id="league"></select>
   </div>
+
   <div class="card" id="statInputs"></div>
+
   <div class="card">
     <button id="calculateBtn">Go</button>
     <button id="clearBtn">Clear</button>
   </div>
+
   <div class="card">
     <h3>Total Fantasy Score: <span id="totalScore">0</span></h3>
     <textarea id="breakdown" rows="8" readonly></textarea>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
