@@ -2,36 +2,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Hockey Calculator</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Fantasy Hockey Calculator</h1>
-
-    <label for="leagueSelect">Select League:</label>
-    <select id="leagueSelect"></select>
-
-    <div id="statsContainer"></div>
-
-    <div class="result-section">
-      <button onclick="calculateScore()">Calculate Fantasy Score</button>
-      <p><strong>Total Score:</strong> <span id="totalScore">-</span></p>
-    </div>
-
-    <hr>
-
-    <h2>Time On Ice Calculator</h2>
-    <label for="toiMinutes">Minutes:</label>
-    <input type="number" id="toiMinutes" min="0">
-    <label for="toiSeconds">Seconds:</label>
-    <input type="number" id="toiSeconds" min="0" max="59">
-    <button onclick="calculateTOI()">Convert</button>
-    <p><strong>TOI in Decimal:</strong> <span id="toiResult">-</span></p>
-  </div>
-
+  <h1>Fantasy Hockey Calculator</h1>
+  <label for="league-select">Select League:</label>
+  <select id="league-select"></select>
+  <div id="stat-inputs"></div>
+  <button id="calculate-btn">Calculate Fantasy Score</button>
+  <p><strong>Total Score:</strong> <span id="total-score">0.00</span></p>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,16 @@
+
+{
+  "League4": {
+    "goals": 3,
+    "assists": 2,
+    "shots": 0.5,
+    "blocks": 0.5,
+    "hits": 0.5
+  },
+  "LeagueX": {
+    "goals": 5,
+    "assists": 3,
+    "plusMinus": 1,
+    "pim": 0.25
+  }
+}
