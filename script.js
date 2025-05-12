@@ -1,30 +1,54 @@
+const statInputs = document.getElementById("statInputs");
+const breakdown = document.getElementById("breakdown");
+const totalScore = document.getElementById("totalScore");
+const leagueSelect = document.getElementById("league");
 
-function calculateScore() {
-    const weights = {
-        points: 1,
-        rebound: 1.2,
-        assist: 1.5,
-        block: 3,
-        steal: 3,
-        turnover: -1
-    };
+let leagueStats = {};
 
-    let total = 0;
-    let breakdown = [];
+fetch('leagues.json')
+  .then(res => res.json())
+  .then(data => {
+    leagueStats = data;
+    renderInputs(leagueSelect.value);
+  });
 
-    for (let stat in weights) {
-        let value = parseFloat(document.getElementById(stat).value) || 0;
-        let score = value * weights[stat];
-        total += score;
-        breakdown.push(`${stat}: ${value} × ${weights[stat]} = ${score.toFixed(2)}`);
-    }
+leagueSelect.addEventListener("change", () => {
+  renderInputs(leagueSelect.value);
+});
 
-    document.getElementById("result").value = breakdown.join("\n") + `\n\nTotal Score: ${total.toFixed(2)}`;
+function renderInputs(league) {
+  statInputs.innerHTML = "";
+  const stats = leagueStats[league];
+  for (let stat in stats) {
+    const inputId = stat.replace(/\s/g, "_");
+    statInputs.innerHTML += \`
+      <label>\${stat} (\${stats[stat]} pts)</label>
+      <input type="number" id="\${inputId}" placeholder="0">
+    \`;
+  }
 }
 
-function clearInputs() {
-    ['points','rebound','assist','block','steal','turnover'].forEach(id => {
-        document.getElementById(id).value = '';
-    });
-    document.getElementById("result").value = '';
-}
+document.getElementById("calculateBtn").addEventListener("click", () => {
+  const stats = leagueStats[leagueSelect.value];
+  let total = 0;
+  let details = "";
+  for (let stat in stats) {
+    const inputId = stat.replace(/\s/g, "_");
+    const val = parseFloat(document.getElementById(inputId).value) || 0;
+    const score = val * stats[stat];
+    total += score;
+    details += \`\${stat}: \${stats[stat]} pts x \${val} = \${score.toFixed(2)}\n\`;
+  }
+  totalScore.innerText = total.toFixed(2);
+  breakdown.value = details;
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  const stats = leagueStats[leagueSelect.value];
+  for (let stat in stats) {
+    const inputId = stat.replace(/\s/g, "_");
+    document.getElementById(inputId).value = "";
+  }
+  totalScore.innerText = "0";
+  breakdown.value = "";
+});

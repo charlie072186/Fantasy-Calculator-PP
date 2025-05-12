@@ -1,16 +1,37 @@
-
 {
-  "Hockey Fantasy Score": {
-    "Goals": 8,
-    "Assists": 5,
-    "Shots on goal": 1.5,
-    "Blocks shots": 1.5,
-
+  "basketball": {
+    "Points": 1,
+    "Rebound": 1.2,
+    "Assist": 1.5,
+    "Block": 3,
+    "Steal": 3,
+    "Turnover": -1
   },
-  "Basketball Fantasy Score": {
-    "Points": 5,
-    "assists": 3,
-    "plusMinus": 1,
-    "pim": 0.25
+  "mlb_pitcher": {
+    "Win": 6,
+    "Quality Start": 4,
+    "Earned Run": -3,
+    "Strikeout": 3,
+    "Innings Pitched": 3
+  },
+  "mlb_hitter": {
+    "Single": 3,
+    "Double": 5,
+    "Triple": 8,
+    "Home Run": 10,
+    "Run": 2,
+    "RBI": 2,
+    "BB": 2,
+    "HBP": 2,
+    "SB": 5
+  },
+  "tennis": {
+    "Match Played": 10,
+    "Game Won": 1,
+    "Game Loss": -1,
+    "Set Won": 3,
+    "Set Loss": -3,
+    "Ace": 0.5,
+    "Double Fault": -0.5
   }
 }

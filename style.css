@@ -1,80 +1,39 @@
-
 body {
-    background-color: #0f111a;
-    font-family: 'Arial', sans-serif;
-    color: white;
-    padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #0c0e1c;
+  color: white;
+  padding: 20px;
 }
-
-.container {
-    max-width: 400px;
-    margin: auto;
-    background-color: #12141f;
-    padding: 20px;
-    border-radius: 12px;
+.card {
+  background-color: #1b1e33;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  max-width: 500px;
 }
-
-h1, h2 {
-    text-align: center;
+select, input[type="number"], textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1em;
 }
-
-.stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.stat-row label {
-    width: 70%;
-    font-weight: bold;
-}
-
-.stat-row span {
-    font-weight: normal;
-    margin-left: 8px;
-}
-
-input[type="number"] {
-    width: 25%;
-    padding: 5px;
-    background-color: #1c1e2a;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 4px;
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
 button {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 10px;
 }
-
-button:nth-child(1) {
-    background-color: #7928ca;
-    color: white;
+#calculateBtn {
+  background-color: #7928ca;
+  color: white;
 }
-
-button.clear {
-    background-color: yellow;
-    color: black;
-}
-
-textarea {
-    width: 100%;
-    background-color: #1c1e2a;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 6px;
-    padding: 10px;
-    resize: none;
-    margin-top: 10px;
+#clearBtn {
+  background-color: #ffd500;
+  color: black;
+  margin-left: 10px;
 }
