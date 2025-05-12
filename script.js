@@ -39,7 +39,7 @@ function renderInputs(selectedLeague) {
     const input = document.createElement("input");
     input.type = "number";
     input.id = stat;
-    input.placeholder = "0";
+    input.placeholder = " ";
     statInputs.appendChild(label);
     statInputs.appendChild(input);
   }
