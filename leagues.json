@@ -1,14 +1,14 @@
 
 {
-  "League4": {
-    "goals": 3,
-    "assists": 2,
-    "shots": 0.5,
-    "blocks": 0.5,
-    "hits": 0.5
+  "Hockey Fantasy Score": {
+    "Goals": 8,
+    "Assists": 5,
+    "Shots on goal": 1.5,
+    "Blocks shots": 1.5,
+
   },
-  "LeagueX": {
-    "goals": 5,
+  "Basketball Fantasy Score": {
+    "Points": 5,
     "assists": 3,
     "plusMinus": 1,
     "pim": 0.25
