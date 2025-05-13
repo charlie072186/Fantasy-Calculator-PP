@@ -47,7 +47,7 @@
     }
   },
   "mma": {
-    "name": "MMA FS",
+    "name": "MMA",
     "stats": {
       "significantStrikes": 0.5,
       "submissionAttempt": 4,
@@ -77,7 +77,7 @@
     ]
   },
   "nfl_cfb": {
-    "name": "Football Offensive FS",
+    "name": "NFL/CFB Offensive FS",
     "stats": [
       { "label": "Passing Yards", "points": 0.04 },
       { "label": "Passing TDs", "points": 4 },
