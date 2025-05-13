@@ -41,15 +41,22 @@ function renderInputs(selectedLeague) {
   const bonuses = leagues[selectedLeague].bonuses;
 
   for (let stat in stats) {
-    const label = document.createElement("label");
-    label.innerText = `${stat} (${stats[stat]} pts)`;
-    const input = document.createElement("input");
-    input.type = "number";
-    input.id = stat;
-    input.placeholder = " ";
-    statInputs.appendChild(label);
-    statInputs.appendChild(input);
-  }
+  const row = document.createElement("div");
+  row.className = "stat-row";
+
+  const label = document.createElement("label");
+  label.setAttribute("for", stat);
+  label.innerText = `${stat} (${stats[stat]} pts)`;
+
+  const input = document.createElement("input");
+  input.type = "number";
+  input.id = stat;
+  input.placeholder = " ";
+
+  row.appendChild(label);
+  row.appendChild(input);
+  statInputs.appendChild(row);
+}
 
   if (bonuses && Array.isArray(bonuses)) {
     bonusSection.style.display = "block";
