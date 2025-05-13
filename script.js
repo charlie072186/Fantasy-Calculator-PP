@@ -1,121 +1,94 @@
-const leagueSelect = document.getElementById('league');
-const statInputsDiv = document.getElementById('statInputs');
-const bonusSection = document.getElementById('bonusSection');
-const bonusOptionsDiv = document.getElementById('bonusOptions');
-const hideZeros = document.getElementById('hideZeros');
-const totalScoreSpan = document.getElementById('totalScore');
-const breakdownTextarea = document.getElementById('breakdown');
-
-let leagueData = {}; // stores the fetched JSON data
-
-fetch('leagues.json')
-  .then(res => res.json())
-  .then(data => {
-    leagueData = data;
-    Object.entries(data).forEach(([key, val]) => {
-      const option = document.createElement('option');
-      option.value = key;
-      option.textContent = val.name;
-      leagueSelect.appendChild(option);
-    });
-    renderInputs(); // render first league by default
-  })
-  .catch(() => {
-    leagueSelect.innerHTML = '<option disabled>Error loading data</option>';
-  });
-
-leagueSelect.addEventListener('change', renderInputs);
-hideZeros.addEventListener('change', renderInputs);
-
-function renderInputs() {
-  const selectedLeague = leagueData[leagueSelect.value];
-  if (!selectedLeague) return;
-
-  statInputsDiv.innerHTML = '';
-  bonusOptionsDiv.innerHTML = '';
-  bonusSection.style.display = 'none';
-
-  const stats = Array.isArray(selectedLeague.stats)
-    ? selectedLeague.stats.map(s => ({ label: s.label, points: s.points }))
-    : Object.entries(selectedLeague.stats).map(([label, points]) => ({ label, points }));
-
-  stats.forEach(stat => {
-    const value = parseFloat(document.getElementById(`input-${stat.label}`)?.value || 0);
-    if (hideZeros.checked && value === 0) return;
-
-    const row = document.createElement('div');
-    row.className = 'stat-row';
-
-    const label = document.createElement('label');
-    label.className = 'stat-label';
-    label.textContent = `${stat.label} — ${stat.points} pts`;
-
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.min = 0;
-    input.id = `input-${stat.label}`;
-    input.className = 'stat-input';
-    input.value = value;
-
-    row.appendChild(label);
-    row.appendChild(input);
-    statInputsDiv.appendChild(row);
-  });
-
-  if (selectedLeague.bonuses && selectedLeague.bonuses.length) {
-    bonusSection.style.display = 'block';
-    selectedLeague.bonuses.forEach(bonus => {
-      const label = document.createElement('label');
-      const radio = document.createElement('input');
-      radio.type = 'radio';
-      radio.name = 'bonus';
-      radio.value = bonus.points;
-      label.appendChild(radio);
-      label.append(` ${bonus.label} (+${bonus.points})`);
-      bonusOptionsDiv.appendChild(label);
-    });
+const leagues = {
+  "NBA": {
+    "stats": {
+      "Points": 1,
+      "Rebound": 1.2,
+      "Assist": 1.5,
+      "Block": 3,
+      "Steal": 3,
+      "Turnover": -1
+    }
+  },
+  "Soccer": {
+    "stats": {
+      "Goal": 5,
+      "Assist": 4,
+      "Goal from PEN": 3,
+      "Shot on Target": 2,
+      "Completed Pass": 0.1,
+      "Missed Pass": -0.1,
+      "Yellow Card": -1,
+      "Red Card": -2
+    }
   }
+};
+
+const leagueSelect = document.getElementById("league");
+const statInputs = document.getElementById("statInputs");
+const totalScore = document.getElementById("totalScore");
+const breakdownArea = document.getElementById("breakdown");
+const hideZerosCheckbox = document.getElementById("hideZeros");
+
+function renderLeagueOptions() {
+  Object.keys(leagues).forEach(league => {
+    const option = document.createElement("option");
+    option.value = league;
+    option.textContent = league;
+    leagueSelect.appendChild(option);
+  });
 }
 
-document.getElementById('calculateBtn').addEventListener('click', () => {
-  const selectedLeague = leagueData[leagueSelect.value];
-  if (!selectedLeague) return;
+function renderStatInputs(leagueName) {
+  statInputs.innerHTML = "";
+  const stats = leagues[leagueName].stats;
 
+  Object.entries(stats).forEach(([label, points]) => {
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    row.innerHTML = `
+      <label>${label} <span style="color:#bbb">— ${points} pts</span></label>
+      <input type="number" min="0" data-stat="${label}" />
+    `;
+    statInputs.appendChild(row);
+  });
+}
+
+function calculateScore() {
+  const stats = leagues[leagueSelect.value].stats;
   let total = 0;
-  let breakdown = '';
+  let breakdown = "";
 
-  const stats = Array.isArray(selectedLeague.stats)
-    ? selectedLeague.stats.map(s => ({ label: s.label, points: s.points }))
-    : Object.entries(selectedLeague.stats).map(([label, points]) => ({ label, points }));
+  document.querySelectorAll("#statInputs input").forEach(input => {
+    const stat = input.dataset.stat;
+    const value = parseFloat(input.value) || 0;
+    const pts = stats[stat];
+    const subtotal = value * pts;
 
-  stats.forEach(stat => {
-    const input = document.getElementById(`input-${stat.label}`);
-    const val = parseFloat(input?.value || 0);
-    const pts = val * stat.points;
-    if (!hideZeros.checked || val !== 0) {
-      breakdown += `${stat.label}: ${val} × ${stat.points} = ${pts.toFixed(2)}\n`;
+    if (!hideZerosCheckbox.checked || value !== 0) {
+      breakdown += `${stat}: ${value} × ${pts} = ${(subtotal).toFixed(2)}\n`;
     }
-    total += pts;
+
+    total += subtotal;
   });
 
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) {
-    const bonusPts = parseFloat(bonus.value);
-    total += bonusPts;
-    breakdown += `Bonus: +${bonusPts}\n`;
-  }
+  totalScore.textContent = total.toFixed(2);
+  breakdownArea.value = breakdown.trim();
+}
 
-  totalScoreSpan.textContent = total.toFixed(2);
-  breakdownTextarea.value = breakdown;
+function clearInputs() {
+  document.querySelectorAll("#statInputs input").forEach(input => input.value = "");
+  totalScore.textContent = "Fantasy Score";
+  breakdownArea.value = "";
+}
+
+document.getElementById("calculateBtn").addEventListener("click", calculateScore);
+document.getElementById("clearBtn").addEventListener("click", clearInputs);
+document.getElementById("copyBtn").addEventListener("click", () => {
+  breakdownArea.select();
+  document.execCommand("copy");
 });
 
-document.getElementById('clearBtn').addEventListener('click', () => {
-  document.querySelectorAll('#statInputs input').forEach(i => (i.value = '0'));
-  document.querySelectorAll('input[name="bonus"]').forEach(r => (r.checked = false));
-  totalScoreSpan.textContent = '0';
-  breakdownTextarea.value = '';
-});
+leagueSelect.addEventListener("change", () => renderStatInputs(leagueSelect.value));
 
-document.getElementById('copyBtn').addEventListener('click', () => {
-  navigator.clipboard.writeText(breakdownTextarea.value);
-});
+renderLeagueOptions();
+renderStatInputs(leagueSelect.value);
