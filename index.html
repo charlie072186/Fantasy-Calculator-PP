@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
- <style>
+  <style>
     body {
       background: #101020;
       color: #fff;
@@ -84,52 +84,69 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    <label for="league">Select League:</label>
+    <select id="league"></select>
+    
+    <div id="inputs"></div>
 
-    <div class="select-league">
-      <label for="league">Select League</label>
-      <select id="league">
-        <!-- Options will be populated dynamically -->
-      </select>
-    </div>
-
-    <div id="statInputs">
-      <!-- Stat input fields will be populated dynamically -->
-    </div>
-
-    <div id="bonusOptions">
-      <!-- Bonus options for combat sports will be populated dynamically -->
-    </div>
-
-    <button id="calculateBtn">Calculate Score</button>
+    <button id="goBtn">Go</button>
     <button id="clearBtn">Clear</button>
 
-    <div id="totalScore">0</div>
-
-    <textarea id="breakdown" readonly></textarea>
+    <div class="checkbox">
+      <label><input type="checkbox" id="hideZeros"> Hide zero stats</label>
+    </div>
+    
+    <h3>Total Fantasy Score: <span id="score">0</span></h3>
+    <textarea id="output" readonly></textarea>
+    <button id="copyBtn">Copy</button>
   </div>
 
-   <script>
-    const inputsConfig = {
-      tennis: [
-        { label: "Match Played (10 pts)", name: "matchPlayed", points: 10 },
-        { label: "Game Won (1 pts)", name: "gameWon", points: 1 },
-        { label: "Game Loss (-1 pts)", name: "gameLoss", points: -1 },
-        { label: "Set Won (3 pts)", name: "setWon", points: 3 },
-        { label: "Set Loss (-3 pts)", name: "setLoss", points: -3 },
-        { label: "Ace (0.5 pts)", name: "ace", points: 0.5 },
-        { label: "Double Fault (-0.5 pts)", name: "doubleFault", points: -0.5 }
-      ],
-      mma: {
-        stats: [
-          { label: "Significant Strikes (0.5 pts)", name: "significantStrikes", points: 0.5 },
-          { label: "Submission Attempt (4 pts)", name: "submissionAttempt", points: 4 },
-          { label: "Takedown (5 pts)", name: "takedown", points: 5 },
-          { label: "Knockdown (10 pts)", name: "knockdown", points: 10 },
-        ],
-        bonuses: [
+  <script>
+    const leagues = {
+      "NBA FS": {
+        "Points": 1,
+        "Rebound": 1.2,
+        "Assist": 1.5,
+        "Block": 3,
+        "Steal": 3,
+        "Turnover": -1
+      },
+      "MLB Pitcher FS": {
+        "Win": 6,
+        "Quality Start": 4,
+        "Earned Run": -3,
+        "Strikeout": 3,
+        "Innings Pitched": 2
+      },
+      "MLB Hitter FS": {
+        "Single":	3,
+        "Double (2B)":	5,
+        "Triple (3B)":	8,
+        "Home Run (HR)":	10,
+        "Run (R)":	2,
+        "Run Batted In (RBI)":	2,
+        "Base on Balls (BB)":	2,
+        "Hit By Pitch (HBP)":	2,
+        "Stolen Base (SB)":	5,
+      },
+      "Tennis FS": {
+        "Match Played": 10,
+        "Game Won": 1,
+        "Game Loss": -1,
+        "Set Won": 3,
+        "Set Loss": -3,
+        "Ace": 0.5,
+        "Double Fault": -0.5,
+       },
+      "mma": {
+        "significantStrikes": 0.5,
+        "submissionAttempt": 4,
+        "takedown": 5,
+        "knockdown": 10,
+      },
+        "bonuses" [
           { label: "1st Round Win", points: 50 },
           { label: "2nd Round Win", points: 40 },
           { label: "3rd Round Win", points: 30 },
@@ -138,90 +155,82 @@
           { label: "Draw", points: 0 }
         ]
       },
-      boxing: {
-        stats: [
-          { label: "Punch Landed (0.5 pts)", name: "punchLanded", points: 0.5 },
-          { label: "Knockdown on Opponent (12 pts)", name: "knockdownOpponent", points: 12 },
-          { label: "Being Knocked by Opponent (-12 pts)", name: "knockedByOpponent", points: -12 }
-        ],
-        bonuses: [
-          { label: "Win Rounds 1-2", points: 100 },
-          { label: "Win Rounds 3-6", points: 75 },
-          { label: "Win Rounds 7-10", points: 50 },
-          { label: "Win Rounds 11-12", points: 25 },
-          { label: "Decision Win", points: 20 }
-        ]
+      };
+
+    const leagueSelect = document.getElementById("league");
+    const inputsDiv = document.getElementById("inputs");
+    const output = document.getElementById("output");
+    const scoreSpan = document.getElementById("score");
+    const hideZerosCheckbox = document.getElementById("hideZeros");
+
+    function loadLeagues() {
+      for (const league in leagues) {
+        const option = document.createElement("option");
+        option.value = league;
+        option.textContent = league;
+        leagueSelect.appendChild(option);
       }
-    };
+      generateInputs();
+    }
 
-    function renderInputs() {
-      const league = document.getElementById('leagueSelect').value;
-      const form = document.getElementById('scoreForm');
-      form.innerHTML = '';
-
-      if (league === 'tennis') {
-        inputsConfig.tennis.forEach(input => {
-          form.innerHTML += \`
-            <div class="form-group">
-              <label>\${input.label}</label>
-              <input type="number" name="\${input.name}" placeholder="" />
-            </div>
-          \`;
-        });
-      } else {
-        const config = inputsConfig[league];
-        config.stats.forEach(input => {
-          form.innerHTML += \`
-            <div class="form-group">
-              <label>\${input.label}</label>
-              <input type="number" name="\${input.name}" placeholder="" />
-            </div>
-          \`;
-        });
-
-        form.innerHTML += '<div class="form-group"><strong>Fight Conclusion Bonuses</strong></div>';
-
-        config.bonuses.forEach((bonus, idx) => {
-          form.innerHTML += \`
-            <div>
-              <input type="radio" name="bonus" value="\${bonus.points}" id="bonus\${idx}" />
-              <label for="bonus\${idx}">\${bonus.label} (\${bonus.points} pts)</label>
-            </div>
-          \`;
-        });
+    function generateInputs() {
+      inputsDiv.innerHTML = "";
+      const selected = leagues[leagueSelect.value];
+      for (const stat in selected) {
+        const label = document.createElement("label");
+        label.textContent = `${stat} (${selected[stat]} pts)`;
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = 0;
+        input.value = 0;
+        input.name = stat;
+        input.style.width = "100px";
+        inputsDiv.appendChild(label);
+        inputsDiv.appendChild(input);
       }
     }
 
     function calculateScore() {
-      const league = document.getElementById('leagueSelect').value;
-      const form = document.getElementById('scoreForm');
-      const formData = new FormData(form);
-      let score = 0;
+      const selected = leagues[leagueSelect.value];
+      let total = 0;
+      let outputText = "";
+      const inputs = inputsDiv.querySelectorAll("input");
 
-      if (league === 'tennis') {
-        inputsConfig.tennis.forEach(input => {
-          const val = parseFloat(formData.get(input.name)) || 0;
-          score += val * input.points;
-        });
-      } else {
-        inputsConfig[league].stats.forEach(input => {
-          const val = parseFloat(formData.get(input.name)) || 0;
-          score += val * input.points;
-        });
+      inputs.forEach(input => {
+        const stat = input.name;
+        const val = parseFloat(input.value) || 0;
+        const pts = selected[stat];
+        const totalStat = +(val * pts).toFixed(2);
+        total += totalStat;
+        if (!hideZerosCheckbox.checked || val !== 0) {
+          outputText += `${stat}: ${pts} pts × ${val} = ${totalStat}
+`;
+        }
+      });
 
-        const bonus = parseFloat(formData.get('bonus')) || 0;
-        score += bonus;
-      }
-
-      document.getElementById('output').textContent = \`TOTAL: Fantasy Score = \${score}\`;
+      scoreSpan.textContent = total.toFixed(2);
+      output.value = outputText + `
+TOTAL FS = ${total.toFixed(2)}`;
     }
 
-    function clearInputs() {
-      document.getElementById('scoreForm').reset();
-      document.getElementById('output').textContent = '';
+    function clearForm() {
+      inputsDiv.querySelectorAll("input").forEach(input => input.value = 0);
+      output.value = "";
+      scoreSpan.textContent = "0";
     }
 
-    window.onload = renderInputs;
+    function copyOutput() {
+      output.select();
+      document.execCommand("copy");
+    }
+
+    leagueSelect.addEventListener("change", generateInputs);
+    document.getElementById("goBtn").addEventListener("click", calculateScore);
+    document.getElementById("clearBtn").addEventListener("click", clearForm);
+    document.getElementById("copyBtn").addEventListener("click", copyOutput);
+    hideZerosCheckbox.addEventListener("change", calculateScore);
+
+    loadLeagues();
   </script>
 </body>
 </html>
