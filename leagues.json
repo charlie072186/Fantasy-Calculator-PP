@@ -47,21 +47,20 @@
     }
   },
   "mma": {
-    "name": "MMA FS",
-    "stats": {
-      "Significant Strikes": 0.5,
-      "Submission Attempt": 4,
-      "Takedown": 5,
-      "Knockdown": 10
-    },
-    "bonuses": {
-      "1st Round Win": 50,
-      "2nd Round Win": 40,
-      "3rd Round Win": 30,
-      "4th/5th Round Win": 20,
-      "Decision Win": 10,
-      "Draw": 0
-    }
+  "name": "MMA",
+  "stats": {
+    "significantStrikes": 0.5,
+    "submissionAttempt": 4,
+    "takedown": 5,
+    "knockdown": 10
+  },
+  "bonuses": [
+    { "label": "1st Round Win", "points": 50 },
+    { "label": "2nd Round Win", "points": 40 },
+    { "label": "Decision Win", "points": 10 },
+    { "label": "Draw", "points": 0 }
+  ]
+}
   },
   "boxing": {
     "name": "Boxing FS",
@@ -70,12 +69,12 @@
       "Knockdown on Opponent": 12,
       "Being Knocked by Opponent": -12
     },
-    "bonuses": {
-      "Win Rounds 1-2": 100,
-      "Win Rounds 3-6": 75,
-      "Win Rounds 7-10": 50,
-      "Win Rounds 11-12": 25,
-      "Decision Win": 20
-    }
+    "bonuses": [
+      {"label":"Win Rounds 1-2": 100},
+      {"label":"Win Rounds 3-6": 75},
+      {"label":"Win Rounds 7-10": 50},
+      {"label":"Win Rounds 11-12": 25},
+      {"label":"Decision Win": 20}
+    ]
   }
 }
