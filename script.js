@@ -121,3 +121,26 @@ copyBtn.addEventListener("click", () => {
   breakdown.select();
   document.execCommand("copy");
 });
+
+function renderStats(league) {
+  const container = document.getElementById('statInputs');
+  container.innerHTML = '';
+
+  league.stats.forEach(stat => {
+    const row = document.createElement('div');
+    row.className = 'stat-row';
+
+    const label = document.createElement('label');
+    label.innerHTML = `${stat.label} <span class="points">(${stat.points} pts${stat.label.toLowerCase().includes("yards") ? "/yd" : ""})</span>`;
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'stat-input';
+    input.setAttribute('data-label', stat.label);
+
+    row.appendChild(label);
+    row.appendChild(input);
+    container.appendChild(row);
+  });
+}
+
