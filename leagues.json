@@ -55,10 +55,22 @@
       "knockdown": 10
     },
     "bonuses": [
-      { "label": "1st Round Win", "points": 50 },
-      { "label": "2nd Round Win", "points": 40 },
-      { "label": "Decision Win", "points": 10 },
-      { "label": "Draw", "points": 0 }
+      {
+        "label": "1st Round Win",
+        "points": 50
+      },
+      {
+        "label": "2nd Round Win",
+        "points": 40
+      },
+      {
+        "label": "Decision Win",
+        "points": 10
+      },
+      {
+        "label": "Draw",
+        "points": 0
+      }
     ]
   },
   "boxing": {
@@ -69,28 +81,79 @@
       "Being Knocked by Opponent": -12
     },
     "bonuses": [
-      { "label": "Win Rounds 1-2", "points": 100 },
-      { "label": "Win Rounds 3-6", "points": 75 },
-      { "label": "Win Rounds 7-10", "points": 50 },
-      { "label": "Win Rounds 11-12", "points": 25 },
-      { "label": "Decision Win", "points": 20 }
+      {
+        "label": "Win Rounds 1-2",
+        "points": 100
+      },
+      {
+        "label": "Win Rounds 3-6",
+        "points": 75
+      },
+      {
+        "label": "Win Rounds 7-10",
+        "points": 50
+      },
+      {
+        "label": "Win Rounds 11-12",
+        "points": 25
+      },
+      {
+        "label": "Decision Win",
+        "points": 20
+      }
     ]
   },
   "nfl_cfb": {
     "name": "Football Offensive FS",
     "stats": [
-      { "label": "Passing Yards", "points": 0.04 },
-      { "label": "Passing TDs", "points": 4 },
-      { "label": "Interceptions", "points": -1 },
-      { "label": "Rushing Yards", "points": 0.1 },
-      { "label": "Rushing TDs", "points": 6 },
-      { "label": "Receiving Yards", "points": 0.1 },
-      { "label": "Receiving TDs", "points": 6 },
-      { "label": "Receptions", "points": 1 },
-      { "label": "Fumbles Lost", "points": -1 },
-      { "label": "2 Point Conversions", "points": 2 },
-      { "label": "Offensive Fumble Recovery TD", "points": 6 },
-      { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
+      {
+        "label": "Passing Yards",
+        "points": 0.04
+      },
+      {
+        "label": "Passing TDs",
+        "points": 4
+      },
+      {
+        "label": "Interceptions",
+        "points": -1
+      },
+      {
+        "label": "Rushing Yards",
+        "points": 0.1
+      },
+      {
+        "label": "Rushing TDs",
+        "points": 6
+      },
+      {
+        "label": "Receiving Yards",
+        "points": 0.1
+      },
+      {
+        "label": "Receiving TDs",
+        "points": 6
+      },
+      {
+        "label": "Receptions",
+        "points": 1
+      },
+      {
+        "label": "Fumbles Lost",
+        "points": -1
+      },
+      {
+        "label": "2 Point Conversions",
+        "points": 2
+      },
+      {
+        "label": "Offensive Fumble Recovery TD",
+        "points": 6
+      },
+      {
+        "label": "Kick/Punt/Field Goal Return TD",
+        "points": 6
+      }
     ],
     "bonuses": []
   },
@@ -105,6 +168,37 @@
       "Missed Pass": -0.1,
       "Yellow Card": -1,
       "Red Card": -2
+    }
+  },
+  "dst": {
+    "name": "Defense/Special Teams",
+    "stats": {
+      "Sack": 1,
+      "Interception": 2,
+      "Fumble Recovery": 2,
+      "Punt/Kickoff/FG Return for TD": 6,
+      "Interception Return TD": 6,
+      "Fumble Recovery TD": 6,
+      "Blocked Punt or FG Return TD": 6,
+      "Safety": 2,
+      "Blocked Kick": 2,
+      "2 Point Conversions/Extra Point Returns": 2,
+      "0 Point Allowed": 10,
+      "1-6 Points Allowed": 7,
+      "7-13 Points Allowed": 4,
+      "14-20 Points Allowed": 1,
+      "21-27 Points Allowed": 0,
+      "28-34 Points Allowed": -1,
+      "35+ Points Allowed": -4
+    }
+  },
+  "kickers": {
+    "name": "Kickers FS",
+    "stats": {
+      "FG 0-39 yards": 3,
+      "FG 40-49 yards": 4,
+      "FG 50+ yards": 5,
+      "XP conversions": 1
     }
   }
 }
