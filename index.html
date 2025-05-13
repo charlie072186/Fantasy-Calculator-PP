@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
@@ -20,13 +20,14 @@
       <div id="bonusOptions"></div>
     </div>
 
-    <label class="hide-zero">
+    <label class="hide-zeros">
       <input type="checkbox" id="hideZeros" /> Hide 0-value stats
     </label>
 
-    <div class="buttons">
-      <button id="calculateBtn">Go</button>
-      <button id="clearBtn" class="link-btn">Clear</button>
+    <div class="button-row">
+      <button id="calculateBtn" class="go-btn">Go</button>
+      <button id="clearBtn" class="clear-btn">Clear</button>
+      <span class="help">❓ Help</span>
     </div>
 
     <h2>TOTAL: <span id="totalScore">Fantasy Score</span></h2>
