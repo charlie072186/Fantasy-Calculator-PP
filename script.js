@@ -1,10 +1,14 @@
 let leagues = {};
 const leagueSelect = document.getElementById("league");
 const statInputs = document.getElementById("statInputs");
+const bonusSection = document.getElementById("bonusSection");
+const bonusOptions = document.getElementById("bonusOptions");
 const calculateBtn = document.getElementById("calculateBtn");
 const clearBtn = document.getElementById("clearBtn");
 const totalScore = document.getElementById("totalScore");
 const breakdown = document.getElementById("breakdown");
+const hideZeros = document.getElementById("hideZeros");
+const copyBtn = document.getElementById("copyBtn");
 
 fetch("leagues.json")
   .then(res => res.json())
@@ -30,8 +34,11 @@ function populateLeagues() {
 
 function renderInputs(selectedLeague) {
   statInputs.innerHTML = "";
-  const leagueData = leagues[selectedLeague];
-  const stats = leagueData.stats;
+  bonusOptions.innerHTML = "";
+  bonusSection.style.display = "none";
+
+  const stats = leagues[selectedLeague].stats;
+  const bonuses = leagues[selectedLeague].bonuses;
 
   for (let stat in stats) {
     const label = document.createElement("label");
@@ -44,28 +51,20 @@ function renderInputs(selectedLeague) {
     statInputs.appendChild(input);
   }
 
-  // If bonuses exist (for combat sports), render bonus radio buttons
-  if (leagueData.bonuses) {
-    const bonusGroup = document.createElement("div");
-    bonusGroup.style.marginTop = "1rem";
-    bonusGroup.innerHTML = "<strong>Fight Outcome Bonus:</strong><br>";
-    leagueData.bonuses.forEach((bonus, index) => {
+  if (bonuses && Array.isArray(bonuses)) {
+    bonusSection.style.display = "block";
+    bonuses.forEach((bonus, i) => {
+      const label = document.createElement("label");
+      label.style.display = "block";
       const radio = document.createElement("input");
       radio.type = "radio";
       radio.name = "bonus";
       radio.value = bonus.points;
-      radio.id = `bonus_${index}`;
-
-      const label = document.createElement("label");
-      label.htmlFor = radio.id;
-      label.innerText = ` ${bonus.label} (${bonus.points} pts)`;
-
-      const line = document.createElement("div");
-      line.appendChild(radio);
-      line.appendChild(label);
-      bonusGroup.appendChild(line);
+      if (i === 0) radio.checked = true; // default selection
+      label.appendChild(radio);
+      label.append(` ${bonus.label} (+${bonus.points})`);
+      bonusOptions.appendChild(label);
     });
-    statInputs.appendChild(bonusGroup);
   }
 }
 
@@ -76,8 +75,7 @@ leagueSelect.addEventListener("change", () => {
 });
 
 calculateBtn.addEventListener("click", () => {
-  const leagueData = leagues[leagueSelect.value];
-  const stats = leagueData.stats;
+  const stats = leagues[leagueSelect.value].stats;
   let total = 0;
   let details = "";
 
@@ -85,31 +83,34 @@ calculateBtn.addEventListener("click", () => {
     const val = parseFloat(document.getElementById(stat).value) || 0;
     const score = val * stats[stat];
     total += score;
-    details += `${stat}: ${stats[stat]} x ${val} = ${score.toFixed(2)}\n`;
+    if (!hideZeros.checked || val !== 0) {
+      details += `${stat}: ${stats[stat]} x ${val} = ${score.toFixed(2)}\n`;
+    }
   }
 
-  // Add bonus if selected
-  const selectedBonus = document.querySelector("input[name='bonus']:checked");
+  const selectedBonus = document.querySelector('input[name="bonus"]:checked');
   if (selectedBonus) {
-    const bonusPoints = parseFloat(selectedBonus.value);
-    total += bonusPoints;
-    details += `Bonus: ${bonusPoints.toFixed(2)} pts\n`;
+    const bonusValue = parseFloat(selectedBonus.value);
+    total += bonusValue;
+    details += `Bonus: +${bonusValue}\n`;
   }
 
   totalScore.innerText = total.toFixed(2);
-  breakdown.value = details;
+  breakdown.value = details + `\nTOTAL FS = ${total.toFixed(2)}`;
 });
 
 clearBtn.addEventListener("click", () => {
-  const leagueData = leagues[leagueSelect.value];
-  const stats = leagueData.stats;
+  const stats = leagues[leagueSelect.value].stats;
   for (let stat in stats) {
     document.getElementById(stat).value = "";
   }
-  const selectedBonus = document.querySelector("input[name='bonus']:checked");
-  if (selectedBonus) {
-    selectedBonus.checked = false;
-  }
+  const selectedBonus = document.querySelector('input[name="bonus"]:checked');
+  if (selectedBonus) selectedBonus.checked = false;
   totalScore.innerText = "0";
   breakdown.value = "";
+});
+
+copyBtn.addEventListener("click", () => {
+  breakdown.select();
+  document.execCommand("copy");
 });
