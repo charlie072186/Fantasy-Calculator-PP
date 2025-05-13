@@ -2,180 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      background-color: #141328;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    /* Inline style tweaks for compact inputs */
+    #statInputs label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
     }
-    h1 {
-      font-size: 2rem;
+
+    #statInputs input[type="number"] {
+      width: 80px;
+      padding: 4px;
+      margin-left: 10px;
     }
-    select, input[type="number"] {
+
+    textarea#breakdown {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
+      height: 100px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
     }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    button {
-      padding: 10px 20px;
-      margin-right: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .go-btn {
-      background-color: #a855f7;
-      color: white;
-    }
-    .clear-btn {
-      background-color: #facc15;
-      color: black;
-    }
-    .score-output {
-      margin-top: 20px;
-      font-size: 1.25rem;
-      font-weight: bold;
-    }
-    .hidden {
-      display: none;
+
+    #bonusOptions label {
+      margin-bottom: 0.3rem;
     }
   </style>
 </head>
 <body>
-  <h1>Fantasy Score Calculator</h1>
+  <div class="container">
+    <h1>Fantasy Score Calculator</h1>
+    
+    <label for="league">Select League:</label>
+    <select id="league"></select>
 
-  <label for="leagueSelect"><strong>Select League:</strong></label>
-  <select id="leagueSelect" onchange="renderInputs()">
-    <option value="tennis">Tennis FS</option>
-    <option value="mma">MMA FS</option>
-    <option value="boxing">Boxing FS</option>
-  </select>
+    <div id="statInputs"></div>
 
-  <form id="scoreForm"></form>
+    <!-- Bonus section (shown only for combat sports) -->
+    <div id="bonusSection" style="display: none; margin-top: 1rem;">
+      <strong>Bonus:</strong>
+      <div id="bonusOptions" style="margin-top: 0.5rem;"></div>
+    </div>
 
-  <button class="go-btn" onclick="calculateScore()">Go</button>
-  <button class="clear-btn" onclick="clearInputs()">Clear</button>
+    <div style="margin-top: 1rem;">
+      <button id="calculateBtn" class="go">Go</button>
+      <button id="clearBtn" class="clear">Clear</button>
+    </div>
 
-  <div class="score-output" id="output"></div>
+    <div class="checkbox" style="margin-top: 1rem;">
+      <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
+    </div>
 
-  <script>
-    const inputsConfig = {
-      tennis: [
-        { label: "Match Played (10 pts)", name: "matchPlayed", points: 10 },
-        { label: "Game Won (1 pts)", name: "gameWon", points: 1 },
-        { label: "Game Loss (-1 pts)", name: "gameLoss", points: -1 },
-        { label: "Set Won (3 pts)", name: "setWon", points: 3 },
-        { label: "Set Loss (-3 pts)", name: "setLoss", points: -3 },
-        { label: "Ace (0.5 pts)", name: "ace", points: 0.5 },
-        { label: "Double Fault (-0.5 pts)", name: "doubleFault", points: -0.5 }
-      ],
-      mma: {
-        stats: [
-          { label: "Significant Strikes (0.5 pts)", name: "significantStrikes", points: 0.5 },
-          { label: "Submission Attempt (4 pts)", name: "submissionAttempt", points: 4 },
-          { label: "Takedown (5 pts)", name: "takedown", points: 5 },
-          { label: "Knockdown (10 pts)", name: "knockdown", points: 10 },
-        ],
-        bonuses: [
-          { label: "1st Round Win", points: 50 },
-          { label: "2nd Round Win", points: 40 },
-          { label: "3rd Round Win", points: 30 },
-          { label: "4th/5th Round Win", points: 20 },
-          { label: "Decision Win", points: 10 },
-          { label: "Draw", points: 0 }
-        ]
-      },
-      boxing: {
-        stats: [
-          { label: "Punch Landed (0.5 pts)", name: "punchLanded", points: 0.5 },
-          { label: "Knockdown on Opponent (12 pts)", name: "knockdownOpponent", points: 12 },
-          { label: "Being Knocked by Opponent (-12 pts)", name: "knockedByOpponent", points: -12 }
-        ],
-        bonuses: [
-          { label: "Win Rounds 1-2", points: 100 },
-          { label: "Win Rounds 3-6", points: 75 },
-          { label: "Win Rounds 7-10", points: 50 },
-          { label: "Win Rounds 11-12", points: 25 },
-          { label: "Decision Win", points: 20 }
-        ]
-      }
-    };
+    <h3 style="margin-top: 1rem;">Total Fantasy Score: <span id="totalScore">0</span></h3>
 
-    function renderInputs() {
-      const league = document.getElementById('leagueSelect').value;
-      const form = document.getElementById('scoreForm');
-      form.innerHTML = '';
+    <textarea id="breakdown" readonly></textarea>
+    
+    <button id="copyBtn" style="margin-top: 0.5rem;">Copy</button>
+  </div>
 
-      if (league === 'tennis') {
-        inputsConfig.tennis.forEach(input => {
-          form.innerHTML += \`
-            <div class="form-group">
-              <label>\${input.label}</label>
-              <input type="number" name="\${input.name}" placeholder="" />
-            </div>
-          \`;
-        });
-      } else {
-        const config = inputsConfig[league];
-        config.stats.forEach(input => {
-          form.innerHTML += \`
-            <div class="form-group">
-              <label>\${input.label}</label>
-              <input type="number" name="\${input.name}" placeholder="" />
-            </div>
-          \`;
-        });
-
-        form.innerHTML += '<div class="form-group"><strong>Fight Conclusion Bonuses</strong></div>';
-
-        config.bonuses.forEach((bonus, idx) => {
-          form.innerHTML += \`
-            <div>
-              <input type="radio" name="bonus" value="\${bonus.points}" id="bonus\${idx}" />
-              <label for="bonus\${idx}">\${bonus.label} (\${bonus.points} pts)</label>
-            </div>
-          \`;
-        });
-      }
-    }
-
-    function calculateScore() {
-      const league = document.getElementById('leagueSelect').value;
-      const form = document.getElementById('scoreForm');
-      const formData = new FormData(form);
-      let score = 0;
-
-      if (league === 'tennis') {
-        inputsConfig.tennis.forEach(input => {
-          const val = parseFloat(formData.get(input.name)) || 0;
-          score += val * input.points;
-        });
-      } else {
-        inputsConfig[league].stats.forEach(input => {
-          const val = parseFloat(formData.get(input.name)) || 0;
-          score += val * input.points;
-        });
-
-        const bonus = parseFloat(formData.get('bonus')) || 0;
-        score += bonus;
-      }
-
-      document.getElementById('output').textContent = \`TOTAL: Fantasy Score = \${score}\`;
-    }
-
-    function clearInputs() {
-      document.getElementById('scoreForm').reset();
-      document.getElementById('output').textContent = '';
-    }
-
-    window.onload = renderInputs;
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
