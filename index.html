@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,28 +87,21 @@
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    <label for="league">Select League:</label>
+    <select id="league"></select>
+    
+    <div id="inputs"></div>
 
-    <div class="select-league">
-      <label for="league">Select League</label>
-      <select id="league">
-        <!-- Options will be populated dynamically -->
-      </select>
-    </div>
-
-    <div id="statInputs">
-      <!-- Stat input fields will be populated dynamically -->
-    </div>
-
-    <div id="bonusOptions">
-      <!-- Bonus options for combat sports will be populated dynamically -->
-    </div>
-
-    <button id="calculateBtn">Calculate Score</button>
+    <button id="goBtn">Go</button>
     <button id="clearBtn">Clear</button>
 
-    <div id="totalScore">0</div>
-
-    <textarea id="breakdown" readonly></textarea>
+    <div class="checkbox">
+      <label><input type="checkbox" id="hideZeros"> Hide zero stats</label>
+    </div>
+    
+    <h3>Total Fantasy Score: <span id="score">0</span></h3>
+    <textarea id="output" readonly></textarea>
+    <button id="copyBtn">Copy</button>
   </div>
 
   <script>
