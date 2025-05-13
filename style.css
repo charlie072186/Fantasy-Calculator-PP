@@ -102,8 +102,33 @@ textarea {
 .hide-zeros {
   margin: 1rem 0;
 }
-
-.help {
-  color: #d1d5da;
-  font-size: 0.9rem;
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  gap: 12px; /* tighter spacing between label and input */
 }
+
+.stat-label {
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.stat-points {
+  margin-left: 6px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.stat-input {
+  background-color: white;
+  color: black;
+  border: 1px solid #999;
+  width: 60px;
+  padding: 4px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
