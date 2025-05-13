@@ -1,4 +1,4 @@
-let leagues = [];
+let leagues = {};
 
 const leagueSelect = document.getElementById("league");
 const statInputs = document.getElementById("statInputs");
@@ -11,25 +11,30 @@ const breakdown = document.getElementById("breakdown");
 const hideZeros = document.getElementById("hideZeros");
 const copyBtn = document.getElementById("copyBtn");
 
+// Load leagues.json
 fetch("leagues.json")
   .then(res => res.json())
   .then(data => {
     leagues = data;
     populateLeagues();
-    renderInputs(leagues[0].name); // default league
+    const firstKey = Object.keys(leagues)[0];
+    leagueSelect.value = leagues[firstKey].name;
+    renderInputs(leagues[firstKey].name); // default league
   })
   .catch(err => {
     console.error("Error loading JSON:", err);
     statInputs.innerHTML = "<p style='color: red;'>Error loading league data.</p>";
   });
 
+// Get league object by name
 function getLeagueByName(name) {
-  return leagues.find(l => l.name === name);
+  return Object.values(leagues).find(l => l.name === name);
 }
 
+// Populate dropdown
 function populateLeagues() {
   leagueSelect.innerHTML = "";
-  leagues.forEach(league => {
+  Object.values(leagues).forEach(league => {
     const option = document.createElement("option");
     option.value = league.name;
     option.textContent = league.name;
@@ -37,6 +42,7 @@ function populateLeagues() {
   });
 }
 
+// Render stat input fields and bonus radio buttons
 function renderInputs(leagueName) {
   const league = getLeagueByName(leagueName);
   if (!league) return;
@@ -45,24 +51,27 @@ function renderInputs(leagueName) {
   bonusOptions.innerHTML = "";
   bonusSection.style.display = "none";
 
-  league.stats.forEach(stat => {
-    const row = document.createElement("div");
-    row.className = "stat-row";
+  // Render stat inputs
+  (league.stats instanceof Array ? league.stats : Object.entries(league.stats).map(([label, points]) => ({ label, points })))
+    .forEach(stat => {
+      const row = document.createElement("div");
+      row.className = "stat-row";
 
-    const label = document.createElement("label");
-    const unit = stat.label.toLowerCase().includes("yard") ? "/yd" : "";
-    label.innerHTML = `${stat.label} <span class="points">(${stat.points} pts${unit})</span>`;
+      const label = document.createElement("label");
+      const unit = stat.label.toLowerCase().includes("yard") ? "/yd" : "";
+      label.innerHTML = `${stat.label} <span class="points">(${stat.points} pts${unit})</span>`;
 
-    const input = document.createElement("input");
-    input.type = "number";
-    input.id = stat.label;
-    input.placeholder = " ";
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = stat.label;
+      input.placeholder = " ";
 
-    row.appendChild(label);
-    row.appendChild(input);
-    statInputs.appendChild(row);
-  });
+      row.appendChild(label);
+      row.appendChild(input);
+      statInputs.appendChild(row);
+    });
 
+  // Render bonus options if any
   if (league.bonuses && league.bonuses.length > 0) {
     bonusSection.style.display = "block";
     league.bonuses.forEach((bonus, i) => {
@@ -82,12 +91,14 @@ function renderInputs(leagueName) {
   }
 }
 
+// Handle league switch
 leagueSelect.addEventListener("change", () => {
   renderInputs(leagueSelect.value);
   totalScore.innerText = "0";
   breakdown.value = "";
 });
 
+// Calculate score
 calculateBtn.addEventListener("click", () => {
   const league = getLeagueByName(leagueSelect.value);
   if (!league) return;
@@ -95,15 +106,16 @@ calculateBtn.addEventListener("click", () => {
   let total = 0;
   let details = "";
 
-  league.stats.forEach(stat => {
-    const val = parseFloat(document.getElementById(stat.label).value) || 0;
-    const score = val * stat.points;
-    total += score;
+  (league.stats instanceof Array ? league.stats : Object.entries(league.stats).map(([label, points]) => ({ label, points })))
+    .forEach(stat => {
+      const val = parseFloat(document.getElementById(stat.label).value) || 0;
+      const score = val * stat.points;
+      total += score;
 
-    if (!hideZeros.checked || val !== 0) {
-      details += `${stat.label}: ${stat.points} x ${val} = ${score.toFixed(2)}\n`;
-    }
-  });
+      if (!hideZeros.checked || val !== 0) {
+        details += `${stat.label}: ${stat.points} x ${val} = ${score.toFixed(2)}\n`;
+      }
+    });
 
   const selectedBonus = document.querySelector('input[name="bonus"]:checked');
   if (selectedBonus) {
@@ -116,22 +128,26 @@ calculateBtn.addEventListener("click", () => {
   breakdown.value = details + `\nTOTAL FS = ${total.toFixed(2)}`;
 });
 
+// Clear inputs
 clearBtn.addEventListener("click", () => {
   const league = getLeagueByName(leagueSelect.value);
   if (!league) return;
 
-  league.stats.forEach(stat => {
-    const input = document.getElementById(stat.label);
-    if (input) input.value = "";
-  });
+  (league.stats instanceof Array ? league.stats : Object.entries(league.stats).map(([label]) => ({ label })))
+    .forEach(stat => {
+      const input = document.getElementById(stat.label);
+      if (input) input.value = "";
+    });
 
-  const selectedBonus = document.querySelector('input[name="bonus"]:checked');
-  if (selectedBonus) selectedBonus.checked = false;
+  document.querySelectorAll('input[name="bonus"]').forEach(radio => {
+    radio.checked = false;
+  });
 
   totalScore.innerText = "0";
   breakdown.value = "";
 });
 
+// Copy to clipboard
 copyBtn.addEventListener("click", () => {
   breakdown.select();
   document.execCommand("copy");
