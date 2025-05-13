@@ -111,3 +111,10 @@ select#league {
   color: #bbb;
   margin-left: 0.25rem;
 }
+
+.points {
+  color: gray;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
