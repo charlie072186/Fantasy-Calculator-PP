@@ -47,7 +47,7 @@
     }
   },
   "mma": {
-    "name": "MMA",
+    "name": "MMA FS",
     "stats": {
       "significantStrikes": 0.5,
       "submissionAttempt": 4,
