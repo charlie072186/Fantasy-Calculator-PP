@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,82 +13,74 @@
       margin-bottom: 0.5rem;
     }
 
-```
-#statInputs input[type="number"] {
-  width: 80px;
-  padding: 4px;
-  margin-left: 10px;
-}
+    #statInputs input[type="number"] {
+      width: 80px;
+      padding: 4px;
+      margin-left: 10px;
+    }
 
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.stat-row label {
-  flex: 1;
-  font-size: 0.9rem;
-}
+    .stat-row label {
+      flex: 1;
+      font-size: 0.9rem;
+    }
 
-.stat-row input[type="number"] {
-  width: 70px;
-  padding: 4px;
-  font-size: 0.9rem;
-}
+    .stat-row input[type="number"] {
+      width: 70px;
+      padding: 4px;
+      font-size: 0.9rem;
+    }
 
-textarea#breakdown {
-  width: 300px;
-  height: 100px;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
+    textarea#breakdown {
+      width: 300px;
+      height: 100px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
 
-#bonusOptions {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-```
-
+    #bonusOptions {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    
+    <label for="league">Select League:</label>
+    <select id="league"></select>
 
-```
-<label for="league">Select League:</label>
-<select id="league"></select>
+    <div id="statInputs"></div>
 
-<div id="statInputs"></div>
+    <div id="bonusSection" style="display: none; margin-top: 1rem;">
+      <strong>Bonus:</strong>
+      <div id="bonusOptions"></div>
+    </div>
 
-<!-- Bonus section (shown only for combat sports) -->
-<div id="bonusSection" style="display: none; margin-top: 1rem;">
-  <strong>Bonus:</strong>
-  <div id="bonusOptions"></div>
-</div>
+    <div style="margin-top: 1rem;">
+      <button id="calculateBtn" class="go">Go</button>
+      <button id="clearBtn" class="clear">Clear</button>
+    </div>
 
-<div style="margin-top: 1rem;">
-  <button id="calculateBtn" class="go">Go</button>
-  <button id="clearBtn" class="clear">Clear</button>
-</div>
+    <div class="checkbox" style="margin-top: 1rem;">
+      <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
+    </div>
 
-<div class="checkbox" style="margin-top: 1rem;">
-  <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
-</div>
+    <h3 style="margin-top: 1rem;">Total Fantasy Score: <span id="totalScore">0</span></h3>
 
-<h3 style="margin-top: 1rem;">Total Fantasy Score: <span id="totalScore">0</span></h3>
-
-<textarea id="breakdown" readonly></textarea>
-
-<button id="copyBtn" style="margin-top: 0.5rem;">Copy</button>
-```
-
+    <textarea id="breakdown" readonly></textarea>
+    
+    <button id="copyBtn" style="margin-top: 0.5rem;">Copy</button>
   </div>
 
   <script src="script.js"></script>
-
 </body>
 </html>
