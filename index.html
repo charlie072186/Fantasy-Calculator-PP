@@ -12,6 +12,13 @@
     <label for="league">Select League:</label>
     <select id="league" onchange="loadStats()"></select>
     <div id="stats-container"></div>
+     <div id="statInputs"></div>
+
+    <!-- Bonus section (shown only for combat sports) -->
+    <div id="bonusSection" style="display: none; margin-top: 1rem;">
+      <strong>Bonus:</strong>
+      <div id="bonusOptions"></div>
+
     <label><input type="checkbox" id="hideZero" /> Hide 0-value stats</label>
     <div class="buttons">
       <button onclick="calculateScore()">Go</button>
