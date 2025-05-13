@@ -1,237 +1,40 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
-  <style>
-    body {
-      background: #101020;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #181830;
-      padding: 1.5rem;
-      border-radius: 12px;
-    }
-
-    select, input[type="number"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin: 0.25rem 0;
-      border-radius: 6px;
-      border: none;
-      font-size: 1rem;
-    }
-
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    label {
-      display: block;
-      margin-top: 0.5rem;
-      font-weight: bold;
-    }
-
-    button {
-      margin: 0.5rem 0.25rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #goBtn {
-      background: #8e44ad;
-      color: white;
-    }
-
-    #clearBtn {
-      background: #f1c40f;
-    }
-
-    #copyBtn {
-      background: #2ecc71;
-      color: white;
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      margin-top: 1rem;
-      padding: 1rem;
-      font-family: monospace;
-      font-size: 0.95rem;
-    }
-
-    .checkbox {
-      margin-top: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    
     <label for="league">Select League:</label>
     <select id="league"></select>
-    
-    <div id="inputs"></div>
 
-    <button id="goBtn">Go</button>
-    <button id="clearBtn">Clear</button>
+    <div id="statInputs"></div>
+
+    <!-- Bonus section (shown only for combat sports) -->
+    <div id="bonusSection" style="display: none; margin-top: 1rem;">
+      <strong>Bonus:</strong>
+      <div id="bonusOptions"></div>
+    </div>
+
+    <div style="margin-top: 1rem;">
+      <button id="calculateBtn">Go</button>
+      <button id="clearBtn">Clear</button>
+    </div>
 
     <div class="checkbox">
-      <label><input type="checkbox" id="hideZeros"> Hide zero stats</label>
+      <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
     </div>
-    
-    <h3>Total Fantasy Score: <span id="score">0</span></h3>
-    <textarea id="output" readonly></textarea>
+
+    <h3>Total Fantasy Score: <span id="totalScore">0</span></h3>
+    <textarea id="breakdown" readonly></textarea>
     <button id="copyBtn">Copy</button>
   </div>
 
-  <script>
-    const leagues = {
-      "NBA FS": {
-        "Points": 1,
-        "Rebound": 1.2,
-        "Assist": 1.5,
-        "Block": 3,
-        "Steal": 3,
-        "Turnover": -1
-      },
-      "MLB Pitcher FS": {
-        "Win": 6,
-        "Quality Start": 4,
-        "Earned Run": -3,
-        "Strikeout": 3,
-        "Innings Pitched": 2
-      },
-      "MLB Hitter FS": {
-        "Single":	3,
-        "Double (2B)":	5,
-        "Triple (3B)":	8,
-        "Home Run (HR)":	10,
-        "Run (R)":	2,
-        "Run Batted In (RBI)":	2,
-        "Base on Balls (BB)":	2,
-        "Hit By Pitch (HBP)":	2,
-        "Stolen Base (SB)":	5,
-      },
-      "Tennis FS": {
-        "Match Played": 10,
-        "Game Won": 1,
-        "Game Loss": -1,
-        "Set Won": 3,
-        "Set Loss": -3,
-        "Ace": 0.5,
-        "Double Fault": -0.5,
-       },
-      "mma": {
-        "significantStrikes": 0.5,
-        "submissionAttempt": 4,
-        "takedown": 5,
-        "knockdown": 10,
-      },
-        "bonuses" [
-          { label: "1st Round Win", points: 50 },
-          { label: "2nd Round Win", points: 40 },
-          { label: "3rd Round Win", points: 30 },
-          { label: "4th/5th Round Win", points: 20 },
-          { label: "Decision Win", points: 10 },
-          { label: "Draw", points: 0 }
-        ]
-      },
-      };
-
-    const leagueSelect = document.getElementById("league");
-    const inputsDiv = document.getElementById("inputs");
-    const output = document.getElementById("output");
-    const scoreSpan = document.getElementById("score");
-    const hideZerosCheckbox = document.getElementById("hideZeros");
-
-    function loadLeagues() {
-      for (const league in leagues) {
-        const option = document.createElement("option");
-        option.value = league;
-        option.textContent = league;
-        leagueSelect.appendChild(option);
-      }
-      generateInputs();
-    }
-
-    function generateInputs() {
-      inputsDiv.innerHTML = "";
-      const selected = leagues[leagueSelect.value];
-      for (const stat in selected) {
-        const label = document.createElement("label");
-        label.textContent = `${stat} (${selected[stat]} pts)`;
-        const input = document.createElement("input");
-        input.type = "number";
-        input.min = 0;
-        input.value = 0;
-        input.name = stat;
-        input.style.width = "100px";
-        inputsDiv.appendChild(label);
-        inputsDiv.appendChild(input);
-      }
-    }
-
-    function calculateScore() {
-      const selected = leagues[leagueSelect.value];
-      let total = 0;
-      let outputText = "";
-      const inputs = inputsDiv.querySelectorAll("input");
-
-      inputs.forEach(input => {
-        const stat = input.name;
-        const val = parseFloat(input.value) || 0;
-        const pts = selected[stat];
-        const totalStat = +(val * pts).toFixed(2);
-        total += totalStat;
-        if (!hideZerosCheckbox.checked || val !== 0) {
-          outputText += `${stat}: ${pts} pts × ${val} = ${totalStat}
-`;
-        }
-      });
-
-      scoreSpan.textContent = total.toFixed(2);
-      output.value = outputText + `
-TOTAL FS = ${total.toFixed(2)}`;
-    }
-
-    function clearForm() {
-      inputsDiv.querySelectorAll("input").forEach(input => input.value = 0);
-      output.value = "";
-      scoreSpan.textContent = "0";
-    }
-
-    function copyOutput() {
-      output.select();
-      document.execCommand("copy");
-    }
-
-    leagueSelect.addEventListener("change", generateInputs);
-    document.getElementById("goBtn").addEventListener("click", calculateScore);
-    document.getElementById("clearBtn").addEventListener("click", clearForm);
-    document.getElementById("copyBtn").addEventListener("click", copyOutput);
-    hideZerosCheckbox.addEventListener("change", calculateScore);
-
-    loadLeagues();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
