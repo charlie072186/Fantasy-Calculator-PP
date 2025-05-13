@@ -1,4 +1,3 @@
-
 {
   "NBA": {
     "name": "NBA FS",
@@ -48,34 +47,35 @@
     }
   },
   "mma": {
-    "stats": [
-      { "label": "Significant Strikes", "name": "significantStrikes", "points": 0.5 },
-      { "label": "Submission Attempt", "name": "submissionAttempt", "points": 4 },
-      { "label": "Takedown", "name": "takedown", "points": 5 },
-      { "label": "Knockdown", "name": "knockdown", "points": 10 }
-    ],
-    "bonuses": [
-      { "label": "1st Round Win", "points": 50 },
-      { "label": "2nd Round Win", "points": 40 },
-      { "label": "3rd Round Win", "points": 30 },
-      { "label": "4th/5th Round Win", "points": 20 },
-      { "label": "Decision Win", "points": 10 },
-      { "label": "Draw", "points": 0 }
-    ]
+    "name": "MMA FS",
+    "stats": {
+      "Significant Strikes": 0.5,
+      "Submission Attempt": 4,
+      "Takedown": 5,
+      "Knockdown": 10
+    },
+    "bonuses": {
+      "1st Round Win": 50,
+      "2nd Round Win": 40,
+      "3rd Round Win": 30,
+      "4th/5th Round Win": 20,
+      "Decision Win": 10,
+      "Draw": 0
+    }
   },
   "boxing": {
-    "stats": [
-      { "label": "Punch Landed", "name": "punchLanded", "points": 0.5 },
-      { "label": "Knockdown on Opponent", "name": "knockdownOpponent", "points": 12 },
-      { "label": "Being Knocked by Opponent", "name": "knockedByOpponent", "points": -12 }
-    ],
-    "bonuses": [
-      { "label": "Win Rounds 1-2", "points": 100 },
-      { "label": "Win Rounds 3-6", "points": 75 },
-      { "label": "Win Rounds 7-10", "points": 50 },
-      { "label": "Win Rounds 11-12", "points": 25 },
-      { "label": "Decision Win", "points": 20 }
-    ]
+    "name": "Boxing FS",
+    "stats": {
+      "Punch Landed": 0.5,
+      "Knockdown on Opponent": 12,
+      "Being Knocked by Opponent": -12
+    },
+    "bonuses": {
+      "Win Rounds 1-2": 100,
+      "Win Rounds 3-6": 75,
+      "Win Rounds 7-10": 50,
+      "Win Rounds 11-12": 25,
+      "Decision Win": 20
+    }
   }
 }
-
