@@ -1,86 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fantasy Score Calculator</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    #statInputs label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
+// Load leagues.json and populate dropdown
+fetch('league.json')
+  .then(res => res.json())
+  .then(data => {
+    const leagueSelect = document.getElementById('league');
+    const statInputs = document.getElementById('statInputs');
+    const bonusSection = document.getElementById('bonusSection');
+    const bonusOptions = document.getElementById('bonusOptions');
+    const totalScoreEl = document.getElementById('totalScore');
+    const breakdownTextarea = document.getElementById('breakdown');
+    const hideZeros = document.getElementById('hideZeros');
 
-    #statInputs input[type="number"] {
-      width: 80px;
-      padding: 4px;
-      margin-left: 10px;
-    }
+    let currentLeague = null;
 
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    // Populate dropdown
+    Object.entries(data).forEach(([key, league]) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = league.name;
+      leagueSelect.appendChild(option);
+    });
 
-    .stat-row label {
-      flex: 1;
-      font-size: 0.9rem;
-    }
+    // Load stat inputs when league changes
+    leagueSelect.addEventListener('change', () => {
+      const selectedKey = leagueSelect.value;
+      currentLeague = data[selectedKey];
+      statInputs.innerHTML = '';
+      bonusOptions.innerHTML = '';
+      bonusSection.style.display = currentLeague.bonuses ? 'block' : 'none';
 
-    .stat-row input[type="number"] {
-      width: 70px;
-      padding: 4px;
-      font-size: 0.9rem;
-    }
+      const stats = Array.isArray(currentLeague.stats)
+        ? currentLeague.stats
+        : Object.entries(currentLeague.stats).map(([label, points]) => ({ label, points }));
 
-    textarea#breakdown {
-      width: 300px;
-      height: 100px;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
+      stats.forEach(stat => {
+        const row = document.createElement('div');
+        row.className = 'stat-row';
 
-    #bonusOptions {
-      margin-top: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Fantasy Score Calculator</h1>
-    
-    <label for="league">Select League:</label>
-    <select id="league"></select>
+        const label = document.createElement('label');
+        label.textContent = `${stat.label} (${stat.points})`;
 
-    <div id="statInputs"></div>
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'stat-input';
+        input.dataset.points = stat.points;
+        input.dataset.label = stat.label;
 
-    <div id="bonusSection" style="display: none; margin-top: 1rem;">
-      <strong>Bonus:</strong>
-      <div id="bonusOptions"></div>
-    </div>
+        row.appendChild(label);
+        row.appendChild(input);
+        statInputs.appendChild(row);
+      });
 
-    <div style="margin-top: 1rem;">
-      <button id="calculateBtn" class="go">Go</button>
-      <button id="clearBtn" class="clear">Clear</button>
-    </div>
+      if (currentLeague.bonuses) {
+        currentLeague.bonuses.forEach(bonus => {
+          const label = document.createElement('label');
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = 'bonus';
+          radio.value = bonus.points;
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(` ${bonus.label} (${bonus.points})`));
+          bonusOptions.appendChild(label);
+        });
+      }
+    });
 
-    <div class="checkbox" style="margin-top: 1rem;">
-      <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
-    </div>
+    // Calculate button
+    document.getElementById('calculateBtn').addEventListener('click', () => {
+      const inputs = document.querySelectorAll('.stat-input');
+      let total = 0;
+      let breakdown = '';
 
-    <h3 style="margin-top: 1rem;">Total Fantasy Score: <span id="totalScore">0</span></h3>
+      inputs.forEach(input => {
+        const value = parseFloat(input.value) || 0;
+        const points = parseFloat(input.dataset.points);
+        const label = input.dataset.label;
+        const subtotal = value * points;
 
-    <textarea id="breakdown" readonly></textarea>
-    
-    <button id="copyBtn" style="margin-top: 0.5rem;">Copy</button>
-  </div>
+        if (!hideZeros.checked || value !== 0) {
+          breakdown += `${label}: ${value} × ${points} = ${subtotal}\n`;
+        }
 
-  <script src="script.js"></script>
-</body>
-</html>
+        total += subtotal;
+      });
+
+      const bonusRadio = document.querySelector('#bonusOptions input[type="radio"]:checked');
+      if (bonusRadio) {
+        const bonus = parseFloat(bonusRadio.value);
+        total += bonus;
+        breakdown += `Bonus: +${bonus}\n`;
+      }
+
+      totalScoreEl.textContent = total.toFixed(2);
+      breakdownTextarea.value = breakdown.trim();
+    });
+
+    // Clear button
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.querySelectorAll('.stat-input').forEach(input => input.value = '');
+      document.querySelectorAll('#bonusOptions input[type="radio"]').forEach(radio => radio.checked = false);
+      totalScoreEl.textContent = '0';
+      breakdownTextarea.value = '';
+    });
+
+    // Copy breakdown
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(breakdownTextarea.value);
+    });
+
+    // Trigger initial render
+    leagueSelect.dispatchEvent(new Event('change'));
+  });
