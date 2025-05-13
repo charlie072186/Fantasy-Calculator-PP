@@ -75,24 +75,23 @@
       { "label": "Win Rounds 11-12", "points": 25 },
       { "label": "Decision Win", "points": 20 }
     ]
-  }
-  [
-  {
+  },
+  "nfl_offense": {
     "name": "NFL/CFB Offensive FS",
-    "stats": [
-      { "label": "Passing Yards", "points": 0.04 },
-      { "label": "Passing TDs", "points": 4 },
-      { "label": "Interceptions", "points": -1 },
-      { "label": "Rushing Yards", "points": 0.1 },
-      { "label": "Rushing TDs", "points": 6 },
-      { "label": "Receiving Yards", "points": 0.1 },
-      { "label": "Receiving TDs", "points": 6 },
-      { "label": "Receptions", "points": 1 },
-      { "label": "Fumbles Lost", "points": -1 },
-      { "label": "2 Point Conversions", "points": 2 },
-      { "label": "Offensive Fumble Recovery TD", "points": 6 },
-      { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
-    ],
+    "stats": {
+      "Passing Yards": 0.04,
+      "Passing TDs": 4,
+      "Interceptions": -1,
+      "Rushing Yards": 0.1,
+      "Rushing TDs": 6,
+      "Receiving Yards": 0.1,
+      "Receiving TDs": 6,
+      "Receptions": 1,
+      "Fumbles Lost": -1,
+      "2 Point Conversions": 2,
+      "Offensive Fumble Recovery TD": 6,
+      "Kick/Punt/Field Goal Return TD": 6
+    },
     "bonuses": []
   }
-]
+}
