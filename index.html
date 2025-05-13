@@ -4,38 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
-
     <label for="league">Select League:</label>
-    <select id="league"></select>
-
-    <div id="statInputs"></div>
-
-    <div id="bonusSection" style="display: none;">
-      <h3>Bonus:</h3>
-      <div id="bonusOptions"></div>
+    <select id="league" onchange="loadStats()"></select>
+    <div id="stats-container"></div>
+    <label><input type="checkbox" id="hideZero" /> Hide 0-value stats</label>
+    <div class="buttons">
+      <button onclick="calculateScore()">Go</button>
+      <button onclick="clearInputs()">Clear</button>
     </div>
-
-    <label class="hide-zeros">
-      <input type="checkbox" id="hideZeros" /> Hide 0-value stats
-    </label>
-
-    <div class="button-row">
-      <button id="calculateBtn" class="go-btn">Go</button>
-      <button id="clearBtn" class="clear-btn">Clear</button>
-      <span class="help">❓ Help</span>
-    </div>
-
-    <h2>TOTAL: <span id="totalScore">Fantasy Score</span></h2>
-
+    <h2>TOTAL: Fantasy Score</h2>
     <textarea id="breakdown" readonly></textarea>
-    <button id="copyBtn">Copy Breakdown</button>
+    <button onclick="copyBreakdown()">Copy Breakdown</button>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
