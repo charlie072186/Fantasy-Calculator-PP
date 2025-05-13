@@ -93,17 +93,5 @@
       { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
     ],
     "bonuses": []
-  },
-  "soccer": {
-    "name": "Soccer",
-    "stats": {
-      "Goal":	5,
-      "Assist":	4,
-      "Goal from PEN":	3,
-      "Shot on Target":	2,
-      "Completed Pass":	0.1,
-      "Missed Pass":	-0.1,
-      "Yellow Card":	-1,
-      "Red Card":	-2
-    }
+  }
 }
