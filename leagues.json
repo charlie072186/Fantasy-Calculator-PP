@@ -76,20 +76,23 @@
       { "label": "Decision Win", "points": 20 }
     ]
   }
+  [
   {
-  "name": "Football Offensive FS",
-  "stats": [
-    { "label": "Passing Yards", "points": 0.04 },
-    { "label": "Passing TDs", "points": 4 },
-    { "label": "Interceptions", "points": -1 },
-    { "label": "Rushing Yards", "points": 0.1 },
-    { "label": "Rushing TDs", "points": 6 },
-    { "label": "Receiving Yards", "points": 0.1 },
-    { "label": "Receiving TDs", "points": 6 },
-    { "label": "Receptions", "points": 1 },
-    { "label": "Fumbles Lost", "points": -1 },
-    { "label": "2 Point Conversions", "points": 2 },
-    { "label": "Offensive Fumble Recovery TD", "points": 6 },
-    { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
-  ]
-}
+    "name": "NFL/CFB Offensive FS",
+    "stats": [
+      { "label": "Passing Yards", "points": 0.04 },
+      { "label": "Passing TDs", "points": 4 },
+      { "label": "Interceptions", "points": -1 },
+      { "label": "Rushing Yards", "points": 0.1 },
+      { "label": "Rushing TDs", "points": 6 },
+      { "label": "Receiving Yards", "points": 0.1 },
+      { "label": "Receiving TDs", "points": 6 },
+      { "label": "Receptions", "points": 1 },
+      { "label": "Fumbles Lost", "points": -1 },
+      { "label": "2 Point Conversions", "points": 2 },
+      { "label": "Offensive Fumble Recovery TD", "points": 6 },
+      { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
+    ],
+    "bonuses": []
+  }
+]
