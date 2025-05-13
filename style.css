@@ -38,3 +38,50 @@ button {
   color: black;
   margin-left: 10px;
 }
+.container {
+  max-width: 400px; /* Keeps overall layout boxed */
+  margin: auto;
+}
+
+select#league {
+  width: 100%;
+  max-width: 300px; /* Prevent full-width stretching */
+  padding: 6px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+#statInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-row label {
+  flex: 1;
+  font-size: 0.9rem;
+  padding-right: 10px;
+}
+
+.stat-row input[type="number"] {
+  width: 60px;
+  padding: 4px;
+  font-size: 0.9rem;
+}
+#bonusSection {
+  margin-top: 1rem;
+  background: #181818;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 300px;
+}
+
+#bonusOptions label {
+  font-size: 0.9rem;
+}
