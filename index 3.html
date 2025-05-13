@@ -6,7 +6,6 @@
   <title>Fantasy Score Calculator</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Inline style tweaks for compact inputs */
     #statInputs label {
       display: flex;
       justify-content: space-between;
@@ -20,15 +19,35 @@
       margin-left: 10px;
     }
 
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-row label {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    .stat-row input[type="number"] {
+      width: 70px;
+      padding: 4px;
+      font-size: 0.9rem;
+    }
+
     textarea#breakdown {
-      width: 100%;
+      width: 300px;
       height: 100px;
       font-size: 0.9rem;
       margin-top: 0.5rem;
     }
 
-    #bonusOptions label {
-      margin-bottom: 0.3rem;
+    #bonusOptions {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
     }
   </style>
 </head>
@@ -44,7 +63,7 @@
     <!-- Bonus section (shown only for combat sports) -->
     <div id="bonusSection" style="display: none; margin-top: 1rem;">
       <strong>Bonus:</strong>
-      <div id="bonusOptions" style="margin-top: 0.5rem;"></div>
+      <div id="bonusOptions"></div>
     </div>
 
     <div style="margin-top: 1rem;">
