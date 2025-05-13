@@ -4,185 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fantasy Score Calculator</title>
-  <style>
-    body {
-      background-color: #0c0f1a;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    select {
-      background-color: #11131c;
-      color: #fff;
-      border: 1px solid #333;
-      padding: 6px 10px;
-      font-size: 16px;
-      margin-left: 10px;
-      border-radius: 5px;
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-    }
-
-    .stat-label {
-      flex: 1;
-      font-size: 16px;
-    }
-
-    .stat-points {
-      margin-left: 4px;
-      color: #ccc;
-      white-space: nowrap;
-    }
-
-    .stat-input {
-      background-color: #111;
-      border: 1px solid #444;
-      color: #fff;
-      width: 70px;
-      padding: 5px;
-      text-align: center;
-      font-size: 16px;
-      margin-left: 12px;
-      border-radius: 3px;
-    }
-
-    .controls {
-      margin-top: 20px;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .button {
-      background-color: #832bff;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .clear-btn {
-      background: none;
-      color: yellow;
-      text-decoration: underline;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .help {
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    #total {
-      font-weight: 600;
-      font-size: 20px;
-      margin-top: 20px;
-    }
-
-    #breakdown {
-      width: 100%;
-      background-color: #0a0a0a;
-      border: 1px solid #222;
-      color: #ccc;
-      margin-top: 10px;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 14px;
-      resize: none;
-      height: auto;
-      min-height: 80px;
-      overflow: hidden;
-    }
-
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🏀 Basketball FS</h1>
+  <div class="container">
+    <h1>Fantasy Score Calculator</h1>
 
-  <div id="statsContainer"></div>
+    <label for="league">Select League:</label>
+    <select id="league"></select>
 
-  <div class="controls">
-    <button class="button" onclick="calculateScore()">Go</button>
-    <button class="clear-btn" onclick="clearInputs()">Clear</button>
-    <div class="help">❓ Help</div>
+    <div id="statInputs"></div>
+
+    <div id="bonusSection" style="display: none;">
+      <h3>Bonus:</h3>
+      <div id="bonusOptions"></div>
+    </div>
+
+    <label class="hide-zeros">
+      <input type="checkbox" id="hideZeros" /> Hide 0-value stats
+    </label>
+
+    <div class="button-row">
+      <button id="calculateBtn" class="go-btn">Go</button>
+      <button id="clearBtn" class="clear-btn">Clear</button>
+      <span class="help">❓ Help</span>
+    </div>
+
+    <h2>TOTAL: <span id="totalScore">Fantasy Score</span></h2>
+
+    <textarea id="breakdown" readonly></textarea>
+    <button id="copyBtn">Copy Breakdown</button>
   </div>
 
-  <div id="total">TOTAL: Fantasy Score</div>
-  <textarea id="breakdown" readonly></textarea>
-
-  <script>
-    const stats = [
-      { name: "Points", value: 1 },
-      { name: "Rebound", value: 1.2 },
-      { name: "Assist", value: 1.5 },
-      { name: "Block", value: 3 },
-      { name: "Steal", value: 3 },
-      { name: "Turnover", value: -1 }
-    ];
-
-    const container = document.getElementById("statsContainer");
-
-    stats.forEach(stat => {
-      const row = document.createElement("div");
-      row.className = "stat-row";
-
-      row.innerHTML = `
-        <div class="stat-label">
-          ${stat.name} <span class="stat-points">${stat.value} pt${Math.abs(stat.value) !== 1 ? 's' : ''}</span>
-        </div>
-        <input class="stat-input" type="number" step="any" id="${stat.name}" placeholder="" />
-      `;
-
-      container.appendChild(row);
-    });
-
-    function calculateScore() {
-      let total = 0;
-      let breakdown = "";
-
-      stats.forEach(stat => {
-        const input = document.getElementById(stat.name);
-        const val = parseFloat(input.value);
-        if (!isNaN(val) && val !== 0) {
-          const pts = val * stat.value;
-          total += pts;
-          breakdown += `${stat.name}: ${val} × ${stat.value} = ${pts.toFixed(2)}\n`;
-        }
-      });
-
-      document.getElementById("total").innerText = `TOTAL: ${total.toFixed(2)}`;
-      document.getElementById("breakdown").value = breakdown.trim();
-    }
-
-    function clearInputs() {
-      stats.forEach(stat => {
-        document.getElementById(stat.name).value = "";
-      });
-      document.getElementById("total").innerText = "TOTAL: Fantasy Score";
-      document.getElementById("breakdown").value = "";
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
