@@ -70,10 +70,10 @@
       "Being Knocked by Opponent": -12
     },
     "bonuses": [
-      {"label":"Win Rounds 1-2": 100},
-      {"label":"Win Rounds 3-6": 75},
-      {"label":"Win Rounds 7-10": 50},
-      {"label":"Win Rounds 11-12": 25},
-      {"label":"Decision Win": 20}
+      {"label":"Win Rounds 1-2", "points": 100},
+      {"label":"Win Rounds 3-6" "points": 75},
+      {"label":"Win Rounds 7-10" "points": 50},
+      {"label":"Win Rounds 11-12" "points": 25},
+      {"label":"Decision Win" "points": 20}
     ]
   }
