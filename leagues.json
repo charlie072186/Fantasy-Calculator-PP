@@ -77,7 +77,7 @@
     ]
   },
   "nfl_cfb": {
-    "name": "NFL/CFB Offensive FS",
+    "name": "Football Offensive FS",
     "stats": [
       { "label": "Passing Yards", "points": 0.04 },
       { "label": "Passing TDs", "points": 4 },
