@@ -6,23 +6,43 @@
   <title>Fantasy Score Calculator</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    #statInputs label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      background-color: #f9f9f9;
     }
 
-    #statInputs input[type="number"] {
-      width: 80px;
-      padding: 4px;
-      margin-left: 10px;
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h3 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.4rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
     }
 
     .stat-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.5rem;
     }
 
     .stat-row label {
@@ -31,16 +51,13 @@
     }
 
     .stat-row input[type="number"] {
-      width: 70px;
+      width: 80px;
       padding: 4px;
       font-size: 0.9rem;
     }
 
-    textarea#breakdown {
-      width: 300px;
-      height: 100px;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
+    #bonusSection {
+      margin-top: 1rem;
     }
 
     #bonusOptions {
@@ -49,6 +66,37 @@
       flex-direction: column;
       gap: 0.3rem;
     }
+
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+
+    textarea#breakdown {
+      width: 100%;
+      height: 120px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      resize: vertical;
+    }
+
+    .checkbox {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      .stat-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stat-row input {
+        width: 100%;
+        margin-top: 0.3rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -56,12 +104,12 @@
     <h1>Fantasy Score Calculator</h1>
     
     <label for="league">Select League:</label>
-    <select id="league"></select>
+    <select id="league" aria-label="Select League"></select>
 
     <div id="statInputs"></div>
 
-    <!-- Bonus section (shown only for combat sports) -->
-    <div id="bonusSection" style="display: none; margin-top: 1rem;">
+    <!-- Bonus section -->
+    <div id="bonusSection" style="display: none;">
       <strong>Bonus:</strong>
       <div id="bonusOptions"></div>
     </div>
@@ -71,12 +119,13 @@
       <button id="clearBtn" class="clear">Clear</button>
     </div>
 
-    <div class="checkbox" style="margin-top: 1rem;">
+    <div class="checkbox">
       <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
     </div>
 
-    <h3 style="margin-top: 1rem;">Total Fantasy Score: <span id="totalScore">0</span></h3>
+    <h3>Total Fantasy Score: <span id="totalScore">0</span></h3>
 
+    <label for="breakdown">Score Breakdown:</label>
     <textarea id="breakdown" readonly></textarea>
     
     <button id="copyBtn" style="margin-top: 0.5rem;">Copy</button>
