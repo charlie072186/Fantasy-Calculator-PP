@@ -59,18 +59,18 @@ function renderInputs(selectedLeague) {
 }
 
   if (bonuses && Array.isArray(bonuses)) {
-    bonusSection.style.display = "block";
-    bonuses.forEach((bonus, i) => {
-      const label = document.createElement("label");
-      label.style.display = "block";
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = "bonus";
-      radio.value = bonus.points;
-      if (i === 0) radio.checked = true; // default selection
-      label.appendChild(radio);
-      label.append(` ${bonus.label} (+${bonus.points})`);
-      bonusOptions.appendChild(label);
+  bonusSection.style.display = "block";
+  bonuses.forEach((bonus, i) => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "bonus";
+    radio.value = bonus.points;
+    if (i === 0) radio.checked = true;
+    label.appendChild(radio);
+    label.append(` ${bonus.label} (+${bonus.points})`);
+    bonusOptions.appendChild(label);
     });
   }
 }
