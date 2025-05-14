@@ -123,3 +123,25 @@ textarea {
   width: 100px;
 }
 
+.tennis-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+.tennis-player {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+}
+.note {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-top: 10px;
+}
+.hidden {
+  display: none;
+}
+
