@@ -96,49 +96,32 @@ function copyBreakdown() {
   document.execCommand("copy");
 }
 
-function loadStats() {
-  const leagueKey = document.getElementById("league").value;
-  const league = leagues[leagueKey];
-  const container = document.getElementById("stats-container");
-  container.innerHTML = "";
-
-  // Special UI for Tennis
-  if (leagueKey === "tennis") {
-    const customTennisHTML = `
-      <div class="tennis-grid">
-        <div><strong>PLAYER</strong></div>
-        <div><input type="text" placeholder="Name" /></div>
-        <div><strong>Set 1</strong></div>
-        <div><input type="text" class="stat-input" id="set1" /></div>
-        <div><strong>Set 2</strong></div>
-        <div><input type="text" class="stat-input" id="set2" /></div>
-        <div><strong>Set 3</strong></div>
-        <div><input type="text" class="stat-input" id="set3" /></div>
-        <div><strong>Aces</strong></div>
-        <div><input type="text" class="stat-input" id="Ace" /></div>
-        <div><strong>Double Faults</strong></div>
-        <div><input type="text" class="stat-input" id="Double Fault" /></div>
+if (leagueKey === "tennis") {
+  container.innerHTML = `
+    <div class="tennis-section">
+      <div class="player-row">
+        <input type="text" placeholder="Player 1 Name" class="tennis-input" id="tennis-player1" />
+        <label class="tennis-label">vs</label>
+        <input type="text" placeholder="Player 2 Name" class="tennis-input" id="tennis-player2" />
       </div>
-      <p class="note">Note: Input 3 for set won, 0 for set lost</p>
-    `;
-    container.innerHTML = customTennisHTML;
-    return;
-  }
-
-  // Default stat layout for all other leagues
-  const stats = Array.isArray(league.stats)
-    ? league.stats.map(s => [s.label, s.points])
-    : Object.entries(league.stats);
-
-  stats.forEach(([label, points]) => {
-    const row = document.createElement("div");
-    row.className = "stat-row";
-    row.innerHTML = `
-      <div class="stat-label">${label} — ${points} pts</div>
-      <input type="text" class="stat-input" id="stat-${label}" />
-    `;
-    container.appendChild(row);
-  });
+      <div class="set-inputs">
+        <div class="tennis-label">Set Wins (1P)</div>
+        ${[1,2,3].map(i => `<input class="tennis-stat" type="number" id="set1P${i}" placeholder="0/3" />`).join('')}
+        <div class="tennis-label">Set Wins (2P)</div>
+        ${[1,2,3].map(i => `<input class="tennis-stat" type="number" id="set2P${i}" placeholder="0/3" />`).join('')}
+      </div>
+      <div class="stat-inputs">
+        <div class="stat-group">
+          <label class="tennis-label">Ace</label>
+          <input class="tennis-stat" type="number" id="tennis-ace" />
+        </div>
+        <div class="stat-group">
+          <label class="tennis-label">Double Fault</label>
+          <input class="tennis-stat" type="number" id="tennis-double-fault" />
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 
