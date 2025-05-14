@@ -4,6 +4,7 @@ async function loadLeagues() {
   const res = await fetch("leagues.json");
   leagues = await res.json();
   const select = document.getElementById("league");
+  select.innerHTML = "";
   Object.entries(leagues).forEach(([key, val]) => {
     const opt = document.createElement("option");
     opt.value = key;
@@ -17,7 +18,10 @@ function loadStats() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
   const container = document.getElementById("stats-container");
+  const bonusContainer = document.getElementById("bonus-container");
   container.innerHTML = "";
+  bonusContainer.innerHTML = "";
+
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
@@ -31,6 +35,24 @@ function loadStats() {
     `;
     container.appendChild(row);
   });
+
+  if (league.bonuses && league.bonuses.length > 0) {
+    const title = document.createElement("h3");
+    title.textContent = "Bonus:";
+    bonusContainer.appendChild(title);
+
+    league.bonuses.forEach((bonus, index) => {
+      const row = document.createElement("div");
+      row.className = "bonus-option";
+      row.innerHTML = `
+        <label>
+          <input type="radio" name="bonus" value="${bonus.points}" />
+          ${bonus.label} — ${bonus.points} pts
+        </label>
+      `;
+      bonusContainer.appendChild(row);
+    });
+  }
 }
 
 function calculateScore() {
@@ -39,6 +61,7 @@ function calculateScore() {
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
+
   let total = 0;
   let breakdown = "";
 
@@ -50,12 +73,21 @@ function calculateScore() {
     total += val * points;
   });
 
+  const bonus = document.querySelector('input[name="bonus"]:checked');
+  if (bonus) {
+    const bonusVal = parseFloat(bonus.value);
+    total += bonusVal;
+    breakdown += `Bonus: +${bonusVal}\n`;
+  }
+
   document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
 }
 
 function clearInputs() {
   document.querySelectorAll(".stat-input").forEach(input => input.value = "");
   document.getElementById("breakdown").value = "";
+  const selectedBonus = document.querySelector('input[name="bonus"]:checked');
+  if (selectedBonus) selectedBonus.checked = false;
 }
 
 function copyBreakdown() {
