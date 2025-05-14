@@ -119,15 +119,17 @@
       "Blocked Punt or FG Return TD": 6,
       "Safety": 2,
       "Blocked Kick": 2,
-      "2pt/XP Return": 2,
-      "0 Points Allowed": 10,
-      "1-6 Points Allowed": 7,
-      "7-13 Points Allowed": 4,
-      "14-20 Points Allowed": 1,
-      "21-27 Points Allowed": 0,
-      "28-34 Points Allowed": -1,
-      "35+ Points Allowed": -4
-    }
+      "2pt/XP Return": 2
+    },  
+  "bonuses": [    
+      { "label": "0 Points Allowed", "points": 10 },
+      { "label": "1-6 Points Allowed", "points": 7 },
+      { "label": "7-13 Points Allowed", "points": 4 },
+      { "label": "14-20 Points Allowed", "points": 1 },
+      { "label": "21-27 Points Allowed", "points": 0 },
+      { "label": "28-34 Points Allowed", "points": -1 },
+      { "label": "35+ Points Allowed", "points": -4 }
+    ]
   },
   "kickers": {
     "name": "Kickers",
