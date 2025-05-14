@@ -12,10 +12,11 @@
     <label for="league">Select League:</label>
     <select id="league" onchange="loadStats()"></select>
     <div id="stats-container"></div>
-    <div id="bonus-container"></div>
     <label><input type="checkbox" id="hideZero" /> Hide 0-value stats</label>
-    <button onclick="calculateScore()">Go</button>
-    <button onclick="clearInputs()">Clear</button>
+    <div class="buttons">
+      <button onclick="calculateScore()">Go</button>
+      <button onclick="clearInputs()">Clear</button>
+    </div>
     <h2>TOTAL: Fantasy Score</h2>
     <textarea id="breakdown" readonly></textarea>
     <button onclick="copyBreakdown()">Copy Breakdown</button>
