@@ -12,7 +12,10 @@
     <label for="league">Select League:</label>
     <select id="league" onchange="loadStats()"></select>
     <div id="stats-container"></div>
-    <label><input type="checkbox" id="hideZero" /> Hide 0-value stats</label>
+    <div class="options-row">
+      <input type="checkbox" id="hideZero" />
+      <label for="hideZero">Hide 0-value stats</label>
+    </div>
     <div class="buttons">
       <button onclick="calculateScore()">Go</button>
       <button onclick="clearInputs()">Clear</button>
