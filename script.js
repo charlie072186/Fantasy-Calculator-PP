@@ -96,4 +96,50 @@ function copyBreakdown() {
   document.execCommand("copy");
 }
 
+function loadStats() {
+  const leagueKey = document.getElementById("league").value;
+  const league = leagues[leagueKey];
+  const container = document.getElementById("stats-container");
+  container.innerHTML = "";
+
+  // Special UI for Tennis
+  if (leagueKey === "tennis") {
+    const customTennisHTML = `
+      <div class="tennis-grid">
+        <div><strong>PLAYER</strong></div>
+        <div><input type="text" placeholder="Name" /></div>
+        <div><strong>Set 1</strong></div>
+        <div><input type="text" class="stat-input" id="set1" /></div>
+        <div><strong>Set 2</strong></div>
+        <div><input type="text" class="stat-input" id="set2" /></div>
+        <div><strong>Set 3</strong></div>
+        <div><input type="text" class="stat-input" id="set3" /></div>
+        <div><strong>Aces</strong></div>
+        <div><input type="text" class="stat-input" id="Ace" /></div>
+        <div><strong>Double Faults</strong></div>
+        <div><input type="text" class="stat-input" id="Double Fault" /></div>
+      </div>
+      <p class="note">Note: Input 3 for set won, 0 for set lost</p>
+    `;
+    container.innerHTML = customTennisHTML;
+    return;
+  }
+
+  // Default stat layout for all other leagues
+  const stats = Array.isArray(league.stats)
+    ? league.stats.map(s => [s.label, s.points])
+    : Object.entries(league.stats);
+
+  stats.forEach(([label, points]) => {
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    row.innerHTML = `
+      <div class="stat-label">${label} — ${points} pts</div>
+      <input type="text" class="stat-input" id="stat-${label}" />
+    `;
+    container.appendChild(row);
+  });
+}
+
+
 window.onload = loadLeagues;
