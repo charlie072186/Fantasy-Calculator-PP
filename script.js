@@ -96,25 +96,4 @@ function copyBreakdown() {
   document.execCommand("copy");
 }
 
-let groupDiv = document.createElement("div");
-groupDiv.className = "stat-group";
-
-stats.forEach(([label, points], index) => {
-  const row = document.createElement("div");
-  row.className = "stat-row";
-  row.innerHTML = `
-    <div class="stat-label">${label} — ${points} pts</div>
-    <input type="text" class="stat-input" id="stat-${label.replace(/\s+/g, '_')}" />
-  `;
-  groupDiv.appendChild(row);
-
-  // Add 3 per group (adjust as needed)
-  if ((index + 1) % 3 === 0 || index === stats.length - 1) {
-    container.appendChild(groupDiv);
-    groupDiv = document.createElement("div");
-    groupDiv.className = "stat-group";
-  }
-});
-
-
 window.onload = loadLeagues;
