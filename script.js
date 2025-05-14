@@ -97,34 +97,6 @@ function copyBreakdown() {
 }
 
 if (leagueKey === "tennis") {
-  container.innerHTML = `
-    <div class="tennis-section">
-      <div class="player-row">
-        <input type="text" placeholder="Player 1 Name" class="tennis-input" id="tennis-player1" />
-        <label class="tennis-label">vs</label>
-        <input type="text" placeholder="Player 2 Name" class="tennis-input" id="tennis-player2" />
-      </div>
-      <div class="set-inputs">
-        <div class="tennis-label">Set Wins (1P)</div>
-        ${[1,2,3].map(i => `<input class="tennis-stat" type="number" id="set1P${i}" placeholder="0/3" />`).join('')}
-        <div class="tennis-label">Set Wins (2P)</div>
-        ${[1,2,3].map(i => `<input class="tennis-stat" type="number" id="set2P${i}" placeholder="0/3" />`).join('')}
-      </div>
-      <div class="stat-inputs">
-        <div class="stat-group">
-          <label class="tennis-label">Ace</label>
-          <input class="tennis-stat" type="number" id="tennis-ace" />
-        </div>
-        <div class="stat-group">
-          <label class="tennis-label">Double Fault</label>
-          <input class="tennis-stat" type="number" id="tennis-double-fault" />
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-if (leagueKey === "tennis") {
   const ace = parseFloat(document.getElementById("tennis-ace").value) || 0;
   const doubleFault = parseFloat(document.getElementById("tennis-double-fault").value) || 0;
 
