@@ -22,6 +22,16 @@ function loadStats() {
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
 
+  const tennisContainer = document.getElementById("tennis-container");
+if (leagueKey === "tennis") {
+  container.classList.add("hidden");
+  tennisContainer.classList.remove("hidden");
+} else {
+  tennisContainer.classList.add("hidden");
+  container.classList.remove("hidden");
+}
+
+
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
