@@ -65,3 +65,16 @@ textarea {
   color: #fff;
   border: 1px solid #888;
 }
+
+.tennis-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+  padding: 10px 0;
+  color: #90ee90;
+}
+.note {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
