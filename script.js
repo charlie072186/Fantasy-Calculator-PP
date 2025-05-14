@@ -124,5 +124,27 @@ if (leagueKey === "tennis") {
   `;
 }
 
+if (leagueKey === "tennis") {
+  const ace = parseFloat(document.getElementById("tennis-ace").value) || 0;
+  const doubleFault = parseFloat(document.getElementById("tennis-double-fault").value) || 0;
+
+  let setsWon = 0;
+  for (let i = 1; i <= 3; i++) {
+    setsWon += parseInt(document.getElementById(`set1P${i}`).value) || 0;
+  }
+
+  const matchPlayed = 10;
+  const setWon = setsWon * 3;
+  const setLoss = (3 - setsWon) * -3;
+  const aceScore = ace * 0.5;
+  const dfScore = doubleFault * -0.5;
+
+  const total = matchPlayed + setWon + setLoss + aceScore + dfScore;
+
+  document.getElementById("breakdown").value =
+    `Match Played: 1 × 10 = 10.00\nSet Won: ${setsWon} × 3 = ${setWon.toFixed(2)}\nSet Loss: ${(3 - setsWon)} × -3 = ${setLoss.toFixed(2)}\nAces: ${ace} × 0.5 = ${aceScore.toFixed(2)}\nDouble Faults: ${doubleFault} × -0.5 = ${dfScore.toFixed(2)}\n\nTotal: ${total.toFixed(2)}`;
+  return;
+}
+
 
 window.onload = loadLeagues;
