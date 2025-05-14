@@ -128,5 +128,30 @@ if (leagueKey === "tennis") {
   return;
 }
 
+function calculateTennisScore() {
+  const scores = [];
+  ["1", "2"].forEach(i => {
+    const name = document.getElementById(`player${i}Name`).value || `Player ${i}`;
+    const sets = [1, 2, 3].map(s => parseInt(document.getElementById(`p${i}s${s}`).value) || 0);
+    const aces = parseInt(document.getElementById(`p${i}Aces`).value) || 0;
+    const df = parseInt(document.getElementById(`p${i}DF`).value) || 0;
+
+    const matchPlayed = 10;
+    const setWon = sets.filter(v => v === 3).length;
+    const setLost = sets.filter(v => v === 0).length;
+
+    const total =
+      matchPlayed +
+      (setWon * 3) +
+      (setLost * -3) +
+      (aces * 0.5) +
+      (df * -0.5);
+
+    scores.push(`${name} Total: ${total.toFixed(2)}\n`);
+  });
+
+  document.getElementById("breakdown").value = scores.join("\n");
+}
+
 
 window.onload = loadLeagues;
