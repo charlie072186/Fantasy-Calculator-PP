@@ -91,7 +91,8 @@
       { "label": "2 Point Conversions", "points": 2 },
       { "label": "Offensive Fumble Recovery TD", "points": 6 },
       { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
-    ]
+    ],
+    "bonuses": []
   },
   "soccer": {
     "name": "Soccer",
@@ -119,16 +120,14 @@
       "Safety": 2,
       "Blocked Kick": 2,
       "2pt/XP Return": 2,
-   },  
-    "Points Allowed": [
-      {"label": "0 Points Allowed", "Point": 10},
-      {"label": "1-6 Points Allowed", "Point": 7},
-      {"label": "7-13 Points Allowed","Point": 4},
-      {"label": "14-20 Points Allowed", "Point": 1},
-      {"label": "21-27 Points Allowed", "Point": 0},
-      {"label": "28-34 Points Allowed", "Point":  -1,}
+      "0 Points Allowed": 10,
+      "1-6 Points Allowed": 7,
+      "7-13 Points Allowed": 4,
+      "14-20 Points Allowed": 1,
+      "21-27 Points Allowed": 0,
+      "28-34 Points Allowed": -1,
       "35+ Points Allowed": -4
-    ]
+    }
   },
   "kickers": {
     "name": "Kickers",
