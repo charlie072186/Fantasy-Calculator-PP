@@ -15,6 +15,29 @@
     <div id="stats-container"></div>
     <div id="bonus-container"></div>
 
+    <!-- Only for Tennis FS league -->
+<div id="tennis-container" class="tennis-container hidden">
+  <div class="tennis-player">
+    <label>PLAYER 1:</label><input type="text" id="player1Name" placeholder="Name" />
+    <label>Set 1</label><input type="number" id="p1s1" />
+    <label>Set 2</label><input type="number" id="p1s2" />
+    <label>Set 3</label><input type="number" id="p1s3" />
+    <label>Aces</label><input type="number" id="p1Aces" />
+    <label>Double Faults</label><input type="number" id="p1DF" />
+  </div>
+
+  <div class="tennis-player">
+    <label>PLAYER 2:</label><input type="text" id="player2Name" placeholder="Name" />
+    <label>Set 1</label><input type="number" id="p2s1" />
+    <label>Set 2</label><input type="number" id="p2s2" />
+    <label>Set 3</label><input type="number" id="p2s3" />
+    <label>Aces</label><input type="number" id="p2Aces" />
+    <label>Double Faults</label><input type="number" id="p2DF" />
+  </div>
+
+  <p class="note">Note: Input <b>3</b> for set won, <b>0</b> for set lost</p>
+</div>
+
     <div class="options-row">
       <input type="checkbox" id="hideZero" />
       <label for="hideZero">Hide 0-value stats</label>
