@@ -153,5 +153,15 @@ function calculateTennisScore() {
   document.getElementById("breakdown").value = scores.join("\n");
 }
 
+function calculateScore() {
+  const leagueKey = document.getElementById("league").value;
+  if (leagueKey === "tennis") {
+    calculateTennisScore();
+    return;
+  }
+
+  // existing logic for other leagues...
+}
+
 
 window.onload = loadLeagues;
