@@ -9,27 +9,32 @@
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    
     <label for="league">Select League:</label>
-    <select id="league" onchange="loadStats()"></select>
+    <select id="league"></select>
 
-    <div id="stats-container"></div>
+    <div id="statInputs"></div>
 
-    <div id="bonus-container"></div>
-
-    <div class="options-row">
-      <input type="checkbox" id="hideZero" />
-      <label for="hideZero">Hide 0-value stats</label>
+    <!-- Bonus section -->
+    <div id="bonusSection" style="display: none;">
+      <strong>Bonus:</strong>
+      <div id="bonusOptions"></div>
     </div>
 
-    <div class="buttons">
-      <button onclick="calculateScore()">Go</button>
-      <button onclick="clearInputs()">Clear</button>
+    <div class="checkbox-row">
+      <label><input type="checkbox" id="hideZeros" /> Hide zero stats</label>
     </div>
 
-    <h2>TOTAL: Fantasy Score</h2>
+    <div class="button-row">
+      <button id="calculateBtn" class="go">Go</button>
+      <button id="clearBtn" class="clear">Clear</button>
+    </div>
+
+    <h3>Total Fantasy Score: <span id="totalScore">0</span></h3>
     <textarea id="breakdown" readonly></textarea>
-    <button onclick="copyBreakdown()">Copy Breakdown</button>
+    <button id="copyBtn">Copy</button>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
