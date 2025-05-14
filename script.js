@@ -22,16 +22,6 @@ function loadStats() {
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
 
-  const tennisContainer = document.getElementById("tennis-container");
-if (leagueKey === "tennis") {
-  container.classList.add("hidden");
-  tennisContainer.classList.remove("hidden");
-} else {
-  tennisContainer.classList.add("hidden");
-  container.classList.remove("hidden");
-}
-
-
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
@@ -105,63 +95,5 @@ function copyBreakdown() {
   breakdown.select();
   document.execCommand("copy");
 }
-
-if (leagueKey === "tennis") {
-  const ace = parseFloat(document.getElementById("tennis-ace").value) || 0;
-  const doubleFault = parseFloat(document.getElementById("tennis-double-fault").value) || 0;
-
-  let setsWon = 0;
-  for (let i = 1; i <= 3; i++) {
-    setsWon += parseInt(document.getElementById(`set1P${i}`).value) || 0;
-  }
-
-  const matchPlayed = 10;
-  const setWon = setsWon * 3;
-  const setLoss = (3 - setsWon) * -3;
-  const aceScore = ace * 0.5;
-  const dfScore = doubleFault * -0.5;
-
-  const total = matchPlayed + setWon + setLoss + aceScore + dfScore;
-
-  document.getElementById("breakdown").value =
-    `Match Played: 1 × 10 = 10.00\nSet Won: ${setsWon} × 3 = ${setWon.toFixed(2)}\nSet Loss: ${(3 - setsWon)} × -3 = ${setLoss.toFixed(2)}\nAces: ${ace} × 0.5 = ${aceScore.toFixed(2)}\nDouble Faults: ${doubleFault} × -0.5 = ${dfScore.toFixed(2)}\n\nTotal: ${total.toFixed(2)}`;
-  return;
-}
-
-function calculateTennisScore() {
-  const scores = [];
-  ["1", "2"].forEach(i => {
-    const name = document.getElementById(`player${i}Name`).value || `Player ${i}`;
-    const sets = [1, 2, 3].map(s => parseInt(document.getElementById(`p${i}s${s}`).value) || 0);
-    const aces = parseInt(document.getElementById(`p${i}Aces`).value) || 0;
-    const df = parseInt(document.getElementById(`p${i}DF`).value) || 0;
-
-    const matchPlayed = 10;
-    const setWon = sets.filter(v => v === 3).length;
-    const setLost = sets.filter(v => v === 0).length;
-
-    const total =
-      matchPlayed +
-      (setWon * 3) +
-      (setLost * -3) +
-      (aces * 0.5) +
-      (df * -0.5);
-
-    scores.push(`${name} Total: ${total.toFixed(2)}\n`);
-  });
-
-  document.getElementById("breakdown").value = scores.join("\n");
-}
-
-function calculateScore() {
-  const leagueKey = document.getElementById("league").value;
-  if (leagueKey === "tennis") {
-    calculateTennisScore();
-    return;
-  }
-
-  // existing logic for other leagues...
-}
-
 
 window.onload = loadLeagues;
