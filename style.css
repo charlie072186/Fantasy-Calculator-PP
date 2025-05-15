@@ -137,3 +137,67 @@ textarea {
   visibility: visible;
   opacity: 1;
 }
+
+.stat-group {
+  border: 1px solid #444;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background-color: #1a1a1a;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #a2a2a2;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 6px;
+  user-select: none;
+}
+
+/* Adjust stat-row spacing inside groups */
+.stat-group .stat-row {
+  margin-bottom: 8px;
+}
+
+/* Tooltip styling for the little info icons */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  color: #90cdf4;
+  margin-left: 6px;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #444;
+  color: #fff;
+  text-align: left;
+  border-radius: 4px;
+  padding: 6px 10px;
+  position: absolute;
+  z-index: 10;
+  top: 120%;
+  left: 0;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Checkbox input size adjustment */
+input[type="checkbox"].stat-input {
+  width: 18px;
+  height: 18px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
