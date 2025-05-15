@@ -91,11 +91,31 @@ textarea {
   padding-bottom: 4px;
 }
 
-/* Tooltip Styles */
+/* Grouped stat layout */
+.stat-group {
+  border: 1px solid #555;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+}
+
+.group-title {
+  font-weight: bold;
+  color: #90ee90;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 4px;
+}
+
+/* Tooltip styling for info icon */
 .tooltip {
   position: relative;
-  cursor: pointer;
   display: inline-block;
+  cursor: pointer;
+  margin-left: 6px;
+  font-size: 0.85rem;
   color: #90cdf4;
 }
 
@@ -113,7 +133,7 @@ textarea {
   left: 110%;
   font-size: 0.8rem;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
 
 .tooltip:hover .tooltiptext {
