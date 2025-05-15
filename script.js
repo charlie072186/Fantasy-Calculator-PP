@@ -201,6 +201,32 @@ function calculateScore() {
     if (qsInput) qsInput.value = 1;
   }
 
+if (label === "Quality Start") {
+  const row = document.createElement("div");
+  row.className = "stat-row";
+  row.innerHTML = `
+    <div class="stat-label">
+      ${label}
+      <span class="tooltip">ℹ️
+        <span class="tooltiptext">Auto: 6+ IP & ≤3 ER = 4 pts</span>
+      </span>
+    </div>
+    <input type="text" class="stat-input" id="stat-${label}" readonly />
+  `;
+  container.appendChild(row);
+  return;
+}
+  
+  if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
+  const qsStat = league.stats.find(s => s.label === "Quality Start");
+  if (qsStat) {
+    const qsPoints = qsStat.points;
+    document.getElementById("stat-Quality Start").value = 1;
+    total += qsPoints;
+    breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+  }
+}
+
   // Bonus
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
