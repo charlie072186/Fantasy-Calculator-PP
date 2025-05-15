@@ -47,7 +47,11 @@ function loadStats() {
         "Fumble Recovery TD",
         "Blocked Punt or FG Return TD"
       ],
-      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
+      "Special Teams / Misc": [
+        "Safety",
+        "Blocked Kick",
+        "2pt/XP Return"
+      ]
     };
     renderGroupedStats(container, league.stats, dstGroups);
     return;
@@ -77,7 +81,14 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-          <input type="text" class="stat-input" id="stat-${label}" readonly />
+        `; // no input field
+        container.appendChild(row);
+        return;
+      }
+      if (label === "Win") {
+        row.innerHTML = `
+          <div class="stat-label">${label} — ${points} pts</div>
+          <input type="checkbox" class="stat-input" id="stat-${label}" />
         `;
         container.appendChild(row);
         return;
@@ -156,7 +167,12 @@ function calculateScore() {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
 
-    let val = parseFloat(input.value);
+    let val;
+    if (input.type === "checkbox") {
+      val = input.checked ? 1 : 0;
+    } else {
+      val = parseFloat(input.value);
+    }
     if (isNaN(val)) return;
 
     if (leagueKey === "mlb_pitcher") {
@@ -173,7 +189,7 @@ function calculateScore() {
         earnedRuns = val;
       }
       if (label === "Quality Start") {
-        return;
+        return; // auto-computed later
       }
     }
 
@@ -184,14 +200,9 @@ function calculateScore() {
   });
 
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-    const qsStat = league.stats.find(s => s.label === "Quality Start");
-    if (qsStat) {
-      const qsPoints = qsStat.points;
-      const qsInput = document.getElementById("stat-Quality Start");
-      if (qsInput) qsInput.value = 1;
-      total += qsPoints;
-      breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
-    }
+    const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
+    breakdown += `Quality Start (auto): +${qsPoints}\n`;
+    total += qsPoints;
   }
 
   const bonus = document.querySelector('input[name="bonus"]:checked');
@@ -206,7 +217,8 @@ function calculateScore() {
 
 function clearInputs() {
   document.querySelectorAll(".stat-input").forEach(input => {
-    input.value = "";
+    if (input.type === "checkbox") input.checked = false;
+    else input.value = "";
   });
   document.getElementById("breakdown").value = "";
   const selectedBonus = document.querySelector('input[name="bonus"]:checked');
