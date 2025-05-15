@@ -26,7 +26,6 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-  // Special layout for Football FS
   if (leagueKey === "nfl_cfb") {
     const groups = {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -36,11 +35,20 @@ function loadStats() {
       "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"]
     };
 
-    for (const [group, labels] of Object.entries(groups)) {
+    for (const [groupName, labels] of Object.entries(groups)) {
       const groupDiv = document.createElement("div");
       groupDiv.className = "stat-group";
+
+      const groupTitle = document.createElement("div");
+      groupTitle.className = "group-title";
+      groupTitle.textContent = groupName;
+      groupDiv.appendChild(groupTitle);
+
       labels.forEach(label => {
-        const points = league.stats.find(s => s.label === label)?.points ?? 0;
+        const statObj = league.stats.find(s => s.label === label);
+        if (!statObj) return;
+        const points = statObj.points;
+
         const row = document.createElement("div");
         row.className = "stat-row";
         row.innerHTML = `
@@ -49,10 +57,10 @@ function loadStats() {
         `;
         groupDiv.appendChild(row);
       });
+
       container.appendChild(groupDiv);
     }
   } else {
-    // Default layout for all other leagues
     stats.forEach(([label, points]) => {
       const row = document.createElement("div");
       row.className = "stat-row";
@@ -64,13 +72,12 @@ function loadStats() {
     });
   }
 
-  // Bonus points (MMA, Boxing, etc.)
   if (league.bonuses && league.bonuses.length > 0) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
     bonusContainer.appendChild(title);
 
-    league.bonuses.forEach((bonus, index) => {
+    league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
       row.className = "bonus-option";
       row.innerHTML = `
