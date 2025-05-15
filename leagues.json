@@ -49,10 +49,10 @@
   "mma": {
     "name": "MMA",
     "stats": {
-      "significantStrikes": 0.5,
-      "submissionAttempt": 4,
-      "takedown": 5,
-      "knockdown": 10
+      "Significant Strikes": 0.5,
+      "Submission Attempt": 4,
+      "Takedown": 5,
+      "Knockdown": 10
     },
     "bonuses": [
       { "label": "1st Round Win", "points": 50 },
