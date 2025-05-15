@@ -27,7 +27,6 @@ function loadStats() {
     : Object.entries(league.stats);
 
   if (leagueKey === "nfl_cfb") {
-    // Grouping layout for Football Offense
     const groups = {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
       "Rushing": ["Rushing Yards", "Rushing TDs"],
@@ -61,8 +60,8 @@ function loadStats() {
 
       container.appendChild(groupDiv);
     }
+
   } else if (leagueKey === "dst") {
-    // Grouping layout for Defense/Special Teams
     const dstGroups = {
       "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
       "Return TDs": [
@@ -102,9 +101,31 @@ function loadStats() {
 
       container.appendChild(groupDiv);
     }
+
   } else {
-    // Default rendering for all other leagues
     stats.forEach(([label, points]) => {
+      if (leagueKey === "mlb_pitcher") {
+        if (label === "Innings Pitched") {
+          const row = document.createElement("div");
+          row.className = "stat-row";
+          row.innerHTML = `
+            <div class="stat-label">
+              ${label}
+              <span class="tooltip">ℹ️
+                <span class="tooltiptext">1 IP = 3 outs; 0.1 IP = 1 out</span>
+              </span>
+            </div>
+            <input type="text" class="stat-input" id="stat-${label}" />
+          `;
+          container.appendChild(row);
+          return;
+        }
+        if (label === "Quality Start") {
+          // Skip rendering QS input (auto)
+          return;
+        }
+      }
+
       const row = document.createElement("div");
       row.className = "stat-row";
       row.innerHTML = `
@@ -115,7 +136,6 @@ function loadStats() {
     });
   }
 
-  // Bonus rendering (common to all leagues)
   if (league.bonuses && league.bonuses.length > 0) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
@@ -145,29 +165,46 @@ function calculateScore() {
   let total = 0;
   let breakdown = "";
 
+  let innings = 0;
+  let earnedRuns = 0;
+
   stats.forEach(([label, points]) => {
     let val = parseFloat(document.getElementById(`stat-${label}`)?.value);
     if (isNaN(val)) return;
 
-    // Custom logic for Innings Pitched (MLB Pitcher)
-    if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
-      const whole = Math.floor(val);
-      const decimal = val - whole;
-      const outs = whole * 3 + Math.round(decimal * 10); // e.g., 5.2 → 17 outs
-      const innings = outs / 3;
-      const pointsEarned = innings * points;
+    if (leagueKey === "mlb_pitcher") {
+      if (label === "Innings Pitched") {
+        innings = val;
+        const full = Math.floor(val);
+        const decimal = val - full;
+        const outs = full * 3 + Math.round(decimal * 10);
+        const score = outs * points;
+        breakdown += `${label}: ${val} IP (${outs} outs) × ${points} = ${score.toFixed(2)}\n`;
+        total += score;
+        return;
+      }
 
-      if (innings !== 0 || !document.getElementById("hideZero").checked) {
-        breakdown += `${label}: ${val} IP (${outs} outs) × ${points} = ${pointsEarned.toFixed(2)}\n`;
+      if (label === "Earned Run") {
+        earnedRuns = val;
       }
-      total += pointsEarned;
-    } else {
-      if (val !== 0 || !document.getElementById("hideZero").checked) {
-        breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
+
+      if (label === "Quality Start") {
+        return; // Skip direct QS input
       }
-      total += val * points;
     }
+
+    if (val !== 0 || !document.getElementById("hideZero").checked) {
+      breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
+    }
+    total += val * points;
   });
+
+  // MLB Pitcher: auto add Quality Start
+  if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
+    const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
+    total += qsPoints;
+    breakdown += `Quality Start (auto): +${qsPoints}\n`;
+  }
 
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
