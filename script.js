@@ -11,6 +11,7 @@ async function loadLeagues() {
     opt.textContent = val.name;
     select.appendChild(opt);
   });
+  loadStats();
 }
 
 function loadStats() {
@@ -25,34 +26,25 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-  if (leagueKey === "nfl_cfb") {
-    const groups = {
-      "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
-      "Rushing": ["Rushing Yards", "Rushing TDs"],
-      "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"],
-      "Turnovers": ["Fumbles Lost"],
-      "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"]
-    };
-    renderGroupedStats(container, league.stats, groups);
-    return;
-  }
-
-  if (leagueKey === "dst") {
-    const dstGroups = {
-      "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
-      "Return TDs": [
-        "Punt/Kickoff/FG Return for TD",
-        "Interception Return TD",
-        "Fumble Recovery TD",
-        "Blocked Punt or FG Return TD"
-      ],
-      "Special Teams / Misc": [
-        "Safety",
-        "Blocked Kick",
-        "2pt/XP Return"
-      ]
-    };
-    renderGroupedStats(container, league.stats, dstGroups);
+  if (leagueKey === "nascar") {
+    container.innerHTML = `
+      <div class="stat-row nascar-row">
+        <label>Starting Position</label>
+        <input type="text" id="stat-Starting Position" />
+      </div>
+      <div class="stat-row nascar-row">
+        <label>Finishing Position</label>
+        <input type="text" id="stat-Finishing Position" />
+      </div>
+      <div class="stat-row nascar-row">
+        <label>Fastest Laps × 0.45</label>
+        <input type="text" id="stat-Fastest Laps" />
+      </div>
+      <div class="stat-row nascar-row">
+        <label>Laps Led × 0.25</label>
+        <input type="text" id="stat-Laps Led" />
+      </div>
+    `;
     return;
   }
 
@@ -80,7 +72,7 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-        `; // No input field
+        `;
         container.appendChild(row);
         return;
       }
@@ -120,36 +112,6 @@ function loadStats() {
   }
 }
 
-function renderGroupedStats(container, stats, groupMap) {
-  for (const [groupName, labels] of Object.entries(groupMap)) {
-    const groupDiv = document.createElement("div");
-    groupDiv.className = "stat-group";
-
-    const groupTitle = document.createElement("div");
-    groupTitle.className = "group-title";
-    groupTitle.textContent = groupName;
-    groupDiv.appendChild(groupTitle);
-
-    labels.forEach(label => {
-      const points = Array.isArray(stats)
-        ? stats.find(s => s.label === label)?.points
-        : stats[label];
-
-      if (points === undefined) return;
-
-      const row = document.createElement("div");
-      row.className = "stat-row";
-      row.innerHTML = `
-        <div class="stat-label">${label} — ${points} pts</div>
-        <input type="text" class="stat-input" id="stat-${label}" />
-      `;
-      groupDiv.appendChild(row);
-    });
-
-    container.appendChild(groupDiv);
-  }
-}
-
 function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
@@ -161,6 +123,46 @@ function calculateScore() {
   let breakdown = "";
   let innings = 0;
   let earnedRuns = 0;
+
+  if (leagueKey === "nascar") {
+    const start = parseInt(document.getElementById("stat-Starting Position").value);
+    const finish = parseInt(document.getElementById("stat-Finishing Position").value);
+    const fastest = parseFloat(document.getElementById("stat-Fastest Laps").value) || 0;
+    const led = parseFloat(document.getElementById("stat-Laps Led").value) || 0;
+
+    if (!isNaN(start) && !isNaN(finish)) {
+      const diff = start - finish;
+      breakdown += `Place Differential: ${diff} pts\n`;
+      total += diff;
+    }
+
+    if (fastest) {
+      const pts = fastest * 0.45;
+      breakdown += `Fastest Laps: ${fastest} × 0.45 = ${pts.toFixed(2)}\n`;
+      total += pts;
+    }
+
+    if (led) {
+      const pts = led * 0.25;
+      breakdown += `Laps Led: ${led} × 0.25 = ${pts.toFixed(2)}\n`;
+      total += pts;
+    }
+
+    if (!isNaN(finish)) {
+      const placePoints = [
+        45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28,
+        27, 26, 25, 24, 23, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+      ];
+      const placeIndex = Math.max(0, Math.min(39, finish - 1));
+      const points = placePoints[placeIndex] ?? 0;
+      breakdown += `Finishing Place Points: ${points} pts\n`;
+      total += points;
+    }
+
+    document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
+    return;
+  }
 
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
@@ -184,13 +186,11 @@ function calculateScore() {
         total += outs;
         return;
       }
-
       if (label === "Earned Run") {
         earnedRuns = val;
       }
-
       if (label === "Quality Start") {
-        return; // Auto-computed
+        return;
       }
     }
 
@@ -200,7 +200,7 @@ function calculateScore() {
     total += val * points;
   });
 
-  // ✅ Auto-calculate Quality Start if criteria met
+  // MLB Pitcher: auto quality start
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     let qsPoints = 0;
     if (Array.isArray(league.stats)) {
