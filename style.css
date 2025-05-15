@@ -109,23 +109,20 @@ textarea {
   padding-bottom: 4px;
 }
 
-/* Tooltip styling for info icon */
 .tooltip {
   position: relative;
   display: inline-block;
   cursor: pointer;
-  margin-left: 6px;
-  font-size: 0.85rem;
-  color: #90cdf4;
+  margin-left: 5px;
 }
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 160px;
+  width: 180px;
   background-color: #444;
   color: #fff;
   text-align: left;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 6px;
   position: absolute;
   z-index: 1;
@@ -133,7 +130,7 @@ textarea {
   left: 110%;
   font-size: 0.8rem;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s;
 }
 
 .tooltip:hover .tooltiptext {
