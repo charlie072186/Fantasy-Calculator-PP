@@ -1,257 +1,98 @@
 body {
   background-color: #121212;
   color: #ffffff;
-  font-family: 'Helvetica Bold', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 1rem;
+  padding: 20px;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 500px;
   margin: auto;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-select, input[type="text"], textarea {
-  background-color: #222;
+h1, h2 {
+  text-align: center;
+  margin: 10px 0;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: none;
+  background-color: #2b2b2b;
   color: #fff;
-  border: 1px solid #888;
-  padding: 5px;
-  margin: 5px 0;
 }
 
 .stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-top: 8px;
 }
 
-.bonus-option {
-  margin: 5px 0;
+.stat-label {
+  flex: 1;
+  font-size: 0.85rem;
+  color: #ddd;
 }
 
-.options-row {
+.stat-input {
+  width: 60px;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  text-align: right;
+}
+
+.buttons {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  justify-content: space-between;
+  margin: 15px 0;
 }
 
 button {
-  padding: 0.6rem;
-  margin: 0.3rem 0;
-  width: 100%;
+  flex: 1;
+  margin: 0 5px;
+  padding: 8px;
+  background-color: #3c3c3c;
   border: none;
+  border-radius: 5px;
+  color: #fff;
   font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-button.go {
-  background-color: #3ddc84;
-}
-
-button.clear {
-  background-color: #f87171;
-}
-
-button.copy {
-  background-color: #4ade80;
+button:hover {
+  background-color: #5a5a5a;
 }
 
 textarea {
   width: 100%;
-  height: 200px;
-  margin-top: 1rem;
-  background-color: #222;
-  color: #fff;
-  border: 1px solid #888;
-}
-
-.stat-group {
-  border: 1px solid #444;
-  padding: 12px;
-  margin: 12px 0;
-  border-radius: 8px;
-  background-color: #1c1c1c;
-}
-
-.stat-group {
-  border: 1px solid #444;
-  border-radius: 10px;
-  margin: 16px 0;
-  padding: 12px 16px;
-  background-color: #1a1a1a;
-}
-
-.group-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #6ee7b7;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 4px;
-}
-
-/* Grouped stat layout */
-.stat-group {
-  border: 1px solid #555;
-  padding: 12px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  background-color: #1e1e1e;
-}
-
-.group-title {
-  font-weight: bold;
-  color: #90ee90;
-  margin-bottom: 8px;
-  font-size: 1rem;
-  border-bottom: 1px solid #444;
-  padding-bottom: 4px;
-}
-
-.tooltip {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  color: #90cdf4;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 180px;
-  background-color: #444;
-  color: #fff;
-  text-align: left;
+  height: 120px;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: white;
+  color: black;
+  border: none;
   border-radius: 4px;
-  padding: 6px;
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  left: 110%;
-  font-size: 0.8rem;
-  opacity: 0;
-  transition: opacity 0.3s;
+  font-family: monospace;
+  resize: none;
+  overflow: hidden;
 }
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.stat-group {
-  border: 1px solid #444;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  border-radius: 6px;
-  background-color: #1a1a1a;
-}
-
-.group-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #a2a2a2;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 6px;
-  user-select: none;
-}
-
-/* Adjust stat-row spacing inside groups */
-.stat-group .stat-row {
-  margin-bottom: 8px;
-}
-
-/* Tooltip styling for the little info icons */
-.tooltip {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  color: #90cdf4;
-  margin-left: 6px;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background-color: #444;
-  color: #fff;
-  text-align: left;
-  border-radius: 4px;
-  padding: 6px 10px;
-  position: absolute;
-  z-index: 10;
-  top: 120%;
-  left: 0;
-  font-size: 0.85rem;
-  opacity: 0;
-  transition: opacity 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Checkbox input size adjustment */
-input[type="checkbox"].stat-input {
-  width: 18px;
-  height: 18px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-
-.stat-group {
-  border: 1px solid #444;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  border-radius: 6px;
-  background-color: #1a1a1a;
-}
-.group-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #a2a2a2;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 6px;
-  user-select: none;
-}
-.stat-group .stat-row {
-  margin-bottom: 8px;
-}
-.tooltip {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  color: #90cdf4;
-  margin-left: 6px;
-}
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background-color: #444;
-  color: #fff;
-  text-align: left;
-  border-radius: 4px;
-  padding: 6px 10px;
-  position: absolute;
-  z-index: 10;
-  top: 120%;
-  left: 0;
-  font-size: 0.85rem;
-  opacity: 0;
-  transition: opacity 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-}
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-input[type="checkbox"].stat-input {
-  width: 18px;
-  height: 18px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-
