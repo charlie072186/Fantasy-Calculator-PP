@@ -91,50 +91,6 @@ function loadStats() {
   }
 }
 
-    if (leagueKey === "dst") {
-    const dstGroups = {
-      "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
-      "Return TDs": [
-        "Punt/Kickoff/FG Return for TD",
-        "Interception Return TD",
-        "Fumble Recovery TD",
-        "Blocked Punt or FG Return TD"
-      ],
-      "Special Teams / Misc": [
-        "Safety",
-        "Blocked Kick",
-        "2pt/XP Return"
-      ]
-    };
-
-    for (const [groupName, labels] of Object.entries(dstGroups)) {
-      const groupDiv = document.createElement("div");
-      groupDiv.className = "stat-group";
-
-      const groupTitle = document.createElement("div");
-      groupTitle.className = "group-title";
-      groupTitle.textContent = groupName;
-      groupDiv.appendChild(groupTitle);
-
-      labels.forEach(label => {
-        if (!(label in league.stats)) return;
-        const points = league.stats[label];
-
-        const row = document.createElement("div");
-        row.className = "stat-row";
-        row.innerHTML = `
-          <div class="stat-label">${label} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${label}" />
-        `;
-        groupDiv.appendChild(row);
-      });
-
-      container.appendChild(groupDiv);
-    }
-
-    return; // Skip default rendering for DST
-  }
-
 
 function calculateScore() {
   const leagueKey = document.getElementById("league").value;
