@@ -11,9 +11,7 @@ async function loadLeagues() {
     opt.textContent = val.name;
     select.appendChild(opt);
   });
-  injectStyles(); // Inject CSS styles on load
-  loadStats();
-}
+ 
 
 function loadStats() {
   const leagueKey = document.getElementById("league").value;
