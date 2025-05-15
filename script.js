@@ -26,7 +26,6 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-  // Grouped layout for NFL
   if (leagueKey === "nfl_cfb") {
     const groups = {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -39,7 +38,6 @@ function loadStats() {
     return;
   }
 
-  // Grouped layout for DST
   if (leagueKey === "dst") {
     const dstGroups = {
       "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
@@ -49,22 +47,16 @@ function loadStats() {
         "Fumble Recovery TD",
         "Blocked Punt or FG Return TD"
       ],
-      "Special Teams / Misc": [
-        "Safety",
-        "Blocked Kick",
-        "2pt/XP Return"
-      ]
+      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
     };
     renderGroupedStats(container, league.stats, dstGroups);
     return;
   }
 
-  // Default rendering
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
 
-    // Special layout for MLB Pitcher
     if (leagueKey === "mlb_pitcher") {
       if (label === "Innings Pitched") {
         row.innerHTML = `
@@ -85,7 +77,7 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-          <input type="text" class="stat-input" id="stat-${label}" disabled />
+          <input type="text" class="stat-input" id="stat-${label}" readonly />
         `;
         container.appendChild(row);
         return;
@@ -99,7 +91,6 @@ function loadStats() {
     container.appendChild(row);
   });
 
-  // Bonus section
   if (league.bonuses && league.bonuses.length > 0) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
@@ -182,7 +173,7 @@ function calculateScore() {
         earnedRuns = val;
       }
       if (label === "Quality Start") {
-        return; // Auto-calculate later
+        return;
       }
     }
 
@@ -192,42 +183,17 @@ function calculateScore() {
     total += val * points;
   });
 
-  // Auto-calculate Quality Start
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-    const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
-    breakdown += `Quality Start (auto): +${qsPoints}\n`;
-    total += qsPoints;
-    const qsInput = document.getElementById("stat-Quality Start");
-    if (qsInput) qsInput.value = 1;
+    const qsStat = league.stats.find(s => s.label === "Quality Start");
+    if (qsStat) {
+      const qsPoints = qsStat.points;
+      const qsInput = document.getElementById("stat-Quality Start");
+      if (qsInput) qsInput.value = 1;
+      total += qsPoints;
+      breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+    }
   }
 
-if (label === "Quality Start") {
-  const row = document.createElement("div");
-  row.className = "stat-row";
-  row.innerHTML = `
-    <div class="stat-label">
-      ${label}
-      <span class="tooltip">ℹ️
-        <span class="tooltiptext">Auto: 6+ IP & ≤3 ER = 4 pts</span>
-      </span>
-    </div>
-    <input type="text" class="stat-input" id="stat-${label}" readonly />
-  `;
-  container.appendChild(row);
-  return;
-}
-  
-  if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-  const qsStat = league.stats.find(s => s.label === "Quality Start");
-  if (qsStat) {
-    const qsPoints = qsStat.points;
-    document.getElementById("stat-Quality Start").value = 1;
-    total += qsPoints;
-    breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
-  }
-}
-
-  // Bonus
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
     const bonusVal = parseFloat(bonus.value);
