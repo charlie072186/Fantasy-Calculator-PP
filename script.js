@@ -212,7 +212,7 @@ function calculateScore() {
   } else {
     qsPoints = league.stats["Quality Start"] || 0;
   }
-  breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+  breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
   total += qsPoints;
 }
 
