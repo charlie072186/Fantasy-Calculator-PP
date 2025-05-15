@@ -205,10 +205,16 @@ function calculateScore() {
 
   // ✅ Auto-calculate Quality Start if criteria met
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-    const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
-    breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
-    total += qsPoints;
+  let qsPoints = 0;
+  if (Array.isArray(league.stats)) {
+    const qsStat = league.stats.find(s => s.label === "Quality Start");
+    qsPoints = qsStat?.points || 0;
+  } else {
+    qsPoints = league.stats["Quality Start"] || 0;
   }
+  breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+  total += qsPoints;
+}
 
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
