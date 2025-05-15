@@ -74,6 +74,7 @@ function loadStats() {
         container.appendChild(row);
         return;
       }
+
       if (label === "Quality Start") {
         row.innerHTML = `
           <div class="stat-label">${label}
@@ -81,10 +82,11 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-        `; // no input field
+        `; // No input field
         container.appendChild(row);
         return;
       }
+
       if (label === "Win") {
         row.innerHTML = `
           <div class="stat-label">${label} — ${points} pts</div>
@@ -185,11 +187,13 @@ function calculateScore() {
         total += outs;
         return;
       }
+
       if (label === "Earned Run") {
         earnedRuns = val;
       }
+
       if (label === "Quality Start") {
-        return; // auto-computed later
+        return; // Auto-computed
       }
     }
 
@@ -199,9 +203,10 @@ function calculateScore() {
     total += val * points;
   });
 
+  // ✅ Auto-calculate Quality Start if criteria met
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
-    breakdown += `Quality Start (auto): +${qsPoints}\n`;
+    breakdown += `Quality Start (auto): 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
     total += qsPoints;
   }
 
