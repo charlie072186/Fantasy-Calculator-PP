@@ -113,26 +113,24 @@ textarea {
   position: relative;
   display: inline-block;
   cursor: pointer;
-  margin-left: 5px;
+  color: #90cdf4;
 }
-
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 180px;
-  background-color: #444;
+  width: 200px;
+  background-color: #333;
   color: #fff;
   text-align: left;
   border-radius: 6px;
   padding: 6px;
   position: absolute;
   z-index: 1;
-  top: -5px;
+  bottom: 125%;
   left: 110%;
-  font-size: 0.8rem;
   opacity: 0;
   transition: opacity 0.3s;
+  font-size: 0.75rem;
 }
-
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
