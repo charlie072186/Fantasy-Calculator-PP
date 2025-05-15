@@ -121,7 +121,17 @@ function loadStats() {
           return;
         }
         if (label === "Quality Start") {
-          // Skip rendering QS input (auto)
+          const row = document.createElement("div");
+          row.className = "stat-row";
+          row.innerHTML = `
+            <div class="stat-label">
+              ${label}
+              <span class="tooltip">ℹ️
+                <span class="tooltiptext">Awarded to pitcher with ≥6 IP and ≤3 ER</span>
+              </span>
+            </div>
+          `;
+          container.appendChild(row);
           return;
         }
       }
@@ -178,8 +188,8 @@ function calculateScore() {
         const full = Math.floor(val);
         const decimal = val - full;
         const outs = full * 3 + Math.round(decimal * 10);
-        const score = outs * points;
-        breakdown += `${label}: ${val} IP (${outs} outs) × ${points} = ${score.toFixed(2)}\n`;
+        const score = outs;
+        breakdown += `${label}: ${val} IP = ${outs} outs = ${score.toFixed(2)} pts\n`;
         total += score;
         return;
       }
@@ -189,7 +199,7 @@ function calculateScore() {
       }
 
       if (label === "Quality Start") {
-        return; // Skip direct QS input
+        return;
       }
     }
 
@@ -199,7 +209,6 @@ function calculateScore() {
     total += val * points;
   });
 
-  // MLB Pitcher: auto add Quality Start
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     const qsPoints = league.stats.find(s => s.label === "Quality Start")?.points || 0;
     total += qsPoints;
