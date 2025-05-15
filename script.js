@@ -11,6 +11,7 @@ async function loadLeagues() {
     opt.textContent = val.name;
     select.appendChild(opt);
   });
+  injectStyles(); // Inject CSS styles on load
   loadStats();
 }
 
@@ -74,7 +75,6 @@ function loadStats() {
         container.appendChild(row);
         return;
       }
-
       if (label === "Quality Start") {
         row.innerHTML = `
           <div class="stat-label">${label}
@@ -86,7 +86,6 @@ function loadStats() {
         container.appendChild(row);
         return;
       }
-
       if (label === "Win") {
         row.innerHTML = `
           <div class="stat-label">${label} — ${points} pts</div>
@@ -205,16 +204,16 @@ function calculateScore() {
 
   // ✅ Auto-calculate Quality Start if criteria met
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-  let qsPoints = 0;
-  if (Array.isArray(league.stats)) {
-    const qsStat = league.stats.find(s => s.label === "Quality Start");
-    qsPoints = qsStat?.points || 0;
-  } else {
-    qsPoints = league.stats["Quality Start"] || 0;
+    let qsPoints = 0;
+    if (Array.isArray(league.stats)) {
+      const qsStat = league.stats.find(s => s.label === "Quality Start");
+      qsPoints = qsStat?.points || 0;
+    } else {
+      qsPoints = league.stats["Quality Start"] || 0;
+    }
+    breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+    total += qsPoints;
   }
-  breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
-  total += qsPoints;
-}
 
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
