@@ -26,47 +26,35 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
+  // For Football Offensive FS, group stats visually
   if (leagueKey === "nfl_cfb") {
-    const groups = {
-      "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
-      "Rushing": ["Rushing Yards", "Rushing TDs"],
-      "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"],
-      "Turnovers": ["Fumbles Lost"],
-      "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"]
-    };
+    let groupDiv = document.createElement("div");
+    groupDiv.className = "stat-group";
 
-    for (const [groupName, labels] of Object.entries(groups)) {
-      const groupDiv = document.createElement("div");
-      groupDiv.className = "stat-group";
+    stats.forEach(([label, points], index) => {
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.innerHTML = `
+        <div class="stat-label">${label} — ${points} pts</div>
+        <input type="text" class="stat-input" id="stat-${label.replace(/\s+/g, '_')}" />
+      `;
+      groupDiv.appendChild(row);
 
-      const groupTitle = document.createElement("div");
-      groupTitle.className = "group-title";
-      groupTitle.textContent = groupName;
-      groupDiv.appendChild(groupTitle);
-
-      labels.forEach(label => {
-        const statObj = league.stats.find(s => s.label === label);
-        if (!statObj) return;
-        const points = statObj.points;
-
-        const row = document.createElement("div");
-        row.className = "stat-row";
-        row.innerHTML = `
-          <div class="stat-label">${label} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${label}" />
-        `;
-        groupDiv.appendChild(row);
-      });
-
-      container.appendChild(groupDiv);
-    }
+      // Group every 3 related stats
+      if ((index + 1) % 3 === 0 || index === stats.length - 1) {
+        container.appendChild(groupDiv);
+        groupDiv = document.createElement("div");
+        groupDiv.className = "stat-group";
+      }
+    });
   } else {
+    // Default rendering for other leagues
     stats.forEach(([label, points]) => {
       const row = document.createElement("div");
       row.className = "stat-row";
       row.innerHTML = `
         <div class="stat-label">${label} — ${points} pts</div>
-        <input type="text" class="stat-input" id="stat-${label}" />
+        <input type="text" class="stat-input" id="stat-${label.replace(/\s+/g, '_')}" />
       `;
       container.appendChild(row);
     });
@@ -77,7 +65,7 @@ function loadStats() {
     title.textContent = "Bonus:";
     bonusContainer.appendChild(title);
 
-    league.bonuses.forEach(bonus => {
+    league.bonuses.forEach((bonus, index) => {
       const row = document.createElement("div");
       row.className = "bonus-option";
       row.innerHTML = `
@@ -91,7 +79,6 @@ function loadStats() {
   }
 }
 
-
 function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
@@ -103,7 +90,7 @@ function calculateScore() {
   let breakdown = "";
 
   stats.forEach(([label, points]) => {
-    const val = parseFloat(document.getElementById(`stat-${label}`)?.value) || 0;
+    const val = parseFloat(document.getElementById(`stat-${label.replace(/\s+/g, '_')}`)?.value) || 0;
     if (val !== 0 || !document.getElementById("hideZero").checked) {
       breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
     }
