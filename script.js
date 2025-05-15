@@ -11,7 +11,6 @@ async function loadLeagues() {
     opt.textContent = val.name;
     select.appendChild(opt);
   });
-  loadStats();
 }
 
 function loadStats() {
@@ -21,6 +20,10 @@ function loadStats() {
   const bonusContainer = document.getElementById("bonus-container");
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
+
+  const stats = Array.isArray(league.stats)
+    ? league.stats.map(s => [s.label, s.points])
+    : Object.entries(league.stats);
 
   if (leagueKey === "nfl_cfb") {
     const groups = {
@@ -43,35 +46,54 @@ function loadStats() {
         "Fumble Recovery TD",
         "Blocked Punt or FG Return TD"
       ],
-      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
+      "Special Teams / Misc": [
+        "Safety",
+        "Blocked Kick",
+        "2pt/XP Return"
+      ]
     };
     renderGroupedStats(container, league.stats, dstGroups);
     return;
   }
 
-  // NASCAR custom UI
-  if (leagueKey === "nascar") {
-    const custom = document.createElement("div");
-    custom.className = "stat-group";
-    custom.innerHTML = `
-      <div class="group-title">NASCAR FS</div>
-      <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position"></div>
-      <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position"></div>
-      <div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps"></div>
-      <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led"></div>
-    `;
-    container.appendChild(custom);
-    return;
-  }
-
-  // Default rendering
-  const stats = Array.isArray(league.stats)
-    ? league.stats.map(s => [s.label, s.points])
-    : Object.entries(league.stats);
-
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
+
+    if (leagueKey === "mlb_pitcher") {
+      if (label === "Innings Pitched") {
+        row.innerHTML = `
+          <div class="stat-label">${label}
+            <span class="tooltip">ℹ️
+              <span class="tooltiptext">1 IP = 3 outs; 0.1 IP = 1 out</span>
+            </span>
+          </div>
+          <input type="text" class="stat-input" id="stat-${label}" />
+        `;
+        container.appendChild(row);
+        return;
+      }
+      if (label === "Quality Start") {
+        row.innerHTML = `
+          <div class="stat-label">${label}
+            <span class="tooltip">ℹ️
+              <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
+            </span>
+          </div>
+        `; // No input field
+        container.appendChild(row);
+        return;
+      }
+      if (label === "Win") {
+        row.innerHTML = `
+          <div class="stat-label">${label} — ${points} pts</div>
+          <input type="checkbox" class="stat-input" id="stat-${label}" />
+        `;
+        container.appendChild(row);
+        return;
+      }
+    }
+
     row.innerHTML = `
       <div class="stat-label">${label} — ${points} pts</div>
       <input type="text" class="stat-input" id="stat-${label}" />
@@ -112,6 +134,7 @@ function renderGroupedStats(container, stats, groupMap) {
       const points = Array.isArray(stats)
         ? stats.find(s => s.label === label)?.points
         : stats[label];
+
       if (points === undefined) return;
 
       const row = document.createElement("div");
@@ -126,3 +149,94 @@ function renderGroupedStats(container, stats, groupMap) {
     container.appendChild(groupDiv);
   }
 }
+
+function calculateScore() {
+  const leagueKey = document.getElementById("league").value;
+  const league = leagues[leagueKey];
+  const stats = Array.isArray(league.stats)
+    ? league.stats.map(s => [s.label, s.points])
+    : Object.entries(league.stats);
+
+  let total = 0;
+  let breakdown = "";
+  let innings = 0;
+  let earnedRuns = 0;
+
+  stats.forEach(([label, points]) => {
+    const input = document.getElementById(`stat-${label}`);
+    if (!input) return;
+
+    let val;
+    if (input.type === "checkbox") {
+      val = input.checked ? 1 : 0;
+    } else {
+      val = parseFloat(input.value);
+    }
+    if (isNaN(val)) return;
+
+    if (leagueKey === "mlb_pitcher") {
+      if (label === "Innings Pitched") {
+        innings = val;
+        const full = Math.floor(val);
+        const decimal = val - full;
+        const outs = full * 3 + Math.round(decimal * 10);
+        breakdown += `${label}: ${val} IP (${outs} outs) = ${outs.toFixed(2)}\n`;
+        total += outs;
+        return;
+      }
+
+      if (label === "Earned Run") {
+        earnedRuns = val;
+      }
+
+      if (label === "Quality Start") {
+        return; // Auto-computed
+      }
+    }
+
+    if (val !== 0 || !document.getElementById("hideZero").checked) {
+      breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
+    }
+    total += val * points;
+  });
+
+  // ✅ Auto-calculate Quality Start if criteria met
+  if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
+    let qsPoints = 0;
+    if (Array.isArray(league.stats)) {
+      const qsStat = league.stats.find(s => s.label === "Quality Start");
+      qsPoints = qsStat?.points || 0;
+    } else {
+      qsPoints = league.stats["Quality Start"] || 0;
+    }
+    breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+    total += qsPoints;
+  }
+
+  const bonus = document.querySelector('input[name="bonus"]:checked');
+  if (bonus) {
+    const bonusVal = parseFloat(bonus.value);
+    breakdown += `Bonus: +${bonusVal}\n`;
+    total += bonusVal;
+  }
+
+  document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
+}
+
+function clearInputs() {
+  document.querySelectorAll(".stat-input").forEach(input => {
+    if (input.type === "checkbox") input.checked = false;
+    else input.value = "";
+  });
+  document.getElementById("breakdown").value = "";
+  const selectedBonus = document.querySelector('input[name="bonus"]:checked');
+  if (selectedBonus) selectedBonus.checked = false;
+}
+
+function copyBreakdown() {
+  const breakdown = document.getElementById("breakdown");
+  breakdown.select();
+  document.execCommand("copy");
+}
+
+window.onload = loadLeagues;
