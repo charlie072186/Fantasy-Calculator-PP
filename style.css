@@ -40,6 +40,16 @@ select, input[type="text"], textarea {
   box-sizing: border-box;
 }
 
+.stat-input {
+  width: 60px;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  text-align: right;
+}
+
 textarea {
   height: 200px;
   overflow-y: auto;
