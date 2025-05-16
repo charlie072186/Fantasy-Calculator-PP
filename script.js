@@ -25,7 +25,6 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-  // NFL Grouped
   if (leagueKey === "nfl_cfb") {
     const groups = {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -38,7 +37,6 @@ function loadStats() {
     return;
   }
 
-  // DST Grouped
   if (leagueKey === "dst") {
     const dstGroups = {
       "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
@@ -48,17 +46,12 @@ function loadStats() {
         "Fumble Recovery TD",
         "Blocked Punt or FG Return TD"
       ],
-      "Special Teams / Misc": [
-        "Safety",
-        "Blocked Kick",
-        "2pt/XP Return"
-      ]
+      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
     };
     renderGroupedStats(container, league.stats, dstGroups);
     return;
   }
 
-  // NASCAR Custom Inputs
   if (leagueKey === "nascar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -182,12 +175,7 @@ function calculateScore() {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
 
-    let val;
-    if (input.type === "checkbox") {
-      val = input.checked ? 1 : 0;
-    } else {
-      val = parseFloat(input.value);
-    }
+    let val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value);
     if (isNaN(val)) return;
 
     if (leagueKey === "mlb_pitcher") {
@@ -200,14 +188,8 @@ function calculateScore() {
         total += outs;
         return;
       }
-
-      if (label === "Earned Run") {
-        earnedRuns = val;
-      }
-
-      if (label === "Quality Start") {
-        return;
-      }
+      if (label === "Earned Run") earnedRuns = val;
+      if (label === "Quality Start") return;
     }
 
     if (val !== 0 || !document.getElementById("hideZero").checked) {
@@ -216,20 +198,14 @@ function calculateScore() {
     total += val * points;
   });
 
-  // MLB Quality Start
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-    let qsPoints = 0;
-    if (Array.isArray(league.stats)) {
-      const qsStat = league.stats.find(s => s.label === "Quality Start");
-      qsPoints = qsStat?.points || 0;
-    } else {
-      qsPoints = league.stats["Quality Start"] || 0;
-    }
+    let qsPoints = Array.isArray(league.stats)
+      ? league.stats.find(s => s.label === "Quality Start")?.points || 0
+      : league.stats["Quality Start"] || 0;
     breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
     total += qsPoints;
   }
 
-  // NASCAR Scoring
   if (leagueKey === "nascar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
