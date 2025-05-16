@@ -25,6 +25,7 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
+  // NFL Grouped
   if (leagueKey === "nfl_cfb") {
     const groups = {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -37,6 +38,7 @@ function loadStats() {
     return;
   }
 
+  // DST Grouped
   if (leagueKey === "dst") {
     const dstGroups = {
       "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
@@ -56,6 +58,7 @@ function loadStats() {
     return;
   }
 
+  // NASCAR Custom Inputs
   if (leagueKey === "nascar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -69,32 +72,6 @@ function loadStats() {
     return;
   }
 
-  if (leagueKey === "nascar") {
-  // NASCAR custom rendering
-  const nascarGroup = document.createElement("div");
-  nascarGroup.className = "stat-group";
-
-  const title = document.createElement("div");
-  title.className = "group-title";
-  title.textContent = "NASCAR Stats";
-  nascarGroup.appendChild(title);
-
-  ["Starting Position", "Finishing Position", "Fastest Laps", "Laps Led"].forEach(label => {
-    const points = league.stats[label];
-    const row = document.createElement("div");
-    row.className = "stat-row";
-    row.innerHTML = `
-      <div class="stat-label">${label}${(label === "Fastest Laps" || label === "Laps Led") ? ` — ${points} pts` : ""}</div>
-      <input type="text" class="stat-input" id="stat-${label}" />
-    `;
-    nascarGroup.appendChild(row);
-  });
-
-  container.appendChild(nascarGroup);
-  return;
-}
-
-  
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
@@ -119,7 +96,7 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-        `; 
+        `;
         container.appendChild(row);
         return;
       }
@@ -157,34 +134,6 @@ function loadStats() {
       bonusContainer.appendChild(row);
     });
   }
-}
-
-if (leagueKey === "nascar") {
-  let sp = parseInt(document.getElementById("stat-Starting Position")?.value || 0);
-  let fp = parseInt(document.getElementById("stat-Finishing Position")?.value || 0);
-  let fastestLaps = parseFloat(document.getElementById("stat-Fastest Laps")?.value || 0);
-  let lapsLed = parseFloat(document.getElementById("stat-Laps Led")?.value || 0);
-
-  const placeDiff = sp - fp;
-  const flPts = fastestLaps * 0.45;
-  const llPts = lapsLed * 0.25;
-
-  const finishPointsMap = {
-    1: 45, 2: 42, 3: 41, 4: 40, 5: 39, 6: 38, 7: 37, 8: 36, 9: 35, 10: 34,
-    11: 32, 12: 31, 13: 30, 14: 29, 15: 28, 16: 27, 17: 26, 18: 25, 19: 24, 20: 23,
-    21: 21, 22: 20, 23: 19, 24: 18, 25: 17, 26: 16, 27: 15, 28: 14, 29: 13, 30: 12,
-    31: 10, 32: 9, 33: 8, 34: 7, 35: 6, 36: 5, 37: 4, 38: 3, 39: 2, 40: 1
-  };
-  const finishPts = finishPointsMap[fp] ?? 0;
-
-  breakdown += `Place Differential: ${sp} - ${fp} = ${placeDiff}\n`;
-  breakdown += `Fastest Laps: ${fastestLaps} × 0.45 = ${flPts.toFixed(2)}\n`;
-  breakdown += `Laps Led: ${lapsLed} × 0.25 = ${llPts.toFixed(2)}\n`;
-  breakdown += `Finishing Place Points: ${fp} = ${finishPts} pts\n`;
-
-  total += placeDiff + flPts + llPts + finishPts;
-  document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
-  return;
 }
 
 function renderGroupedStats(container, stats, groupMap) {
@@ -257,7 +206,7 @@ function calculateScore() {
       }
 
       if (label === "Quality Start") {
-        return; // Auto-computed
+        return;
       }
     }
 
@@ -267,7 +216,7 @@ function calculateScore() {
     total += val * points;
   });
 
-
+  // MLB Quality Start
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     let qsPoints = 0;
     if (Array.isArray(league.stats)) {
@@ -279,35 +228,36 @@ function calculateScore() {
     breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
     total += qsPoints;
   }
-  
+
+  // NASCAR Scoring
   if (leagueKey === "nascar") {
-    const startInput = parseInt(document.getElementById("stat-Starting Position")?.value);
-    const finishInput = parseInt(document.getElementById("stat-Finishing Position")?.value);
-    const fastestLaps = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-    const lapsLed = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
+    const start = parseInt(document.getElementById("stat-Starting Position")?.value);
+    const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
+    const fastest = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
+    const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
 
-    if (!isNaN(startInput) && !isNaN(finishInput)) {
-      const placeDiff = startInput - finishInput;
-      total += placeDiff;
-      breakdown += `Place Differential: ${placeDiff} pts\n`;
+    if (!isNaN(start) && !isNaN(finish)) {
+      const diff = start - finish;
+      breakdown += `Place Differential: ${diff} pts\n`;
+      total += diff;
 
-      const finishingPoints = finishInput >= 1 && finishInput <= 40
-        ? [45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23,
-           21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1][finishInput - 1]
-        : 0;
-      total += finishingPoints;
-      breakdown += `Finishing Position (${finishInput}): ${finishingPoints} pts\n`;
+      const table = [
+        45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28,
+        27, 26, 25, 24, 23, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+      ];
+      const placePts = finish >= 1 && finish <= 40 ? table[finish - 1] : 0;
+      breakdown += `Finishing Position (${finish}): ${placePts} pts\n`;
+      total += placePts;
     }
 
-    const flPoints = fastestLaps * 0.45;
-    const ledPoints = lapsLed * 0.25;
-    if (fastestLaps) breakdown += `Fastest Laps: ${fastestLaps} × 0.45 = ${flPoints.toFixed(2)}\n`;
-    if (lapsLed) breakdown += `Laps Led: ${lapsLed} × 0.25 = ${ledPoints.toFixed(2)}\n`;
-
-    total += flPoints + ledPoints;
+    const fPts = fastest * 0.45;
+    const lPts = led * 0.25;
+    if (fastest) breakdown += `Fastest Laps: ${fastest} × 0.45 = ${fPts.toFixed(2)}\n`;
+    if (led) breakdown += `Laps Led: ${led} × 0.25 = ${lPts.toFixed(2)}\n`;
+    total += fPts + lPts;
   }
 
-  
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
     const bonusVal = parseFloat(bonus.value);
