@@ -60,7 +60,6 @@ function loadStats() {
     const custom = document.createElement("div");
     custom.className = "stat-group";
     custom.innerHTML = `
-      <div class="group-title">NASCAR FS</div>
       <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position"></div>
       <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position"></div>
       <div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps"></div>
