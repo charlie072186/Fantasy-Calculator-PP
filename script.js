@@ -58,58 +58,48 @@ function loadStats() {
     return;
   }
 
-  if (leagueKey === "tennis") {
-    const matchDiv = document.createElement("div");
-    matchDiv.className = "stat-group";
-    matchDiv.innerHTML = `
-      <label>Player Name:</label>
-      <input type="text" class="stat-input" id="player-name" placeholder="Player Name" />
-      <div class="group-title">Match Info</div>
+ if (leagueKey === "tennis") {
+  const matchDiv = document.createElement("div");
+  matchDiv.className = "stat-group";
+  matchDiv.innerHTML = `
+    <div class="group-title">Match Info</div>
+    <div class="stat-row">
+      <div class="stat-label">Match Played — 10 pts</div>
+      <input type="checkbox" class="stat-input" id="stat-Match Played" />
+    </div>
+  `;
+  container.appendChild(matchDiv);
+
+  const gameSetDiv = document.createElement("div");
+  gameSetDiv.className = "stat-group";
+  gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
+  ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
+    const points = league.stats[stat];
+    gameSetDiv.innerHTML += `
       <div class="stat-row">
-        <div class="stat-label">Match Played — 10 pts</div>
-        <input type="checkbox" class="stat-input" id="stat-Match Played" />
+        <div class="stat-label">${stat} — ${points} pts</div>
+        <input type="text" class="stat-input" id="stat-${stat}" />
       </div>
     `;
-    container.appendChild(matchDiv);
+  });
+  container.appendChild(gameSetDiv);
 
-    const gameSetDiv = document.createElement("div");
-    gameSetDiv.className = "stat-group";
-    gameSetDiv.innerHTML = `
-      <label>Player Name:</label>
-      <input type="text" class="stat-input" disabled />
-      <div class="group-title">Game & Set</div>
+  const serveDiv = document.createElement("div");
+  serveDiv.className = "stat-group";
+  serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
+  ["Ace", "Double Fault"].forEach(stat => {
+    const points = league.stats[stat];
+    serveDiv.innerHTML += `
+      <div class="stat-row">
+        <div class="stat-label">${stat} — ${points} pts</div>
+        <input type="text" class="stat-input" id="stat-${stat}" />
+      </div>
     `;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
-      const points = league.stats[stat];
-      gameSetDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
-        </div>
-      `;
-    });
-    container.appendChild(gameSetDiv);
+  });
+  container.appendChild(serveDiv);
 
-    const serveDiv = document.createElement("div");
-    serveDiv.className = "stat-group";
-    serveDiv.innerHTML = `
-      <label>Player Name:</label>
-      <input type="text" class="stat-input" disabled />
-      <div class="group-title">Serve Stats</div>
-    `;
-    ["Ace", "Double Fault"].forEach(stat => {
-      const points = league.stats[stat];
-      serveDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
-        </div>
-      `;
-    });
-    container.appendChild(serveDiv);
-
-    return;
-  }
+  return;
+}
 
   if (leagueKey === "nascar") {
     const custom = document.createElement("div");
