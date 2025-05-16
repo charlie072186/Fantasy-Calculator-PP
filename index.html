@@ -16,6 +16,14 @@
     <div id="stats-container"></div>
     <div id="bonus-container"></div>
 
+    <!-- Optional Summary Boxes -->
+    <div id="summary-boxes">
+      <textarea id="summary-nba-pra" readonly placeholder="Total Points + Rebounds + Assists"></textarea>
+      <textarea id="summary-nba-stocks" readonly placeholder="Total Blocks + Steals"></textarea>
+      <textarea id="summary-nfl-td" readonly placeholder="Rush TD + Rec TD Total"></textarea>
+      <textarea id="summary-mlb-hits" readonly placeholder="Hits + Runs + RBI Total"></textarea>
+    </div>
+
     <div class="options-row">
       <input type="checkbox" id="hideZero" />
       <label for="hideZero">Hide 0-value stats</label>
@@ -28,35 +36,14 @@
 
     <h2>TOTAL: Fantasy Score</h2>
     <textarea id="breakdown" readonly></textarea>
-    <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
 
-    <!-- NBA PRA & BLK+STL Box -->
-    <div id="nba-summary" class="summary-container" style="display:none;">
-      <h3>NBA Auto Totals</h3>
-      <div class="summary-box">
-        <label for="nba-pra">Points + Rebounds + Assists</label>
-        <textarea id="nba-pra" readonly></textarea>
-        <button class="copy" onclick="copyToClipboard('nba-pra')">Copy Breakdown</button>
-      </div>
-      <div class="summary-box">
-        <label for="nba-blkstl">Blocks + Steals</label>
-        <textarea id="nba-blkstl" readonly></textarea>
-        <button class="copy" onclick="copyToClipboard('nba-blkstl')">Copy Breakdown</button>
-      </div>
+    <div class="copy-buttons">
+      <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
+      <button class="copy" onclick="copyText('summary-nba-pra')">Copy P+R+A</button>
+      <button class="copy" onclick="copyText('summary-nba-stocks')">Copy Blk+Stl</button>
+      <button class="copy" onclick="copyText('summary-nfl-td')">Copy Rush+Rec TD</button>
+      <button class="copy" onclick="copyText('summary-mlb-hits')">Copy Hits+Run+RBI</button>
     </div>
-
-    <!-- NFL TD Summary -->
-    <div id="nfl-summary" class="summary-container" style="display:none;">
-      <h3>NFL TD Summary</h3>
-      <textarea id="nfl-td-summary" readonly></textarea>
-    </div>
-
-    <!-- MLB Hit Summary -->
-    <div id="mlb-summary" class="summary-container" style="display:none;">
-      <h3>MLB Hits + Runs + RBI Summary</h3>
-      <textarea id="mlb-hit-summary" readonly></textarea>
-    </div>
-
   </div>
 
   <script src="script.js"></script>
