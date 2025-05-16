@@ -36,7 +36,7 @@ select, input[type="text"], textarea {
   padding: 10px;
   border-radius: 8px;
   font-size: 1rem;
-  width: 100%;
+  width: 25%;
   box-sizing: border-box;
 }
 
