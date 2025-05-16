@@ -294,3 +294,17 @@ input[type="checkbox"].stat-input {
   border-radius: 6px;
 }
 
+.options-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 1rem 0;
+  gap: 0.5rem;
+}
+
+.hide-zero-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: bold;
+}
