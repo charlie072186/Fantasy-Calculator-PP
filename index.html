@@ -15,6 +15,24 @@
     <div id="stats-container"></div>
     <div id="bonus-container"></div>
 
+    <div id="extra-breakdowns">
+      <div id="nba-breakdowns" style="display:none">
+        <h3>NBA Breakdown</h3>
+        <textarea id="breakdown-nba" readonly></textarea>
+        <button onclick="copyText('breakdown-nba')">Copy Breakdown</button>
+      </div>
+      <div id="mlb-hitter-breakdowns" style="display:none">
+        <h3>MLB Hitter Breakdown</h3>
+        <textarea id="breakdown-mlb-hitter" readonly></textarea>
+        <button onclick="copyText('breakdown-mlb-hitter')">Copy Breakdown</button>
+      </div>
+      <div id="nfl-offense-breakdowns" style="display:none">
+        <h3>NFL Offense Breakdown</h3>
+        <textarea id="breakdown-nfl" readonly></textarea>
+        <button onclick="copyText('breakdown-nfl')">Copy Breakdown</button>
+      </div>
+    </div>
+
     <div class="options-row">
       <input type="checkbox" id="hideZero" />
       <label for="hideZero">Hide 0-value stats</label>
@@ -28,29 +46,7 @@
     <h2>TOTAL: Fantasy Score</h2>
     <textarea id="breakdown" readonly></textarea>
     <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
-
-    <!-- NBA PRA and BLK+STL -->
-    <div id="nba-breakdowns" style="display:none">
-      <h3>NBA Summary Stats</h3>
-      <textarea id="nba-summary" readonly></textarea>
-      <button class="copy" onclick="copyText('nba-summary')">Copy NBA Summary</button>
-    </div>
-
-    <!-- MLB Hitter Summaries -->
-    <div id="mlb-hitter-breakdowns" style="display:none">
-      <h3>MLB Hitter Summary Stats</h3>
-      <textarea id="mlb-summary" readonly></textarea>
-      <button class="copy" onclick="copyText('mlb-summary')">Copy MLB Summary</button>
-    </div>
-
-    <!-- NFL Offensive Summaries -->
-    <div id="nfl-breakdowns" style="display:none">
-      <h3>NFL Offensive Summary Stats</h3>
-      <textarea id="nfl-summary" readonly></textarea>
-      <button class="copy" onclick="copyText('nfl-summary')">Copy NFL Summary</button>
-    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
