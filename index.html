@@ -28,6 +28,19 @@
     <h2>TOTAL: Fantasy Score</h2>
     <textarea id="breakdown" readonly></textarea>
     <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
+
+    <!-- NBA FS Auto Breakdown -->
+    <div id="nba-auto-breakdown" style="display: none; margin-top: 1rem;">
+      <h3>NBA Totals</h3>
+      <div class="nba-group">
+        <label for="pra-total">Total (Points + Rebounds + Assists):</label>
+        <input id="pra-total" readonly class="nba-summary" />
+      </div>
+      <div class="nba-group">
+        <label for="bs-total">Total (Blocks + Steals):</label>
+        <input id="bs-total" readonly class="nba-summary" />
+      </div>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
