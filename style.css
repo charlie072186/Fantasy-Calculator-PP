@@ -282,6 +282,14 @@ input[type="checkbox"].stat-input {
   width: 18px;
   height: 18px;
   margin-left: 8px;
-  vertical-align: middle;
+  vertical-align: side by side;
+}
+
+/* Specific section styling if desired */
+#stats-container .nascar-section {
+  border: 2px solid #4ade80;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 6px;
 }
 
