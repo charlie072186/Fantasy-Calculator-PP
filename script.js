@@ -92,7 +92,7 @@ function loadStats() {
               <span class="tooltiptext">Pitch 6+ innings and allow ≤ 3 earned runs</span>
             </span>
           </div>
-        `; // No input field
+        `; 
         container.appendChild(row);
         return;
       }
@@ -212,7 +212,7 @@ function calculateScore() {
     total += val * points;
   });
 
-  // ✅ Auto-calculate Quality Start if criteria met
+
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     let qsPoints = 0;
     if (Array.isArray(league.stats)) {
