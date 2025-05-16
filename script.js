@@ -102,15 +102,27 @@ function loadStats() {
 }
 
   if (leagueKey === "nascar") {
-    const custom = document.createElement("div");
-    custom.className = "stat-group";
-    custom.innerHTML = `
-      <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position" /></div>
-      <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position" /></div>
-      <div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps" /></div>
-      <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led" /></div>
-    `;
-    container.appendChild(custom);
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "stat-group";
+
+    const inputs = [
+      { label: "Starting Position", id: "Starting Position" },
+      { label: "Finishing Position", id: "Finishing Position" },
+      { label: "Fastest Laps × 0.45", id: "Fastest Laps" },
+      { label: "Laps Led × 0.25", id: "Laps Led" }
+    ];
+
+    inputs.forEach(stat => {
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.innerHTML = `
+        <div class="stat-label">${stat.label}</div>
+        <input type="text" class="stat-input" id="stat-${stat.id}" />
+      `;
+      groupDiv.appendChild(row);
+    });
+
+    container.appendChild(groupDiv);
     return;
   }
 
@@ -240,7 +252,33 @@ function calculateScore() {
     }
     total += val * points;
   });
-
+    if (leagueKey === "nascar") {
+        const getVal = id => parseFloat(document.getElementById(`stat-${id}`)?.value) || 0;
+        const start = getVal("Starting Position");
+        const finish = getVal("Finishing Position");
+        const fastest = getVal("Fastest Laps");
+        const led = getVal("Laps Led");
+    
+        const diff = start - finish;
+        const fastestScore = fastest * 0.45;
+        const ledScore = led * 0.25;
+    
+        const placePointsMap = [
+          45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23,
+          21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+        ];
+        const finishPoints = finish >= 1 && finish <= 40 ? placePointsMap[finish - 1] : 0;
+    
+        breakdown += `Place Differential: ${diff} pts\n`;
+        breakdown += `Finishing Position (${finish}): ${finishPoints} pts\n`;
+        breakdown += `Fastest Laps: ${fastest} × 0.45 = ${fastestScore.toFixed(2)}\n`;
+        breakdown += `Laps Led: ${led} × 0.25 = ${ledScore.toFixed(2)}\n`;
+    
+        total += diff + finishPoints + fastestScore + ledScore;
+        document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
+        return;
+      }
+  
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     const qsPoints = Array.isArray(league.stats)
       ? league.stats.find(s => s.label === "Quality Start")?.points || 0
