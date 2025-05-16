@@ -89,7 +89,7 @@ textarea {
   margin-top: 10px;
   padding: 8px;
   background-color: white;
-  color: black;
+  color: white;
   border: none;
   border-radius: 4px;
   font-family: monospace;
@@ -229,7 +229,7 @@ input[type="checkbox"].stat-input {
   width: 18px;
   height: 18px;
   margin-left: 8px;
-  vertical-align: middle;
+  vertical-align: below;
 }
 
 .stat-group {
