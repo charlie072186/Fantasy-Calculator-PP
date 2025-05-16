@@ -16,12 +16,22 @@
     <div id="stats-container"></div>
     <div id="bonus-container"></div>
 
-    <!-- Optional Summary Boxes -->
+    <!-- Conditional Summary Boxes -->
     <div id="summary-boxes">
-      <textarea id="summary-nba-pra" readonly placeholder="Total Points + Rebounds + Assists"></textarea>
-      <textarea id="summary-nba-stocks" readonly placeholder="Total Blocks + Steals"></textarea>
-      <textarea id="summary-nfl-td" readonly placeholder="Rush TD + Rec TD Total"></textarea>
-      <textarea id="summary-mlb-hits" readonly placeholder="Hits + Runs + RBI Total"></textarea>
+      <textarea id="summary-nba-pra" readonly class="summary-box" placeholder="Points + Rebounds + Assists"></textarea>
+      <textarea id="summary-nba-pa" readonly class="summary-box" placeholder="Points + Assists"></textarea>
+      <textarea id="summary-nba-pr" readonly class="summary-box" placeholder="Points + Rebounds"></textarea>
+      <textarea id="summary-nba-ra" readonly class="summary-box" placeholder="Rebounds + Assists"></textarea>
+      <textarea id="summary-nba-stocks" readonly class="summary-box" placeholder="Blocks + Steals"></textarea>
+
+      <textarea id="summary-mlb-hr-rbi" readonly class="summary-box" placeholder="Hits + Runs + RBI"></textarea>
+      <textarea id="summary-mlb-hbb" readonly class="summary-box" placeholder="Hits + Walks"></textarea>
+      <textarea id="summary-mlb-hbb-h" readonly class="summary-box" placeholder="Hits + Walks + HBP"></textarea>
+
+      <textarea id="summary-nfl-pry" readonly class="summary-box" placeholder="Pass + Rush Yards"></textarea>
+      <textarea id="summary-nfl-rry" readonly class="summary-box" placeholder="Rush + Rec Yards"></textarea>
+      <textarea id="summary-nfl-prtd" readonly class="summary-box" placeholder="Pass + Rush TDs"></textarea>
+      <textarea id="summary-nfl-rrtd" readonly class="summary-box" placeholder="Rush + Rec TDs"></textarea>
     </div>
 
     <div class="options-row">
@@ -39,10 +49,20 @@
 
     <div class="copy-buttons">
       <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
-      <button class="copy" onclick="copyText('summary-nba-pra')">Copy P+R+A</button>
+      <button class="copy" onclick="copyText('summary-nba-pra')">Copy PRA</button>
+      <button class="copy" onclick="copyText('summary-nba-pa')">Copy P+A</button>
+      <button class="copy" onclick="copyText('summary-nba-pr')">Copy P+R</button>
+      <button class="copy" onclick="copyText('summary-nba-ra')">Copy R+A</button>
       <button class="copy" onclick="copyText('summary-nba-stocks')">Copy Blk+Stl</button>
-      <button class="copy" onclick="copyText('summary-nfl-td')">Copy Rush+Rec TD</button>
-      <button class="copy" onclick="copyText('summary-mlb-hits')">Copy Hits+Run+RBI</button>
+
+      <button class="copy" onclick="copyText('summary-mlb-hr-rbi')">Copy Hits+Runs+RBI</button>
+      <button class="copy" onclick="copyText('summary-mlb-hbb')">Copy Hits+Walks</button>
+      <button class="copy" onclick="copyText('summary-mlb-hbb-h')">Copy Hits+Walks+HBP</button>
+
+      <button class="copy" onclick="copyText('summary-nfl-pry')">Copy Pass+Rush Yards</button>
+      <button class="copy" onclick="copyText('summary-nfl-rry')">Copy Rush+Rec Yards</button>
+      <button class="copy" onclick="copyText('summary-nfl-prtd')">Copy Pass+Rush TD</button>
+      <button class="copy" onclick="copyText('summary-nfl-rrtd')">Copy Rush+Rec TD</button>
     </div>
   </div>
 
