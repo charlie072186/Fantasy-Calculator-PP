@@ -279,7 +279,35 @@ function calculateScore() {
     breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
     total += qsPoints;
   }
+  
+  if (leagueKey === "nascar") {
+    const startInput = parseInt(document.getElementById("stat-Starting Position")?.value);
+    const finishInput = parseInt(document.getElementById("stat-Finishing Position")?.value);
+    const fastestLaps = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
+    const lapsLed = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
 
+    if (!isNaN(startInput) && !isNaN(finishInput)) {
+      const placeDiff = startInput - finishInput;
+      total += placeDiff;
+      breakdown += `Place Differential: ${placeDiff} pts\n`;
+
+      const finishingPoints = finishInput >= 1 && finishInput <= 40
+        ? [45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23,
+           21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1][finishInput - 1]
+        : 0;
+      total += finishingPoints;
+      breakdown += `Finishing Position (${finishInput}): ${finishingPoints} pts\n`;
+    }
+
+    const flPoints = fastestLaps * 0.45;
+    const ledPoints = lapsLed * 0.25;
+    if (fastestLaps) breakdown += `Fastest Laps: ${fastestLaps} × 0.45 = ${flPoints.toFixed(2)}\n`;
+    if (lapsLed) breakdown += `Laps Led: ${lapsLed} × 0.25 = ${ledPoints.toFixed(2)}\n`;
+
+    total += flPoints + ledPoints;
+  }
+
+  
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
     const bonusVal = parseFloat(bonus.value);
