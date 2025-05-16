@@ -286,7 +286,6 @@ function copyBreakdown() {
   document.execCommand("copy");
 }
 
-// Allow Enter key to calculate score
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
