@@ -68,6 +68,33 @@ function loadStats() {
     container.appendChild(custom);
     return;
   }
+
+  if (leagueKey === "nascar") {
+  // NASCAR custom rendering
+  const nascarGroup = document.createElement("div");
+  nascarGroup.className = "stat-group";
+
+  const title = document.createElement("div");
+  title.className = "group-title";
+  title.textContent = "NASCAR Stats";
+  nascarGroup.appendChild(title);
+
+  ["Starting Position", "Finishing Position", "Fastest Laps", "Laps Led"].forEach(label => {
+    const points = league.stats[label];
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    row.innerHTML = `
+      <div class="stat-label">${label}${(label === "Fastest Laps" || label === "Laps Led") ? ` — ${points} pts` : ""}</div>
+      <input type="text" class="stat-input" id="stat-${label}" />
+    `;
+    nascarGroup.appendChild(row);
+  });
+
+  container.appendChild(nascarGroup);
+  return;
+}
+
+  
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
@@ -130,6 +157,34 @@ function loadStats() {
       bonusContainer.appendChild(row);
     });
   }
+}
+
+if (leagueKey === "nascar") {
+  let sp = parseInt(document.getElementById("stat-Starting Position")?.value || 0);
+  let fp = parseInt(document.getElementById("stat-Finishing Position")?.value || 0);
+  let fastestLaps = parseFloat(document.getElementById("stat-Fastest Laps")?.value || 0);
+  let lapsLed = parseFloat(document.getElementById("stat-Laps Led")?.value || 0);
+
+  const placeDiff = sp - fp;
+  const flPts = fastestLaps * 0.45;
+  const llPts = lapsLed * 0.25;
+
+  const finishPointsMap = {
+    1: 45, 2: 42, 3: 41, 4: 40, 5: 39, 6: 38, 7: 37, 8: 36, 9: 35, 10: 34,
+    11: 32, 12: 31, 13: 30, 14: 29, 15: 28, 16: 27, 17: 26, 18: 25, 19: 24, 20: 23,
+    21: 21, 22: 20, 23: 19, 24: 18, 25: 17, 26: 16, 27: 15, 28: 14, 29: 13, 30: 12,
+    31: 10, 32: 9, 33: 8, 34: 7, 35: 6, 36: 5, 37: 4, 38: 3, 39: 2, 40: 1
+  };
+  const finishPts = finishPointsMap[fp] ?? 0;
+
+  breakdown += `Place Differential: ${sp} - ${fp} = ${placeDiff}\n`;
+  breakdown += `Fastest Laps: ${fastestLaps} × 0.45 = ${flPts.toFixed(2)}\n`;
+  breakdown += `Laps Led: ${lapsLed} × 0.25 = ${llPts.toFixed(2)}\n`;
+  breakdown += `Finishing Place Points: ${fp} = ${finishPts} pts\n`;
+
+  total += placeDiff + flPts + llPts + finishPts;
+  document.getElementById("breakdown").value = breakdown + `\nTotal: ${total.toFixed(2)}`;
+  return;
 }
 
 function renderGroupedStats(container, stats, groupMap) {
