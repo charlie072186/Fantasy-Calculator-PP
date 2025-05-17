@@ -141,7 +141,7 @@
     }
   },
    "nascar": {
-    "name": "Nascar FS",
+    "name": "Nascar",
     "stats": [
       { "label": "Starting Position", "points": 0 },
       { "label": "Finishing Position", "points": 0 },
