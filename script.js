@@ -1,18 +1,23 @@
 let leagues = {};
 
 async function loadLeagues() {
-  const res = await fetch("leagues.json");
-  leagues = await res.json();
-  const select = document.getElementById("league");
-  select.innerHTML = "";
-  Object.entries(leagues).forEach(([key, val]) => {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = val.name;
-    select.appendChild(opt);
-  });
-  loadStats();
+  try {
+    const res = await fetch("leagues.json");
+    leagues = await res.json();
+    const select = document.getElementById("league");
+    select.innerHTML = "";
+    Object.entries(leagues).forEach(([key, val]) => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = val.name;
+      select.appendChild(opt);
+    });
+    loadStats(); // load first league's stats on page load
+  } catch (e) {
+    console.error("Failed to load leagues.json:", e);
+  }
 }
+
 
 function loadStats() {
   const leagueKey = document.getElementById("league").value;
