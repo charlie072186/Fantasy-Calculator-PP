@@ -286,6 +286,14 @@ function calculateScore() {
     total += pts;
   }
 
+  const full = Math.floor(val);
+  const decimal = Math.round((val - full) * 10);
+  const outs = full * 3 + decimal;
+  const ipPoints = outs * points; // 'points' is 1 point per out (3 per IP)
+  breakdown += `${label}: ${val} IP (${outs} outs) × ${points} = ${ipPoints.toFixed(2)}\n`;
+  total += ipPoints;
+
+  
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
     const val = parseFloat(bonus.value);
@@ -312,7 +320,7 @@ function calculateScore() {
     const total2 = hits + mlb.bb;
     const total3 = hits + mlb.bb + mlb.hbp;
     document.getElementById("mlb-breakdown").value =
-      `Hits+Runs+RBI = ${total1}\nHits+Walks = ${total2}\nHits+Walks+HBP = ${total3}`;
+      `Hits+Runs+RBI = ${total1}\nHits+Walks = ${total2}`;
   }
 
   if (leagueKey === "nfl_cfb") {
