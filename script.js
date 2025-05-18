@@ -240,15 +240,28 @@ function calculateScore() {
     if (isNaN(val)) return;
 
     if (leagueKey === "mlb_pitcher") {
-      if (label === "Innings Pitched") innings = val;
+    if (label === "Innings Pitched") {
+        innings = val;
+        const fullInnings = Math.floor(val);
+        const decimalPart = Math.round((val - fullInnings) * 10); // should be 0, 1, or 2
+        const outs = fullInnings * 3 + decimalPart;
+        const ipPoints = outs * points;
+        breakdown += `${label}: ${val} IP (${outs} outs) × ${points} = ${ipPoints.toFixed(2)}\n`;
+        total += ipPoints;
+        return;
+      }
+
+      if (![0, 1, 2].includes(decimalPart)) {
+        breakdown += `⚠️ Invalid IP decimal: use only .0, .1, or .2\n`;
+      }
+
       if (label === "Earned Run") earnedRuns = val;
       if (label === "Quality Start") return;
     }
 
     if (!hideZero || val !== 0) {
       breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
-    }
-    total += val * points;
+    };
 
     // Accumulate breakdowns
     if (leagueKey === "NBA") {
