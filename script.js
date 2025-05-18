@@ -261,7 +261,7 @@ function calculateScore() {
 
     if (!hideZero || val !== 0) {
       breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
-    };
+    }
 
     // Accumulate breakdowns
     if (leagueKey === "NBA") {
