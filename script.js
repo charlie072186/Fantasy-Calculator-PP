@@ -251,6 +251,7 @@ function calculateScore() {
         return;
       }
 
+
       if (![0, 1, 2].includes(decimalPart)) {
         breakdown += `⚠️ Invalid IP decimal: use only .0, .1, or .2\n`;
       }
@@ -270,7 +271,7 @@ function calculateScore() {
       if (label === "Assist") nba.ast = val;
       if (label === "Block") nba.blk = val;
       if (label === "Steal") nba.stl = val;
-    }
+    };
 
     if (leagueKey === "mlb_hitter") {
       if (label === "Single") mlb.single = val;
