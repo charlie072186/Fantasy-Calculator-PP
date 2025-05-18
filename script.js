@@ -87,8 +87,6 @@ function loadStats() {
     return;
   }
 
-  if (label === "Innings Pitched") innings = val;
-
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
