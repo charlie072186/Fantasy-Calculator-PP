@@ -78,12 +78,22 @@ function calculateScore() {
     if (isNaN(val)) return;
 
     if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
-      innings = val;
-      const full = Math.floor(val);
-      const decimal = Math.round((val - full) * 10);
-      if (![0, 1, 2].includes(decimal)) {
-        breakdown += `⚠️ Invalid IP decimal (use .0, .1, or .2)
-`;
+  innings = val;
+  const full = Math.floor(val);
+  const decimal = Math.round((val - full) * 10);
+  if (![0, 1, 2].includes(decimal)) {
+    breakdown += `⚠️ Invalid IP decimal (use .0, .1, or .2)\n`;
+    return;
+  }
+  const outs = full * 3 + decimal;
+  breakdown += `${label}: ${val} IP = ${outs} outs × ${points} = ${(outs * points).toFixed(2)}\n`;
+  total += outs * points;
+  return; // ✅ Stop here to prevent duplicate addition below
+}
+;
+     total += outs * points;
+      return;
+    }    
         return;
       }
       const outs = full * 3 + decimal;
