@@ -9,6 +9,7 @@
 <body>
   <div class="container">
     <h1>Fantasy Score Calculator</h1>
+    
     <label for="league">Select League:</label>
     <select id="league" onchange="loadStats()"></select>
 
@@ -26,9 +27,29 @@
     </div>
 
     <h2>TOTAL: Fantasy Score</h2>
-    <textarea id="breakdown" readonly></textarea>
+    <textarea id="breakdown" readonly class="breakdown-box"></textarea>
     <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
+
+    <!-- Extra breakdowns (NBA, MLB Hitter, NFL Offense) -->
+    <div id="extra-breakdowns" style="display:none;">
+      <h3>Additional Breakdown</h3>
+      <div id="extraNBA" style="display:none;">
+        <textarea id="nbaBreakdown" readonly class="breakdown-box"></textarea>
+        <button class="copy" onclick="copyToClipboard('nbaBreakdown')">Copy NBA Breakdown</button>
+      </div>
+
+      <div id="extraMLB" style="display:none;">
+        <textarea id="mlbBreakdown" readonly class="breakdown-box"></textarea>
+        <button class="copy" onclick="copyToClipboard('mlbBreakdown')">Copy MLB Breakdown</button>
+      </div>
+
+      <div id="extraNFL" style="display:none;">
+        <textarea id="nflBreakdown" readonly class="breakdown-box"></textarea>
+        <button class="copy" onclick="copyToClipboard('nflBreakdown')">Copy NFL Breakdown</button>
+      </div>
+    </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
