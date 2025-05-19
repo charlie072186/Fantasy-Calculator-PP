@@ -244,7 +244,7 @@ function calculateScore() {
     if (!hideZero || val !== 0)
       breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
 
-    total += val * points;
+    
 
     if (leagueKey === "NBA") nba[label] = val;
     if (leagueKey === "mlb_hitter") mlb[label] = val;
