@@ -89,9 +89,6 @@ function calculateScore() {
       const outs = full * 3 + decimal;
       breakdown += `${label}: ${val} IP = ${outs} outs × ${points} = ${(outs * points).toFixed(2)}
 `;
-      total += outs * points;
-      return;
-    }
 
     if (label === "Earned Run") earnedRuns = val;
     if (label === "Quality Start") return;
