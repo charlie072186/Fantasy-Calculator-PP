@@ -228,8 +228,6 @@ function calculateScore() {
       innings = val;
       const full = Math.floor(val);
       const decimal = Math.round((val - full) * 10);
-      if (![0, 1, 2].includes(decimal)) {
-        breakdown += `⚠️ Invalid IP decimal (use .0, .1, or .2)\n`;
         return;
       }
       const outs = full * 3 + decimal;
