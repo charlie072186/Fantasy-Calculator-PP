@@ -304,7 +304,7 @@ if (leagueKey === "mlb_hitter") {
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>MLB Breakdown</h3>
+    <h3>MLB Single Stats</h3>
     Hits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}
     Runs: ${run}
     RBI: ${rbi}
