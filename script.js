@@ -310,51 +310,8 @@ if (leagueKey === "mlb_hitter") {
     Hits+Runs+RBI = ${sum}
   `;
 }
-const extraWrapper = document.getElementById("extra-breakdown-wrapper");
-const extraBox = document.getElementById("extra-breakdown-box");
-extraBox.value = "";
-extraWrapper.classList.add("hidden");
 
-if (leagueKey === "NBA") {
-  const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
-  const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
-  const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
-
-  const pra = pts + reb + ast;
-  const pa = pts + ast;
-  const pr = pts + reb;
-
-  extraBox.value =
-    `Points: ${pts}\nRebounds: ${reb}\nAssists: ${ast}\n\n` +
-    `P+R+A = ${pra}\nP+A = ${pa}\nP+R = ${pr}`;
-  extraWrapper.classList.remove("hidden");
-}
-
-if (leagueKey === "mlb_hitter") {
-  const single = parseFloat(document.getElementById("stat-Single")?.value) || 0;
-  const doubleHit = parseFloat(document.getElementById("stat-Double")?.value) || 0;
-  const triple = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
-  const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
-  const run = parseFloat(document.getElementById("stat-Run")?.value) || 0;
-  const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
-
-  const hits = single + doubleHit + triple + hr;
-  const sum = hits + run + rbi;
-
-  extraBox.value =
-    `Hits: ${single}+${doubleHit}+${triple}+${hr} = ${hits}\n` +
-    `Runs: ${run}\nRBI: ${rbi}\n\n` +
-    `Hits+Runs+RBI = ${sum}`;
-  extraWrapper.classList.remove("hidden");
-}
-  
   document.getElementById("breakdown").value = breakdown;
-}
-
-function copyExtraBreakdown() {
-  const box = document.getElementById("extra-breakdown-box");
-  box.select();
-  document.execCommand("copy");
 }
 
 function clearInputs() {
