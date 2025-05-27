@@ -278,7 +278,7 @@ if (leagueKey === "NBA") {
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>NBA Breakdown</h3>
+    <h3>NBA Single Stats</h3>
     Points: ${pts}
     Rebounds: ${reb}
     Assists: ${ast}
