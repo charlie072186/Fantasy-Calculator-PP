@@ -275,6 +275,7 @@ if (leagueKey === "NBA") {
   const pra = pts + reb + ast;
   const pa = pts + ast;
   const pr = pts + reb;
+  const ra = reb + ast;
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
@@ -286,6 +287,7 @@ if (leagueKey === "NBA") {
     P+R+A = ${pra}
     P+A = ${pa}
     P+R = ${pr}
+    R+A = ${ra}
   `;
 }
 
@@ -302,7 +304,7 @@ if (leagueKey === "mlb_hitter") {
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>MLB Breakdown</h3>
+    <h3>MLB Single Stats</h3>
     Hits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}
     Runs: ${run}
     RBI: ${rbi}
