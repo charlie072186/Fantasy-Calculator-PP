@@ -374,4 +374,11 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+function copyExtraBreakdown() {
+  const box = document.getElementById("extra-breakdown-box");
+  box.select();
+  document.execCommand("copy");
+}
+
+
 window.onload = loadLeagues;
