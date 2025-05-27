@@ -313,6 +313,27 @@ if (leagueKey === "mlb_hitter") {
   `;
 }
 
+if (leagueKey === "nfl_cfb") {
+  const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
+  const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
+  const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
+  const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
+  const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
+  const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+
+  const yds1 = passYds + rushYds;
+  const yds2 = rushYds + recYds;
+  const td1 = passTD + rushTD;
+  const td2 = rushTD + recTD;
+
+  extraBox.value =
+    `Passing Yards: ${passYds}\nRushing Yards: ${rushYds}\nReceiving Yards: ${recYds}\n` +
+    `Passing TDs: ${passTD}\nRushing TDs: ${rushTD}\nReceiving TDs: ${recTD}\n\n` +
+    `Pass+Rush Yds = ${yds1}\nRush+Rec Yds = ${yds2}\n` +
+    `Pass+Rush TD = ${td1}\nRush+Rec TD = ${td2}`;
+  extraWrapper.classList.remove("hidden");
+}
+  
   document.getElementById("breakdown").value = breakdown;
 }
 
