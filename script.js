@@ -347,8 +347,14 @@ if (leagueKey === "mlb_hitter") {
     `Hits+Runs+RBI = ${sum}`;
   extraWrapper.classList.remove("hidden");
 }
-
+  
   document.getElementById("breakdown").value = breakdown;
+}
+
+function copyExtraBreakdown() {
+  const box = document.getElementById("extra-breakdown-box");
+  box.select();
+  document.execCommand("copy");
 }
 
 function clearInputs() {
@@ -373,6 +379,5 @@ document.addEventListener("keydown", (e) => {
     calculateScore();
   }
 });
-
 
 window.onload = loadLeagues;
