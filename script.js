@@ -304,7 +304,7 @@ if (leagueKey === "mlb_hitter") {
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>MLB Single Stats</h3>
+    <h3>MLB Breakdown</h3>
     Hits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}
     Runs: ${run}
     RBI: ${rbi}
@@ -333,7 +333,7 @@ if (leagueKey === "nfl_cfb") {
     `Pass+Rush TD = ${td1}\nRush+Rec TD = ${td2}`;
   extraWrapper.classList.remove("hidden");
 }
-  
+
   document.getElementById("breakdown").value = breakdown;
 }
 
