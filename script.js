@@ -179,6 +179,54 @@ function renderGroupedStats(container, stats, groupMap) {
 }
 
 function calculateScore() {
+  const extraBox = document.getElementById("extra-breakdown-box");
+extraBox.classList.add("hidden");
+extraBox.innerHTML = "";
+
+if (leagueKey === "NBA") {
+  const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
+  const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
+  const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
+
+  const pra = pts + reb + ast;
+  const pa = pts + ast;
+  const pr = pts + reb;
+
+  extraBox.classList.remove("hidden");
+  extraBox.innerHTML = `
+    <h3>NBA Breakdown</h3>
+    Points: ${pts}
+    Rebounds: ${reb}
+    Assists: ${ast}
+
+    P+R+A = ${pra}
+    P+A = ${pa}
+    P+R = ${pr}
+  `;
+}
+
+if (leagueKey === "mlb_hitter") {
+  const single = parseFloat(document.getElementById("stat-Single")?.value) || 0;
+  const doubleHit = parseFloat(document.getElementById("stat-Double")?.value) || 0;
+  const triple = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
+  const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
+  const run = parseFloat(document.getElementById("stat-Run")?.value) || 0;
+  const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
+
+  const hits = single + doubleHit + triple + hr;
+  const sum = hits + run + rbi;
+
+  extraBox.classList.remove("hidden");
+  extraBox.innerHTML = `
+    <h3>MLB Breakdown</h3>
+    Hits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}
+    Runs: ${run}
+    RBI: ${rbi}
+
+    Hits+Runs+RBI = ${sum}
+  `;
+}
+
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
   const stats = Array.isArray(league.stats)
