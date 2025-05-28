@@ -288,4 +288,16 @@ textarea#breakdown {
   margin-left: auto;
   transform: scale(1.2);
 }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.stat-label {
+  flex: 1;
+}
+.stat-input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-left: 10px;
+}
 
