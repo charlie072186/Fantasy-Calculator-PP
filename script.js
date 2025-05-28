@@ -335,10 +335,10 @@ if (leagueKey === "nfl_cfb") {
     Rushing TDs: ${rushTD}
     Receiving TDs: ${recTD}
 
-    Passing + Receiving Yards = ${yds1}
-    Rushing + Receiving Yards = ${yds2}
-    Passing + Rushing TDs = ${td1}
-    Rushing + Receiving TDs = ${td2}
+    Pass + Rec Yards = ${yds1}
+    Rush + Rec Yards = ${yds2}
+    Pass + Rush TDs = ${td1}
+    Rush + Rece TDs = ${td2}
   `;
 }
 
