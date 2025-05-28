@@ -275,10 +275,11 @@ if (leagueKey === "NBA") {
   const pra = pts + reb + ast;
   const pa = pts + ast;
   const pr = pts + reb;
+  const ra = reb + ast;
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>NBA Breakdown</h3>
+    <h3>NBA Single Stats</h3>
     Points: ${pts}
     Rebounds: ${reb}
     Assists: ${ast}
@@ -286,6 +287,7 @@ if (leagueKey === "NBA") {
     P+R+A = ${pra}
     P+A = ${pa}
     P+R = ${pr}
+    R+A = ${ra}
   `;
 }
 
@@ -302,12 +304,41 @@ if (leagueKey === "mlb_hitter") {
 
   extraBox.classList.remove("hidden");
   extraBox.innerHTML = `
-    <h3>MLB Breakdown</h3>
+    <h3>MLB Single Stats</h3>
     Hits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}
     Runs: ${run}
     RBI: ${rbi}
 
     Hits+Runs+RBI = ${sum}
+  `;
+}
+
+if (leagueKey === "nfl_cfb") {
+  const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
+  const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
+  const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
+  const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
+  const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
+  const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+
+  const yds1 = passYds + rushYds;
+  const yds2 = rushYds + recYds;
+  const td1 = passTD + rushTD;
+  const td2 = rushTD + recTD;
+
+  extraBox.classList.remove("hidden");
+  extraBox.innerHTML = `
+    <h3> Football Single Stats</h3>
+    Passing Yards: ${passYds}
+    Rushing Yards: ${rushYds}
+    Passing TDs: ${passTD}
+    Rushing TDs: ${rushTD}
+    Receiving TDs: ${recTD}
+
+    Pass + Rec Yards = ${yds1}
+    Rush + Rec Yards = ${yds2}
+    Pass + Rush TDs = ${td1}
+    Rush + Rece TDs = ${td2}
   `;
 }
 
