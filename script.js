@@ -327,11 +327,19 @@ if (leagueKey === "nfl_cfb") {
   const td2 = rushTD + recTD;
 
   extraBox.classList.remove("hidden");
-  extraBox.value =
-    `Passing Yards: ${passYds}\nRushing Yards: ${rushYds}\nReceiving Yards: ${recYds}\n` +
-    `Passing TDs: ${passTD}\nRushing TDs: ${rushTD}\nReceiving TDs: ${recTD}\n\n` +
-    `Pass+Rush Yds = ${yds1}\nRush+Rec Yds = ${yds2}\n` +
-    `Pass+Rush TD = ${td1}\nRush+Rec TD = ${td2}`;
+  extraBox.innerHTML = `
+    <h3> Football Single Stats</h3>
+    Passing Yards: ${passYds}
+    Rushing Yards: ${rushYds}
+    Passing TDs: ${passTD}
+    Rushing TDs: ${rushTD}
+    Receiving TDs: ${recTD}
+
+    Passing + Receiving Yards = ${yds1}
+    Rushing + Receiving Yards = ${yds2}
+    Passing + Rushing TDs = ${td1}
+    Rushing + Receiving TDs = ${td2}
+  `;
 }
 
   document.getElementById("breakdown").value = breakdown;
