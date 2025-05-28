@@ -341,7 +341,7 @@ if (leagueKey === "nfl_cfb") {
     Pass + Rec Yards = ${yds1}
     Rush + Rec Yards = ${yds2}
     Pass + Rush TDs = ${td1}
-    Rush + Rece TDs = ${td2}
+    Rush + Rec TDs = ${td2}
   `;
 }
 
