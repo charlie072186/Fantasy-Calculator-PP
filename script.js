@@ -64,13 +64,12 @@ function loadStats() {
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
-    matchDiv.innerHTML = `
-      <div class="group-title">Match Info</div>
-      <div class="stat-row">
-        <div class="stat-label">Match Played — 10 pts</div>
-        <input type="checkbox" class="stat-input" id="stat-Match Played" />
-      </div>
-    `;
+    matchDiv.innerHTML = `<div class="group-title">Match Info</div>
+  <div class="stat-row">
+    <div class="stat-label">Match Played — 10 pts</div>
+    <input type="checkbox" class="stat-input" id="stat-Match Played" />
+  </div>`;
+
     container.appendChild(matchDiv);
 
     const gameSetDiv = document.createElement("div");
@@ -135,10 +134,14 @@ function loadStats() {
         return;
       }
       if (label === "Win") {
-        row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" />`;
-        container.appendChild(row);
-        return;
-      }
+  row.innerHTML = `
+    <div class="stat-label">${label} — ${points} pts</div>
+    <input type="checkbox" class="stat-input" id="stat-${label}" />
+  `;
+  container.appendChild(row);
+  return;
+}
+
     }
 
     row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
