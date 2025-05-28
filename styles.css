@@ -308,3 +308,29 @@ input[type="checkbox"].stat-input {
   gap: 0.4rem;
   font-weight: bold;
 }
+
+.flex-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.extra-box {
+  flex: 1;
+  min-width: 280px;
+  max-width: 320px;
+  padding: 10px;
+  background: #1c1c1c;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  font-family: monospace;
+  font-size: 0.95rem;
+  height: auto;
+  white-space: pre-wrap;
+}
+
+.extra-box.hidden {
+  display: none;
+}
