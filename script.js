@@ -212,15 +212,15 @@ function calculateScore() {
     }
 
     if (!hideZero || fastest !== 0) {
-      breakdown += `Fastest Laps: ${fastest} × 0.45 = ${(fastest * 0.45).toFixed(2)}\n`;
+      breakdown += `Fastest Laps: ${fastest} × 0.45 = ${format(fastest * 0.45)}\n`;
       total += fastest * 0.45;
     }
     if (!hideZero || led !== 0) {
-      breakdown += `Laps Led: ${led} × 0.25 = ${(led * 0.25).toFixed(2)}\n`;
+      breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
       total += led * 0.25;
     }
 
-    breakdown += `\nTotal: ${total.toFixed(2)}`;
+    breakdown += `\nTotal: ${format(total)}`;
     document.getElementById("breakdown").value = breakdown;
     return;
   }
@@ -236,7 +236,7 @@ function calculateScore() {
         const full = Math.floor(val);
         const decimal = val - full;
         const outs = full * 3 + Math.round(decimal * 10);
-        breakdown += `${label}: ${val} IP (${outs} outs) = ${outs.toFixed(2)}\n`;
+        breakdown += `${label}: ${val} IP (${outs} outs) = ${format(outs)}\n`;
         total += outs;
         return;
       }
@@ -244,7 +244,7 @@ function calculateScore() {
       if (label === "Quality Start") return;
     }
     if (!hideZero || val !== 0) {
-      breakdown += `${label}: ${val} × ${points} = ${(val * points).toFixed(2)}\n`;
+      breakdown += `${label}: ${val} × ${points} = ${format(val * points)}\n`;
     }
     total += val * points;
   });
@@ -253,7 +253,7 @@ function calculateScore() {
     const qsPoints = Array.isArray(league.stats)
       ? league.stats.find(s => s.label === "Quality Start")?.points || 0
       : league.stats["Quality Start"] || 0;
-    breakdown += `Quality Start: 1 × ${qsPoints} = ${qsPoints.toFixed(2)}\n`;
+    breakdown += `Quality Start: 1 × ${qsPoints} = ${format(qsPoints)}\n`;
     total += qsPoints;
   }
 
@@ -264,7 +264,7 @@ function calculateScore() {
     total += bonusVal;
   }
 
-  breakdown += `\nTotal: ${total.toFixed(2)}`;
+  breakdown += `\nTotal: ${format(total)}`;
 
   const extraBox = document.getElementById("extra-breakdown-box");
 extraBox.classList.add("hidden");
