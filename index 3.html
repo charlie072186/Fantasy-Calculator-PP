@@ -7,28 +7,34 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Fantasy Score Calculator</h1>
-    <label for="league">Select League:</label>
-    <select id="league" onchange="loadStats()"></select>
+  <div class="flex-wrapper">
+    <div class="container">
+      <h1>Fantasy Score Calculator</h1>
+      <label for="league">Select League:</label>
+      <select id="league" onchange="loadStats()"></select>
 
-    <div id="stats-container"></div>
-    <div id="bonus-container"></div>
+      <div id="stats-container"></div>
+      <div id="bonus-container"></div>
 
-    <div class="options-row">
-      <input type="checkbox" id="hideZero" />
-      <label for="hideZero">Hide 0-value stats</label>
+      <div class="options-row">
+        <input type="checkbox" id="hideZero" />
+        <label for="hideZero">Hide 0-value stats</label>
+      </div>
+
+      <div class="buttons">
+        <button class="go" onclick="calculateScore()">Go</button>
+        <button class="clear" onclick="clearInputs()">Clear</button>
+      </div>
+
+      <h2>TOTAL: Fantasy Score</h2>
+      <textarea id="breakdown" readonly></textarea>
+      <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
     </div>
 
-    <div class="buttons">
-      <button class="go" onclick="calculateScore()">Go</button>
-      <button class="clear" onclick="clearInputs()">Clear</button>
-    </div>
-
-    <h2>TOTAL: Fantasy Score</h2>
-    <textarea id="breakdown" readonly></textarea>
-    <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
+    <div id="extra-breakdown-box" class="extra-box hidden"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
+
 </html>
