@@ -7,9 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="flex-wrapper">
-    <div class="container">
+  <div class="flex-wrapper" style="display: flex; flex-wrap: wrap; gap: 30px; max-width: 1200px; margin: 20px auto; padding: 0 15px;">
+
+    <!-- Left: Main Calculator -->
+    <div class="container" style="flex: 1; min-width: 320px;">
       <h1>Fantasy Score Calculator</h1>
+
       <label for="league">Select League:</label>
       <select id="league" onchange="loadStats()"></select>
 
@@ -31,10 +34,16 @@
       <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
     </div>
 
-    <div id="extra-breakdown-box" class="extra-box hidden"></div>
+    <!-- Right: Extra Breakdown (NBA, MLB Hitter, NFL Offense only) -->
+    <div class="extra-box-section" style="flex: 1; min-width: 300px;">
+      <h2>Stat Breakdown</h2>
+      <div id="extra-breakdowns" class="extra-box-container">
+        <!-- Dynamically injected breakdown boxes via JS -->
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
 </body>
-
 </html>
