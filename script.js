@@ -13,6 +13,9 @@ async function loadLeagues() {
   });
   loadStats();
 }
+function format(val) {
+  return val % 1 === 0 ? val.toString() : val.toFixed(2);
+}
 
 function loadStats() {
   const leagueKey = document.getElementById("league").value;
