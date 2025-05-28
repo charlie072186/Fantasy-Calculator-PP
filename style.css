@@ -276,3 +276,16 @@ textarea#breakdown {
 .hidden {
   display: none;
 }
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.stat-row input[type="checkbox"] {
+  margin-left: auto;
+  transform: scale(1.2);
+}
+
