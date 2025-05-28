@@ -300,4 +300,13 @@ textarea#breakdown {
   transform: scale(1.2);
   margin-left: 10px;
 }
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.stat-label input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
