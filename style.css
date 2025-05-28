@@ -200,6 +200,35 @@ textarea#breakdown {
   border-radius: 6px;
 }
 
+.flex-wrapper {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Extra Breakdown Box */
+#extra-breakdown-box {
+  background-color: #fff;
+  color: #000;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  width: 260px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Make it hidden by default */
+#extra-breakdown-box.hidden {
+  display: none;
+}
+
+
 .hidden {
   display: none;
 }
