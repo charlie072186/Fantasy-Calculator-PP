@@ -1,194 +1,156 @@
-/* Base layout */
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #1e1e2f;
-  color: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1c1c1e;
+  color: #f5f5f7;
   margin: 0;
   padding: 0;
 }
 
 .container {
-  max-width: 900px;
-  margin: 2rem auto;
-  background: #2a2a40;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
 }
 
-/* Title */
+.left-column {
+  flex: 1;
+  min-width: 350px;
+}
+
+.right-column {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 h1, h2 {
-  text-align: center;
-  margin-bottom: 1rem;
+  margin-top: 0;
   color: #ffffff;
 }
 
-/* Dropdown */
-label, select {
-  display: block;
-  margin: 0.5rem 0;
-  font-size: 1rem;
+label {
+  font-weight: 500;
 }
 
-select {
+select, input[type="text"], textarea {
   width: 100%;
-  padding: 0.4rem;
-  font-size: 1rem;
-  background: #3a3a55;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
+  padding: 6px 10px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #2c2c2e;
+  color: #f5f5f7;
+  font-size: 14px;
 }
 
-/* Stat groups */
-.stat-group {
-  margin: 1.2rem 0;
-  padding: 1rem;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: #2f2f48;
-}
-
-.group-title {
-  font-weight: bold;
-  margin-bottom: 0.7rem;
-  color: #ddd;
-  font-size: 1.1rem;
-}
-
-/* Stat rows */
 .stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.4rem 0;
+  margin-bottom: 4px;
 }
 
 .stat-label {
   flex: 1;
-  font-size: 0.95rem;
+  font-size: 14px;
 }
 
 .stat-input {
-  width: 80px;
+  width: 60px;
+  padding: 4px;
+  font-size: 14px;
   text-align: center;
-  padding: 0.3rem;
-  border-radius: 4px;
-  border: 1px solid #666;
-  background: #1f1f2e;
-  color: #fff;
 }
 
-/* Bonus radio */
-.bonus-option {
-  margin: 0.5rem 0;
+textarea {
+  resize: vertical;
+  height: 160px;
+  font-size: 14px;
+  background-color: #fefefe;
+  color: #000;
+  border: 1px solid #ccc;
 }
 
-/* Buttons */
-.buttons {
+.group-title {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  color: #fefefe;
+  border-bottom: 1px solid #444;
+  padding-bottom: 2px;
+}
+
+.stat-group {
+  margin-bottom: 12px;
+}
+
+.options-row {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.options-row input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+.buttons {
+  margin: 10px 0;
+  display: flex;
+  gap: 10px;
 }
 
 button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
+  padding: 6px 14px;
+  font-size: 14px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 button.go {
-  background: #4caf50;
+  background-color: #0a84ff;
   color: white;
 }
 
 button.clear {
-  background: #f44336;
+  background-color: #ff3b30;
   color: white;
 }
 
 button.copy {
-  margin-top: 0.5rem;
-  background: #2196f3;
+  background-color: #34c759;
   color: white;
 }
 
-/* Breakdown output */
-textarea {
-  width: 100%;
-  height: 180px;
-  margin-top: 1rem;
-  border: 1px solid #666;
-  border-radius: 6px;
-  padding: 0.8rem;
-  background: #ffffff;
-  color: #000;
-  font-family: monospace;
-  resize: vertical;
+.extra-box-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* Extra breakdown box */
-.extra-box-wrapper {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background: #3b3b55;
-  border: 1px solid #555;
+.extra-box-section {
+  display: flex;
+  flex-direction: column;
 }
 
-.extra-box-wrapper label {
-  font-weight: bold;
-  color: #ffffff;
+.extra-box-section label {
+  font-size: 13px;
+  margin-bottom: 3px;
+  color: #f5f5f5;
 }
 
 .extra-box {
-  margin-top: 0.4rem;
-  width: 100%;
-  height: 150px;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #888;
-  border-radius: 6px;
-  padding: 0.8rem;
-  font-family: monospace;
-}
-
-/* Checkbox row */
-.options-row {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Tooltip styling */
-.tooltip {
-  position: relative;
-  cursor: help;
-}
-
-.tooltiptext {
-  visibility: hidden;
-  width: 220px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; 
-  left: 50%;
-  margin-left: -110px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
+  height: 110px;
+  font-size: 13px;
+  padding: 8px;
+  resize: none;
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid #ccc;
 }
