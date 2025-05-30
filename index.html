@@ -7,18 +7,32 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="flex-wrapper">
-    <div class="container">
-      <h1>Fantasy Score Calculator</h1>
-      <label for="league">Select League:</label>
-      <select id="league" onchange="loadStats()"></select>
+<div class="flex-wrapper">
+  <!-- FS Calculator -->
+  <div class="container" id="fs-calculator">
+    <h1>Fantasy Score Calculator</h1>
+    <label for="league">Select League:</label>
+    <select id="league" onchange="loadStats()"></select>
 
-<div class="stats-fight-wrapper">
-  <div class="stats-side">
     <div id="stats-container"></div>
     <div id="bonus-container"></div>
+
+    <div class="options-row">
+      <input type="checkbox" id="hideZero" />
+      <label for="hideZero">Hide 0-value stats</label>
+    </div>
+
+    <div class="buttons">
+      <button class="go" onclick="calculateScore()">Go</button>
+      <button class="clear" onclick="clearInputs()">Clear</button>
+    </div>
+
+    <h2>TOTAL: Fantasy Score</h2>
+    <textarea id="breakdown" readonly></textarea>
+    <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
   </div>
 
+  <!-- Fight Time Calculator -->
   <div id="fight-time-container" class="fight-box hidden">
     <h3>Fight Time Calculator</h3>
     <div id="fight-rounds"></div>
