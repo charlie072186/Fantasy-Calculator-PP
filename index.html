@@ -13,8 +13,29 @@
       <label for="league">Select League:</label>
       <select id="league" onchange="loadStats()"></select>
 
-      <div id="stats-container"></div>
-      <div id="bonus-container"></div>
+<div class="stats-fight-wrapper">
+  <div class="stats-side">
+    <div id="stats-container"></div>
+    <div id="bonus-container"></div>
+  </div>
+
+  <div id="fight-time-container" class="fight-box hidden">
+    <h3>Fight Time Calculator</h3>
+    <div id="fight-rounds"></div>
+    <div class="time-inputs">
+      <label>Time in Round:</label>
+      <input type="number" id="fight-minutes" placeholder="min" min="0" />
+      <span>:</span>
+      <input type="number" id="fight-seconds" placeholder="sec" min="0" max="59" />
+    </div>
+    <div class="buttons">
+      <button class="go" onclick="calculateFightTime()">Go</button>
+      <button class="clear" onclick="clearFightTime()">Clear</button>
+    </div>
+    <textarea id="fight-time-output" readonly class="fight-output"></textarea>
+  </div>
+</div>
+
 
       <div class="options-row">
         <input type="checkbox" id="hideZero" />
