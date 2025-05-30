@@ -382,6 +382,14 @@ function clearInputs() {
   if (bonus) bonus.checked = false;
 }
 
+document.getElementById("fight-time-container").classList.add("hidden");
+...
+if (league.hasFightTime) {
+  // logic here
+  document.getElementById("fight-time-container").classList.remove("hidden");
+}
+
+
 function copyBreakdown() {
   const box = document.getElementById("breakdown");
   box.select();
