@@ -368,3 +368,48 @@ textarea#breakdown {
   font-family: monospace;
 }
 
+.flex-wrapper {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+#fs-calculator {
+  flex: 1 1 60%;
+}
+
+.fight-box {
+  flex: 1 1 35%;
+  background-color: #1e1e1e;
+  padding: 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #eee;
+}
+
+.fight-box h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #00d1b2;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.fight-output {
+  width: 100%;
+  min-height: 90px;
+  resize: none;
+  background: #222;
+  color: #f1f1f1;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 6px;
+  font-family: monospace;
+}
