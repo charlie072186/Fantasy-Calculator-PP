@@ -399,7 +399,11 @@ if (leagueKey === "nfl_cfb") {
     Rush + Rec TDs = ${td2}
   `;
 }
-  function calculateFightTime() {
+
+  document.getElementById("breakdown").value = breakdown;
+}
+
+function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
   const min = parseInt(document.getElementById("fight-minutes").value) || 0;
   const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
@@ -425,10 +429,6 @@ function clearFightTime() {
   document.getElementById("fight-time-output").value = "";
   const checked = document.querySelector('input[name="fightRound"]:checked');
   if (checked) checked.checked = false;
-}
-
-
-  document.getElementById("breakdown").value = breakdown;
 }
 
 function clearInputs() {
