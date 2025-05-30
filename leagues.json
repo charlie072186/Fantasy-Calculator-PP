@@ -76,6 +76,17 @@
       { "label": "Decision Win", "points": 20 }
     ]
   },
+    "mma": {
+  "name": "MMA",
+  "hasFightTime": true,
+  ...
+},
+"boxing": {
+  "name": "Boxing FS",
+  "hasFightTime": true,
+  ...
+},
+  
   "nfl_cfb": {
     "name": "Football Offensive FS",
     "stats": [
