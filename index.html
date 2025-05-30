@@ -29,28 +29,29 @@
       <h2>TOTAL: Fantasy Score</h2>
       <textarea id="breakdown" readonly></textarea>
       <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
+
+      <!-- ✅ FIGHT TIME CALCULATOR -->
+      <div id="fight-time-container" class="hidden">
+        <h3>Fight Time Calculator</h3>
+        <div id="fight-rounds"></div>
+        <div class="time-inputs">
+          <label>Time in Round:</label>
+          <input type="number" id="fight-minutes" placeholder="min" min="0" />
+          <span>:</span>
+          <input type="number" id="fight-seconds" placeholder="sec" min="0" max="59" />
+        </div>
+        <button class="go" onclick="calculateFightTime()">Go</button>
+        <button class="clear" onclick="clearFightTime()">Clear</button>
+        <textarea id="fight-time-output" readonly></textarea>
+      </div>
     </div>
 
-  <div id="extra-breakdown-box wrapper" class="extra-box wrapper"> 
-    <div id="extra-breakdown-box wrapper hidden" class="extra-box wrapper hidden"</div>
-    <div class="extra-box-label">Stat Breakdown</div>
-</div>
-      
-  <div id="fight-time-container" class="hidden">
-  <h3>Fight Time Calculator</h3>
-  <div id="fight-rounds"></div>
-  <div class="time-inputs">
-    <label>Time in Round:</label>
-    <input type="number" id="fight-minutes" placeholder="min" min="0" />
-    <span>:</span>
-    <input type="number" id="fight-seconds" placeholder="sec" min="0" max="59" />
+    <!-- ✅ EXTRA BREAKDOWN BOX -->
+    <div id="extra-breakdown-wrapper" class="extra-box-wrapper hidden">
+      <div class="extra-box-label">Stat Breakdown</div>
+      <div id="extra-breakdown-box" class="extra-box"></div>
+    </div>
   </div>
-  <button class="go" onclick="calculateFightTime()">Go</button>
-  <button class="clear" onclick="clearFightTime()">Clear</button>
-  <textarea id="fight-time-output" readonly></textarea>
-</div>
-
-
 
   <script src="script.js"></script>
 </body>
