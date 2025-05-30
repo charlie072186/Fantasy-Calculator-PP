@@ -12,40 +12,47 @@
       <h1>Fantasy Score Calculator</h1>
       <label for="league">Select League:</label>
       <select id="league" onchange="loadStats()"></select>
+
       <div id="stats-container"></div>
       <div id="bonus-container"></div>
+
       <div class="options-row">
         <input type="checkbox" id="hideZero" />
         <label for="hideZero">Hide 0-value stats</label>
       </div>
+
       <div class="buttons">
         <button class="go" onclick="calculateScore()">Go</button>
         <button class="clear" onclick="clearInputs()">Clear</button>
       </div>
+
       <h2>TOTAL: Fantasy Score</h2>
       <textarea id="breakdown" readonly></textarea>
       <button class="copy" onclick="copyBreakdown()">Copy Breakdown</button>
     </div>
 
+    <!-- Extra Breakdown Box (for NBA, MLB, NFL) -->
     <div id="extra-breakdown-wrapper" class="extra-box-wrapper hidden">
       <div class="extra-box-label">Stat Breakdown</div>
       <div id="extra-breakdown-box" class="extra-box"></div>
     </div>
-
-    <div id="fight-time-container" class="hidden">
-      <h3>Fight Time Calculator</h3>
-      <div id="fight-rounds"></div>
-      <div class="time-inputs">
-        <label>Time in Round:</label>
-        <input type="number" id="fight-minutes" placeholder="min" min="0" />
-        <span>:</span>
-        <input type="number" id="fight-seconds" placeholder="sec" min="0" max="59" />
-      </div>
-      <button class="go" onclick="calculateFightTime()">Go</button>
-      <button class="clear" onclick="clearFightTime()">Clear</button>
-      <textarea id="fight-time-output" readonly></textarea>
-    </div>
   </div>
+
+  <!-- Fight Time Inputs (MMA/Boxing only) -->
+  <div id="fight-time-container" class="hidden">
+    <h3>Fight Time Calculator</h3>
+    <div id="fight-rounds"></div>
+    <div class="time-inputs">
+      <label>Time in Round:</label>
+      <input type="number" id="fight-minutes" placeholder="min" min="0" />
+      <span>:</span>
+      <input type="number" id="fight-seconds" placeholder="sec" min="0" max="59" />
+    </div>
+    <button class="go" onclick="calculateFightTime()">Go</button>
+    <button class="clear" onclick="clearFightTime()">Clear</button>
+    <textarea id="fight-time-output" readonly></textarea>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
