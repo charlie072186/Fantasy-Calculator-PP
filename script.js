@@ -61,6 +61,19 @@ function loadStats() {
     return;
   }
 
+  document.getElementById("fight-time-container").classList.add("hidden");
+
+  if (league.hasFightTime) {
+  const rounds = leagueKey === "mma" ? 5 : 12;
+  const fightRoundDiv = document.getElementById("fight-rounds");
+  fightRoundDiv.innerHTML = "<label>Fight ended in:</label><br>";
+  for (let i = 1; i <= rounds; i++) {
+    fightRoundDiv.innerHTML += `<label><input type="radio" name="fightRound" value="${i}"> Round ${i}</label><br>`;
+  }
+  document.getElementById("fight-time-container").classList.remove("hidden");
+
+}
+
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
@@ -386,6 +399,34 @@ if (leagueKey === "nfl_cfb") {
     Rush + Rec TDs = ${td2}
   `;
 }
+  function calculateFightTime() {
+  const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
+  const min = parseInt(document.getElementById("fight-minutes").value) || 0;
+  const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
+
+  if (!round || sec > 59) {
+    alert("Please select a round and valid time.");
+    return;
+  }
+
+  const leagueKey = document.getElementById("league").value;
+  const perRound = leagueKey === "mma" ? 5 : 3;
+
+  const totalMinutes = (round - 1) * perRound + min + (sec / 60);
+  const output = `Fight Ended at ${min}:${sec.toString().padStart(2, '0')} of Round ${round}\n` +
+                 `Total Fight Time = ${((round - 1) * perRound)} + (${min}:${sec}) = ${totalMinutes.toFixed(2)} min`;
+
+  document.getElementById("fight-time-output").value = output;
+}
+
+function clearFightTime() {
+  document.getElementById("fight-minutes").value = "";
+  document.getElementById("fight-seconds").value = "";
+  document.getElementById("fight-time-output").value = "";
+  const checked = document.querySelector('input[name="fightRound"]:checked');
+  if (checked) checked.checked = false;
+}
+
 
   document.getElementById("breakdown").value = breakdown;
 }
@@ -405,6 +446,7 @@ function copyBreakdown() {
   breakdown.select();
   document.execCommand("copy");
 }
+
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
