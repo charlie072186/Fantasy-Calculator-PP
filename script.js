@@ -291,58 +291,67 @@ function calculateScore() {
 }
 
 function showExtraBreakdown(leagueKey) {
-  const extraBox = document.getElementById("extra-breakdown-box");
-  extraBox.innerHTML = "";
-  extraBox.classList.add("hidden");
+  const extraWrapper = document.getElementById("extra-breakdown-wrapper");
+const extraBox = document.getElementById("extra-breakdown-box");
+extraBox.innerHTML = "";
+extraWrapper.classList.add("hidden");
 
-  if (leagueKey === "NBA") {
-    const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
-    const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
-    const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
-    extraBox.innerHTML = `
-      <h3>NBA Stats</h3>
-      Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>
-      P+R+A = ${pts + reb + ast}<br>
-      P+A = ${pts + ast}<br>
-      P+R = ${pts + reb}<br>
-      R+A = ${reb + ast}
-    `;
-    extraBox.classList.remove("hidden");
-  }
+// NBA Breakdown
+if (leagueKey === "NBA") {
+  const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
+  const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
+  const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
 
-  if (leagueKey === "mlb_hitter") {
-    const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
-    const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
-    const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
-    const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
-    const r = parseFloat(document.getElementById("stat-Run")?.value) || 0;
-    const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
-    const hits = s + d + t + hr;
-    extraBox.innerHTML = `
-      <h3>MLB Hitter</h3>
-      Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>
-      Runs: ${r}, RBI: ${rbi}<br>
-      Hits+Runs+RBI = ${hits + r + rbi}
-    `;
-    extraBox.classList.remove("hidden");
-  }
+  const pra = pts + reb + ast;
+  const pa = pts + ast;
+  const pr = pts + reb;
+  const ra = reb + ast;
 
-  if (leagueKey === "nfl_cfb") {
-    const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
-    const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
-    const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
-    const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
-    const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
-    const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+  extraWrapper.classList.remove("hidden");
+  extraBox.innerText =
+    `NBA Breakdown:\n` +
+    `Points: ${pts}\nRebounds: ${reb}\nAssists: ${ast}\n\n` +
+    `P+R+A = ${pra}\nP+A = ${pa}\nP+R = ${pr}\nR+A = ${ra}`;
+}
 
-    extraBox.innerHTML = `
-      <h3>NFL Offense</h3>
-      Pass+Rush Yds = ${passYds + rushYds}<br>
-      Rush+Rec Yds = ${rushYds + recYds}<br>
-      Pass+Rush TDs = ${passTD + rushTD}<br>
-      Rush+Rec TDs = ${rushTD + recTD}
-    `;
-    extraBox.classList.remove("hidden");
+// MLB Hitter Breakdown
+if (leagueKey === "mlb_hitter") {
+  const single = parseFloat(document.getElementById("stat-Single")?.value) || 0;
+  const doubleHit = parseFloat(document.getElementById("stat-Double")?.value) || 0;
+  const triple = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
+  const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
+  const run = parseFloat(document.getElementById("stat-Run")?.value) || 0;
+  const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
+
+  const hits = single + doubleHit + triple + hr;
+  const total = hits + run + rbi;
+
+  extraWrapper.classList.remove("hidden");
+  extraBox.innerText =
+    `MLB Breakdown:\nHits = ${single}+${doubleHit}+${triple}+${hr} = ${hits}\n` +
+    `Runs: ${run}\nRBI: ${rbi}\n\nHits+Runs+RBI = ${total}`;
+}
+
+// NFL Offense Breakdown
+if (leagueKey === "nfl_cfb") {
+  const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
+  const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
+  const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
+  const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
+  const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
+  const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+
+  const yds1 = passYds + rushYds;
+  const yds2 = rushYds + recYds;
+  const td1 = passTD + rushTD;
+  const td2 = rushTD + recTD;
+
+  extraWrapper.classList.remove("hidden");
+  extraBox.innerText =
+    `NFL Breakdown:\nPassing Yards: ${passYds}\nRushing Yards: ${rushYds}\n` +
+    `Receiving Yards: ${recYds}\n\n` +
+    `Pass+Rush Yards = ${yds1}\nRush+Rec Yards = ${yds2}\n` +
+    `Pass+Rush TDs = ${td1}\nRush+Rec TDs = ${td2}`;
   }
 }
 
