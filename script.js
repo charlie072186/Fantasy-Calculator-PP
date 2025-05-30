@@ -1,5 +1,3 @@
-its not working here is the js
-
 let leagues = {};
 
 async function loadLeagues() {
