@@ -233,6 +233,39 @@ function calculateScore() {
     document.getElementById("breakdown").value = breakdown;
     return;
   }
+    if (leagueKey === "indycar") {
+      const start = parseInt(document.getElementById("stat-Starting Position")?.value);
+      const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
+      const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
+    
+      if (!isNaN(start) && !isNaN(finish)) {
+        const diff = start - finish;
+        breakdown += `Place Differential: ${diff} pts\n`;
+        total += diff;
+      }
+    
+      const indycarPoints = [
+        50, 45, 35, 32, 30, 28, 26, 24, 22, 20, // 1–10
+        19, 18, 17, 16, 15, 14, 13, 12, 11, 10, // 11–20
+        9, 8, 7, 6,                            // 21–24
+        5, 5, 5, 5, 5, 5, 5, 5, 5              // 25–33
+      ];
+    
+      if (!isNaN(finish) && finish >= 1 && finish <= 33) {
+        const pts = indycarPoints[finish - 1];
+        breakdown += `Finishing Position (${finish}): ${pts} pts\n`;
+        total += pts;
+      }
+    
+      if (!hideZero || led !== 0) {
+        breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
+        total += led * 0.25;
+      }
+    
+      breakdown += `\nTotal: ${format(total)}`;
+      document.getElementById("breakdown").value = breakdown;
+      return;
+    }
 
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
