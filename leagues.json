@@ -1,4 +1,162 @@
 {
-  "nba": {"name": "NBA", "stats": {"Points": 1, "Rebound": 1.2, "Assist": 1.5}},
-  "mma": {"name": "MMA", "hasFightTime": true}
+  "NBA": {
+    "name": "NBA FS",
+    "stats": {
+      "Points": 1,
+      "Rebound": 1.2,
+      "Assist": 1.5,
+      "Block": 3,
+      "Steal": 3,
+      "Turnover": -1
+    }
+  },
+  "mlb_pitcher": {
+    "name": "MLB Pitcher FS",
+    "stats": {
+      "Win": 6,
+      "Quality Start": 4,
+      "Earned Run": -3,
+      "Strikeout": 3,
+      "Innings Pitched": 3
+    }
+  },
+  "mlb_hitter": {
+    "name": "MLB Hitter FS",
+    "stats": {
+      "Single": 3,
+      "Double": 5,
+      "Triple": 8,
+      "Home Run": 10,
+      "Run": 2,
+      "RBI": 2,
+      "BB": 2,
+      "HBP": 2,
+      "SB": 5
+    }
+  },
+  "tennis": {
+    "name": "Tennis FS",
+    "stats": {
+      "Match Played": 10,
+      "Game Won": 1,
+      "Game Loss": -1,
+      "Set Won": 3,
+      "Set Loss": -3,
+      "Ace": 0.5,
+      "Double Fault": -0.5
+    }
+  },
+  "mma": {
+    "name": "MMA",
+    "hasFightTime": true,
+    "stats": {
+      "Significant Strikes": 0.5,
+      "Submission Attempt": 4,
+      "Takedown": 5,
+      "Knockdown": 10
+    },
+    "bonuses": [
+      { "label": "1st Round Win", "points": 50 },
+      { "label": "2nd Round Win", "points": 40 },
+      { "label": "Decision Win", "points": 10 },
+      { "label": "Draw", "points": 0 }
+    ]
+  },
+  "boxing": {
+    "name": "Boxing FS",
+    "hasFightTime": true,
+    "stats": {
+      "Punch Landed": 0.5,
+      "Knockdown on Opponent": 12,
+      "Being Knocked by Opponent": -12
+    },
+    "bonuses": [
+      { "label": "Win Rounds 1-2", "points": 100 },
+      { "label": "Win Rounds 3-6", "points": 75 },
+      { "label": "Win Rounds 7-10", "points": 50 },
+      { "label": "Win Rounds 11-12", "points": 25 },
+      { "label": "Decision Win", "points": 20 }
+    ]
+  },
+  "nfl_cfb": {
+    "name": "Football Offensive FS",
+    "stats": [
+      { "label": "Passing Yards", "points": 0.04 },
+      { "label": "Passing TDs", "points": 4 },
+      { "label": "Interceptions", "points": -1 },
+      { "label": "Rushing Yards", "points": 0.1 },
+      { "label": "Rushing TDs", "points": 6 },
+      { "label": "Receiving Yards", "points": 0.1 },
+      { "label": "Receiving TDs", "points": 6 },
+      { "label": "Receptions", "points": 1 },
+      { "label": "Fumbles Lost", "points": -1 },
+      { "label": "2 Point Conversions", "points": 2 },
+      { "label": "Offensive Fumble Recovery TD", "points": 6 },
+      { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
+    ],
+    "bonuses": []
+  },
+  "dst": {
+    "name": "Defense/Special Teams",
+    "stats": {
+      "Sack": 1,
+      "Interception": 2,
+      "Fumble Recovery": 2,
+      "Punt/Kickoff/FG Return for TD": 6,
+      "Interception Return TD": 6,
+      "Fumble Recovery TD": 6,
+      "Blocked Punt or FG Return TD": 6,
+      "Safety": 2,
+      "Blocked Kick": 2,
+      "2pt/XP Return": 2
+    },
+    "bonuses": [
+      { "label": "0 Points Allowed", "points": 10 },
+      { "label": "1-6 Points Allowed", "points": 7 },
+      { "label": "7-13 Points Allowed", "points": 4 },
+      { "label": "14-20 Points Allowed", "points": 1 },
+      { "label": "21-27 Points Allowed", "points": 0 },
+      { "label": "28-34 Points Allowed", "points": -1 },
+      { "label": "35+ Points Allowed", "points": -4 }
+    ]
+  },
+  "kickers": {
+    "name": "Kickers",
+    "stats": {
+      "FG 0-39 yards": 3,
+      "FG 40-49 yards": 4,
+      "FG 50+ yards": 5,
+      "XP conversions": 1
+    }
+  },
+  "soccer": {
+    "name": "Soccer",
+    "stats": {
+      "Goal": 5,
+      "Assist": 4,
+      "Goal from PEN": 3,
+      "Shot on Target": 2,
+      "Completed Pass": 0.1,
+      "Missed Pass": -0.1,
+      "Yellow Card": -1,
+      "Red Card": -2
+    }
+  },
+  "nascar": {
+    "name": "Nascar FS",
+    "stats": [
+      { "label": "Starting Position", "points": 0 },
+      { "label": "Finishing Position", "points": 0 },
+      { "label": "Fastest Laps", "points": 0.45 },
+      { "label": "Laps Led", "points": 0.25 }
+    ]
+  },
+  "indycar": {
+    "name": "Indycar FS",
+    "stats": [
+      { "label": "Starting Position", "points": 0 },
+      { "label": "Finishing Position", "points": 0 },
+      { "label": "Laps Led", "points": 0.25 }
+    ]
+  }
 }
