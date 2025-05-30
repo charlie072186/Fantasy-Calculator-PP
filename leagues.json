@@ -148,5 +148,13 @@
       { "label": "Fastest Laps", "points": 0.45 },
       { "label": "Laps Led", "points": 0.25 }
     ]
+  },
+  "indycar": {
+  "name": "IndyCar FS",
+  "stats": [
+    { "label": "Starting Position", "points": 0 },
+    { "label": "Finishing Position", "points": 0 },
+    { "label": "Laps Led", "points": 0.25 }
+    ]
   }
 }
