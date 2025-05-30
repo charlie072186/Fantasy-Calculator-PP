@@ -291,7 +291,7 @@ function calculateScore() {
 }
 
 function showExtraBreakdown(leagueKey) {
-  const extraWrapper = document.getElementById("extra-breakdown-wrapper");
+const extraWrapper = document.getElementById("extra-breakdown-wrapper");
 const extraBox = document.getElementById("extra-breakdown-box");
 extraBox.innerHTML = "";
 extraWrapper.classList.add("hidden");
