@@ -244,15 +244,6 @@ textarea#breakdown {
   max-width: 280px;
 }
 
-.extra-box-wrapper {
-  background: #fff;
-  color: #000;
-  padding: 10px;
-  border-radius: 5px;
-  min-width: 250px;
-  white-space: pre-line;
-  margin-bottom: 20px;
-
 /* Label styling */
 .extra-box-label {
   font-weight: bold;
@@ -453,69 +444,3 @@ button.clear {
   padding: 6px;
   font-family: monospace;
 }
-.flex-wrapper {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-.main-left {
-  flex: 2;
-}
-
-.main-right {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
-  min-width: 280px;
-}
-
-.container {
-  background: #2c2c2c;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.extra-box-wrapper,
-.fight-box {
-  background: #2a2a2a;
-  padding: 16px;
-  border-radius: 8px;
-}
-
-.extra-box {
-  background: #fff;
-  color: #000;
-  font-family: monospace;
-  padding: 10px;
-  border-radius: 5px;
-  min-height: 100px;
-  white-space: pre-wrap;
-}
-
-#fight-time-output {
-  width: 100%;
-  min-height: 100px;
-  background: #fff;
-  color: #000;
-  padding: 10px;
-  border-radius: 5px;
-  font-family: monospace;
-}
-
-.fight-buttons {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.extra-box-label {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.hidden {
-  display: none !important;
-}
-
