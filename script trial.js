@@ -300,7 +300,7 @@ function showExtraBreakdown(leagueKey) {
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
     extraBox.innerHTML = `
-      <h3>NBA Stats</h3>
+      <h3>Single Stats</h3>
       Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>
       P+R+A = ${pts + reb + ast}<br>
       P+A = ${pts + ast}<br>
@@ -319,7 +319,7 @@ function showExtraBreakdown(leagueKey) {
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
     const hits = s + d + t + hr;
     extraBox.innerHTML = `
-      <h3>MLB Hitter</h3>
+      <h3>Single Stats Hitter</h3>
       Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>
       Runs: ${r}, RBI: ${rbi}<br>
       Hits+Runs+RBI = ${hits + r + rbi}
@@ -336,7 +336,7 @@ function showExtraBreakdown(leagueKey) {
     const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
 
     extraBox.innerHTML = `
-      <h3>NFL Offense</h3>
+      <h3>Offense Stats</h3>
       Pass+Rush Yds = ${passYds + rushYds}<br>
       Rush+Rec Yds = ${rushYds + recYds}<br>
       Pass+Rush TDs = ${passTD + rushTD}<br>
