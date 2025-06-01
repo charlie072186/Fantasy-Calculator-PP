@@ -25,14 +25,6 @@ function loadStats() {
   const bonusContainer = document.getElementById("bonus-container");
   const fightTimeContainer = document.getElementById("fight-time-container");
   const extraBox = document.getElementById("extra-breakdown-box");
-extraBox.innerHTML = "";
-extraBox.classList.add("hidden");
-
-document.getElementById("extra-copy-btn").classList.add("hidden");
-document.getElementById("extra-breakdown-wrapper").classList.add("hidden");
-
-fightTimeContainer.classList.add("hidden");
-
 
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
@@ -299,37 +291,23 @@ function calculateScore() {
 }
 
 function showExtraBreakdown(leagueKey) {
-  const extraWrapper = document.getElementById("extra-breakdown-wrapper");
   const extraBox = document.getElementById("extra-breakdown-box");
-  const extraCopyBtn = document.getElementById("extra-copy-btn");
-
   extraBox.innerHTML = "";
-  extraWrapper.classList.add("hidden");
-  extraCopyBtn.classList.add("hidden");
+  extraBox.classList.add("hidden");
 
   if (leagueKey === "NBA") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
-    const pra = pts + reb + ast;
-    const pa = pts + ast;
-    const pr = pts + reb;
-    const ra = reb + ast;
-
     extraBox.innerHTML = `
-<pre>
-NBA Breakdown:
-Points: ${pts}
-Rebounds: ${reb}
-Assists: ${ast}
-
-P+R+A = ${pra}
-P+A = ${pa}
-P+R = ${pr}
-R+A = ${ra}
-</pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+      <h3>Single Stats</h3>
+      Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>
+      P+R+A = ${pts + reb + ast}<br>
+      P+A = ${pts + ast}<br>
+      P+R = ${pts + reb}<br>
+      R+A = ${reb + ast}
+    `;
+    extraBox.classList.remove("hidden");
   }
 
   if (leagueKey === "mlb_hitter") {
@@ -337,22 +315,16 @@ R+A = ${ra}
     const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
     const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
     const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
-    const run = parseFloat(document.getElementById("stat-Run")?.value) || 0;
+    const r = parseFloat(document.getElementById("stat-Run")?.value) || 0;
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
     const hits = s + d + t + hr;
-    const total = hits + run + rbi;
-
     extraBox.innerHTML = `
-<pre>
-MLB Hitter Breakdown:
-Hits = ${s} + ${d} + ${t} + ${hr} = ${hits}
-Runs: ${run}
-RBI: ${rbi}
-
-Hits + Runs + RBI = ${total}
-</pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+      <h3>Single Stats Hitter</h3>
+      Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>
+      Runs: ${r}, RBI: ${rbi}<br>
+      Hits+Runs+RBI = ${hits + r + rbi}
+    `;
+    extraBox.classList.remove("hidden");
   }
 
   if (leagueKey === "nfl_cfb") {
@@ -364,22 +336,15 @@ Hits + Runs + RBI = ${total}
     const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
 
     extraBox.innerHTML = `
-<pre>
-NFL Breakdown:
-Passing Yards: ${passYds}
-Rushing Yards: ${rushYds}
-Receiving Yards: ${recYds}
-
-Pass+Rush Yards = ${passYds + rushYds}
-Rush+Rec  Yards = ${rushYds + recYds}
-Pass+Rush TDs   = ${passTD + rushTD}
-Rush+Rec  TDs   = ${rushTD + recTD}
-</pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+      <h3>Offense Stats</h3>
+      Pass+Rush Yds = ${passYds + rushYds}<br>
+      Rush+Rec Yds = ${rushYds + recYds}<br>
+      Pass+Rush TDs = ${passTD + rushTD}<br>
+      Rush+Rec TDs = ${rushTD + recTD}
+    `;
+    extraBox.classList.remove("hidden");
   }
 }
-
 
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
@@ -424,24 +389,11 @@ function copyBreakdown() {
   document.execCommand("copy");
 }
 
-function copyExtraBreakdown() {
-  const extraBox = document.getElementById("extra-breakdown-box");
-  if (!extraBox || extraBox.classList.contains("hidden")) return;
-  const range = document.createRange();
-  range.selectNodeContents(extraBox);
-  const selection = window.getSelection();
-  selection.removeAllRanges();
-  selection.addRange(range);
-  document.execCommand("copy");
-}
-
-
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     calculateScore();
   }
 });
-
 
 window.onload = loadLeagues;
