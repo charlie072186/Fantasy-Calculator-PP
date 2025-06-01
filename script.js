@@ -25,6 +25,14 @@ function loadStats() {
   const bonusContainer = document.getElementById("bonus-container");
   const fightTimeContainer = document.getElementById("fight-time-container");
   const extraBox = document.getElementById("extra-breakdown-box");
+extraBox.innerHTML = "";
+extraBox.classList.add("hidden");
+
+document.getElementById("extra-copy-btn").classList.add("hidden");
+document.getElementById("extra-breakdown-wrapper").classList.add("hidden");
+
+fightTimeContainer.classList.add("hidden");
+
 
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
