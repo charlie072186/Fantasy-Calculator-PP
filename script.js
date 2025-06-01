@@ -431,12 +431,7 @@ function copyExtraBreakdown() {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
-    const leagueKey = document.getElementById("league").value;
-    if (leagueKey === "mma" || leagueKey === "boxing") {
-      calculateFightTime();
-    } else {
-      calculateScore();
-    }
+    calculateScore();
   }
 });
 
