@@ -382,6 +382,13 @@ Total Fight Time = ${totalMin.toFixed(2)} min`;
 
   document.getElementById("fight-time-output").value = output;
 
+ const extraWrapper = document.getElementById("extra-breakdown-wrapper");
+  const extraBox = document.getElementById("extra-breakdown-box");
+  const extraCopyBtn = document.getElementById("extra-copy-btn");
+
+  extraBox.innerHTML = `<pre>${output}</pre>`;
+  extraWrapper.classList.remove("hidden");
+  extraCopyBtn.classList.remove("hidden");
 }
 
 function clearFightTime() {
