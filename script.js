@@ -352,7 +352,7 @@ Hits + Runs + RBI = ${total}
 `;
   }
 
-  if (leagueKey === "NFL") {
+  if (leagueKey === "nfl_cfb") {
     const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
     const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
     const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
