@@ -310,7 +310,7 @@ function calculateScore() {
 
   let content = "";
 
-  if (leagueKey === "NBA") {
+  if (leagueKey === "NBA FS") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
@@ -332,7 +332,7 @@ R+A = ${ra}
 `;
   }
 
-  if (leagueKey === "mlb_hitter") {
+  if (leagueKey === "MLB Hitter FS") {
     const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
     const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
     const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
