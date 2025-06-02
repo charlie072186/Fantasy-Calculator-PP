@@ -299,10 +299,7 @@ function calculateScore() {
   document.getElementById("breakdown").value = breakdown;
 
   // Extra breakdowns for specific leagues
-  showExtraBreakdown(leagueKey);
-}
-
-function showExtraBreakdown(leagueKey) {
+  function showExtraBreakdown(leagueKey) {
   const extraWrapper = document.getElementById("extra-breakdown-wrapper");
   const extraBox = document.getElementById("extra-breakdown-box");
   const extraCopyBtn = document.getElementById("extra-copy-btn");
@@ -317,17 +314,22 @@ function showExtraBreakdown(leagueKey) {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
+    const pra = pts + reb + ast;
+    const pa = pts + ast;
+    const pr = pts + reb;
+    const ra = reb + ast;
+
     content = `
 NBA Breakdown:
 Points: ${pts}
 Rebounds: ${reb}
 Assists: ${ast}
 
-P+R+A = ${pts + reb + ast}
-P+A = ${pts + ast}
-P+R = ${pts + reb}
-R+A = ${reb + ast}
-    `;
+P+R+A = ${pra}
+P+A = ${pa}
+P+R = ${pr}
+R+A = ${ra}
+`;
   }
 
   if (leagueKey === "mlb_hitter") {
@@ -339,6 +341,7 @@ R+A = ${reb + ast}
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
     const hits = s + d + t + hr;
     const total = hits + run + rbi;
+
     content = `
 MLB Hitter Breakdown:
 Hits = ${s} + ${d} + ${t} + ${hr} = ${hits}
@@ -346,7 +349,7 @@ Runs: ${run}
 RBI: ${rbi}
 
 Hits + Runs + RBI = ${total}
-    `;
+`;
   }
 
   if (leagueKey === "nfl_cfb") {
@@ -367,15 +370,16 @@ Pass+Rush Yards = ${passYds + rushYds}
 Rush+Rec  Yards = ${rushYds + recYds}
 Pass+Rush TDs   = ${passTD + rushTD}
 Rush+Rec  TDs   = ${rushTD + recTD}
-    `;
+`;
   }
 
-  if (content.trim()) {
-    extraBox.innerHTML = `<pre>${content.trim()}</pre>`;
+  if (content.trim() !== "") {
+    extraBox.innerHTML = `<pre>${content}</pre>`;
     extraWrapper.classList.remove("hidden");
     extraCopyBtn.classList.remove("hidden");
   }
 }
+
 
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
