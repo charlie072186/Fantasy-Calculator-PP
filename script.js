@@ -310,7 +310,7 @@ function calculateScore() {
 
   let content = "";
 
-  if (leagueKey === "NBA FS") {
+  if (leagueKey === "NBA") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
@@ -332,7 +332,7 @@ R+A = ${ra}
 `;
   }
 
-  if (leagueKey === "MLB Hitter FS") {
+  if (leagueKey === "mlb_hitter") {
     const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
     const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
     const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
@@ -352,7 +352,7 @@ Hits + Runs + RBI = ${total}
 `;
   }
 
-  if (leagueKey === "Football Offensive FS") {
+  if (leagueKey === "NFL") {
     const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
     const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
     const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
