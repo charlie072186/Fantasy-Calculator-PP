@@ -306,7 +306,7 @@ function showExtraBreakdown(leagueKey) {
 
     extraBox.innerHTML = `
 <pre>
-NBA Breakdown:
+Single Stats Breakdown:
 Points: ${pts}
 Rebounds: ${reb}
 Assists: ${ast}
@@ -332,7 +332,7 @@ R+A = ${reb + ast}
 
     extraBox.innerHTML = `
 <pre>
-MLB Hitter Breakdown:
+Hitter Breakdown:
 Hits = ${s} + ${d} + ${t} + ${hr} = ${hits}
 Runs: ${r}
 RBI: ${rbi}
@@ -353,7 +353,7 @@ Hits + Runs + RBI = ${total}
 
     extraBox.innerHTML = `
 <pre>
-NFL Breakdown:
+Offense Football Breakdown:
 Passing Yards: ${passYds}
 Rushing Yards: ${rushYds}
 Receiving Yards: ${recYds}
