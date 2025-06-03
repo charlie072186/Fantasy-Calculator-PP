@@ -31,6 +31,7 @@ function loadStats() {
   extraBox.innerHTML = "";
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
+  extraWrapper.classList.add("hidden");
 
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
