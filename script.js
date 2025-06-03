@@ -316,8 +316,11 @@ P+A = ${pts + ast}
 P+R = ${pts + reb}
 R+A = ${reb + ast}
 </pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+ 
+  extraBox.classList.remove("hidden");
+  extraWrapper.classList.remove("hidden");
+  extraCopyBtn.classList.remove("hidden");
+}
   }
 
   if (leagueKey === "mlb_hitter") {
@@ -339,8 +342,9 @@ RBI: ${rbi}
 
 Hits + Runs + RBI = ${total}
 </pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+  extraBox.classList.remove("hidden");
+  extraWrapper.classList.remove("hidden");
+  extraCopyBtn.classList.remove("hidden");
   }
 
   if (leagueKey === "nfl_cfb") {
@@ -363,8 +367,9 @@ Rush+Rec  Yards = ${rushYds + recYds}
 Pass+Rush TDs   = ${passTD + rushTD}
 Rush+Rec  TDs   = ${rushTD + recTD}
 </pre>`;
-    extraWrapper.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
+  extraBox.classList.remove("hidden");
+  extraWrapper.classList.remove("hidden");
+  extraCopyBtn.classList.remove("hidden");
   }
 }
 
