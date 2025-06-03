@@ -295,7 +295,7 @@ function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   const extraCopyBtn = document.getElementById("extra-copy-btn");
 
-  extraBox.innerHTML = "";
+  extraBox.classList.add("hidden");
   extraWrapper.classList.add("hidden");
   extraCopyBtn.classList.add("hidden");
 
