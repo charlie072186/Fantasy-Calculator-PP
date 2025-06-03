@@ -65,13 +65,7 @@ function loadStats() {
       "Hitting Stats": ["Single", "Double", "Triple", "Home Run"],
       "Run/RBI Stats": ["Run", "RBI"],
       "Other Stats": ["BB", "HBP", "SB"]
-    },
-
-    Soccer: {
-    "Attack Stats": ["Goal", "Assist", "Goal from PEN", "Shot on Target"],
-    "Passing Stats": ["Completed Pass", "Missed Pass"],
-    "Fouls": ["Yellow Card", "Red Card]
-   }
+    }
   };
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
@@ -301,7 +295,7 @@ function showExtraBreakdown(leagueKey) {
   extraBox.innerHTML = "";
   extraBox.classList.add("hidden");
 
-  if (leagueKey === "nba") {
+  if (leagueKey === "NBA") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
