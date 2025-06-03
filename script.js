@@ -291,23 +291,33 @@ function calculateScore() {
 }
 
 function showExtraBreakdown(leagueKey) {
+  const extraWrapper = document.getElementById("extra-breakdown-wrapper");
   const extraBox = document.getElementById("extra-breakdown-box");
+  const extraCopyBtn = document.getElementById("extra-copy-btn");
+
   extraBox.innerHTML = "";
-  extraBox.classList.add("hidden");
+  extraWrapper.classList.add("hidden");
+  extraCopyBtn.classList.add("hidden");
 
   if (leagueKey === "NBA") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
+
     extraBox.innerHTML = `
-      <h3>Single Stats</h3>
-      Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>
-      P+R+A = ${pts + reb + ast}<br>
-      P+A = ${pts + ast}<br>
-      P+R = ${pts + reb}<br>
-      R+A = ${reb + ast}
-    `;
-    extraBox.classList.remove("hidden");
+<pre>
+NBA Breakdown:
+Points: ${pts}
+Rebounds: ${reb}
+Assists: ${ast}
+
+P+R+A = ${pts + reb + ast}
+P+A = ${pts + ast}
+P+R = ${pts + reb}
+R+A = ${reb + ast}
+</pre>`;
+    extraWrapper.classList.remove("hidden");
+    extraCopyBtn.classList.remove("hidden");
   }
 
   if (leagueKey === "mlb_hitter") {
@@ -318,13 +328,19 @@ function showExtraBreakdown(leagueKey) {
     const r = parseFloat(document.getElementById("stat-Run")?.value) || 0;
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
     const hits = s + d + t + hr;
+    const total = hits + r + rbi;
+
     extraBox.innerHTML = `
-      <h3>Single Stats Hitter</h3>
-      Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>
-      Runs: ${r}, RBI: ${rbi}<br>
-      Hits+Runs+RBI = ${hits + r + rbi}
-    `;
-    extraBox.classList.remove("hidden");
+<pre>
+MLB Hitter Breakdown:
+Hits = ${s} + ${d} + ${t} + ${hr} = ${hits}
+Runs: ${r}
+RBI: ${rbi}
+
+Hits + Runs + RBI = ${total}
+</pre>`;
+    extraWrapper.classList.remove("hidden");
+    extraCopyBtn.classList.remove("hidden");
   }
 
   if (leagueKey === "nfl_cfb") {
@@ -336,15 +352,22 @@ function showExtraBreakdown(leagueKey) {
     const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
 
     extraBox.innerHTML = `
-      <h3>Offense Stats</h3>
-      Pass+Rush Yds = ${passYds + rushYds}<br>
-      Rush+Rec Yds = ${rushYds + recYds}<br>
-      Pass+Rush TDs = ${passTD + rushTD}<br>
-      Rush+Rec TDs = ${rushTD + recTD}
-    `;
-    extraBox.classList.remove("hidden");
+<pre>
+NFL Breakdown:
+Passing Yards: ${passYds}
+Rushing Yards: ${rushYds}
+Receiving Yards: ${recYds}
+
+Pass+Rush Yards = ${passYds + rushYds}
+Rush+Rec  Yards = ${rushYds + recYds}
+Pass+Rush TDs   = ${passTD + rushTD}
+Rush+Rec  TDs   = ${rushTD + recTD}
+</pre>`;
+    extraWrapper.classList.remove("hidden");
+    extraCopyBtn.classList.remove("hidden");
   }
 }
+
 
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
@@ -388,6 +411,18 @@ function copyBreakdown() {
   box.select();
   document.execCommand("copy");
 }
+
+function copyExtraBreakdown() {
+  const extraBox = document.getElementById("extra-breakdown-box");
+  if (!extraBox || extraBox.classList.contains("hidden")) return;
+  const range = document.createRange();
+  range.selectNodeContents(extraBox);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  document.execCommand("copy");
+}
+
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
