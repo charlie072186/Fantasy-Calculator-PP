@@ -299,7 +299,7 @@ function showExtraBreakdown(leagueKey) {
   extraWrapper.classList.add("hidden");
   extraCopyBtn.classList.add("hidden");
 
-  if (leagueKey === "NBA") {
+  if (leagueKey === "nba") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
