@@ -294,9 +294,6 @@ function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = "";
   extraBox.classList.add("hidden");
-  extraCopyBtn.classList.add("hidden");
-
-  
 
   if (leagueKey === "NBA") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
@@ -311,8 +308,6 @@ function showExtraBreakdown(leagueKey) {
       R+A = ${reb + ast}
     `;
     extraBox.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
-
   }
 
   if (leagueKey === "mlb_hitter") {
@@ -330,8 +325,6 @@ function showExtraBreakdown(leagueKey) {
       Hits+Runs+RBI = ${hits + r + rbi}
     `;
     extraBox.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
-
   }
 
   if (leagueKey === "nfl_cfb") {
@@ -350,8 +343,6 @@ function showExtraBreakdown(leagueKey) {
       Rush+Rec TDs = ${rushTD + recTD}
     `;
     extraBox.classList.remove("hidden");
-    extraCopyBtn.classList.remove("hidden");
-
   }
 }
 
