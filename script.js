@@ -157,7 +157,6 @@ function loadStats() {
     row.innerHTML = `<label><input type="radio" name="bonus" value="${bonus.points}" />${bonus.label} — ${bonus.points} pts</label>`;
     bonusContainer.appendChild(row);
   });
-  }
 }
 
 function renderGroupedStats(container, stats, groupMap) {
