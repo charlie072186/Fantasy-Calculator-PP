@@ -148,7 +148,7 @@ function loadStats() {
 
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
-    title.textContent = leagueKey === "dst" ? "Points Allowed:" : "Bonus:";
+    title.textContent = leagueKey === "dst" : "Bonus:";
     bonusContainer.appendChild(title);
     league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
