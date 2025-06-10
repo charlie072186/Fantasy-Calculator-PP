@@ -55,7 +55,7 @@
       "Takedown": 5,
       "Knockdown": 10
     },
-    "bonuses": [
+    "Post-Fight Stats": [
       { "label": "1st Round Win", "points": 50 },
       { "label": "2nd Round Win", "points": 40 },
       { "label": "3rd Round Win", "points": 30 },
@@ -73,7 +73,7 @@
       "Knockdown on Opponent": 12,
       "Being Knocked by Opponent": -12
     },
-    "bonuses": [
+    "Post-Fight Stats": [
       { "label": "Win Rounds 1-2", "points": 100 },
       { "label": "Win Rounds 3-6", "points": 75 },
       { "label": "Win Rounds 7-10", "points": 50 },
