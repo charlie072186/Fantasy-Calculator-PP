@@ -56,14 +56,16 @@
       "Knockdown": 10
     },
     "bonuses": [
-      { "label": "1st Round Win", "points": 50 },
-      { "label": "2nd Round Win", "points": 40 },
-      { "label": "3rd Round Win", "points": 30 },
-      { "label": "4th and 5th Round Win", "points": 20 },
-      { "label": "Decision Round", "points": 10 },
-      { "label": "Draw", "points": 0 }
-    ]
+  { "label": "1st Round Win", "points": 50 },
+  { "label": "2nd Round Win", "points": 40 },
+  { "label": "3rd Round Win", "points": 30 },
+  { "label": "4th Round Win", "points": 20 },
+  { "label": "5th Round Win", "points": 20 },
+  { "label": "Decision Win", "points": 10 },
+  { "label": "Draw", "points": 0 }
+]
   },
+  
   "boxing": {
     "name": "Boxing FS",
     "hasFightTime": true,
