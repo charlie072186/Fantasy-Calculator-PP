@@ -67,9 +67,6 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
-  if (groups[leagueKey]) {
-    renderGroupedStats(container, league.stats, groups[leagueKey]);
-  }
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -145,6 +142,9 @@ function loadStats() {
     container.appendChild(row);
   });
 
+if (groups[leagueKey]) {
+  renderGroupedStats(container, league.stats, groups[leagueKey]);
+  
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
