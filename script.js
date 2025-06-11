@@ -69,6 +69,7 @@ function loadStats() {
   };
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
+    return;
   }
 
   if (leagueKey === "tennis") {
@@ -145,15 +146,10 @@ function loadStats() {
     container.appendChild(row);
   });
 
-  if (groups[leagueKey]) {
-  renderGroupedStats(container, league.stats, groups[leagueKey]);
-
-  // Add DST bonus group here BEFORE return
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
-    title.textContent = leagueKey === "dst" ? "Points Allowed:" : "Bonus:";
+    title.textContent = "Bonus:";
     bonusContainer.appendChild(title);
-
     league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
       row.className = "bonus-option";
