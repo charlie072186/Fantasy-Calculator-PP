@@ -161,8 +161,6 @@ function loadStats() {
       bonusContainer.appendChild(row);
     });
   }
-
-  return; 
 }
 
 function renderGroupedStats(container, stats, groupMap) {
