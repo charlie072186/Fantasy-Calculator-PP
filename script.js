@@ -67,10 +67,10 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
- if (groups[leagueKey]) {
-  renderGroupedStats(container, league.stats, groups[leagueKey]);
-}
-
+  if (groups[leagueKey]) {
+    renderGroupedStats(container, league.stats, groups[leagueKey]);
+    return;
+  }
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -147,16 +147,16 @@ function loadStats() {
   });
 
   if (league.bonuses?.length) {
-  const title = document.createElement("h3");
-  title.textContent = leagueKey === "dst" ? "Points Allowed:" : "Bonus:";
-  bonusContainer.appendChild(title);
-
-  league.bonuses.forEach(bonus => {
-    const row = document.createElement("div");
-    row.className = "bonus-option";
-    row.innerHTML = `<label><input type="radio" name="bonus" value="${bonus.points}" />${bonus.label} — ${bonus.points} pts</label>`;
-    bonusContainer.appendChild(row);
-  });
+    const title = document.createElement("h3");
+    title.textContent = "Bonus:";
+    bonusContainer.appendChild(title);
+    league.bonuses.forEach(bonus => {
+      const row = document.createElement("div");
+      row.className = "bonus-option";
+      row.innerHTML = `<label><input type="radio" name="bonus" value="${bonus.points}" />${bonus.label} — ${bonus.points} pts</label>`;
+      bonusContainer.appendChild(row);
+    });
+  }
 }
 
 function renderGroupedStats(container, stats, groupMap) {
