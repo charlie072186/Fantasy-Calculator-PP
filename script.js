@@ -67,11 +67,10 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
-  
   if (groups[leagueKey]) {
-  renderGroupedStats(container, league.stats, groups[leagueKey]);
-  return;
-}
+    renderGroupedStats(container, league.stats, groups[leagueKey]);
+    return;
+  }
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -147,13 +146,15 @@ function loadStats() {
     container.appendChild(row);
   });
 
-if (groups[leagueKey]) {
+  if (groups[leagueKey]) {
   renderGroupedStats(container, league.stats, groups[leagueKey]);
-  
+
+  // Add DST bonus group here BEFORE return
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
     title.textContent = leagueKey === "dst" ? "Points Allowed:" : "Bonus:";
     bonusContainer.appendChild(title);
+
     league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
       row.className = "bonus-option";
@@ -161,7 +162,8 @@ if (groups[leagueKey]) {
       bonusContainer.appendChild(row);
     });
   }
-  return; 
+
+  return; // now safe — bonus already rendered
 }
 
 function renderGroupedStats(container, stats, groupMap) {
