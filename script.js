@@ -147,7 +147,7 @@ if (groups[leagueKey]) {
   
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
-    title.textContent = "Bonus:";
+    title.textContent = leagueKey === "dst" ? "Points Allowed:" : "Bonus:";
     bonusContainer.appendChild(title);
     league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
