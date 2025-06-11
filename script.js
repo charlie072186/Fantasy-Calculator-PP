@@ -69,7 +69,6 @@ function loadStats() {
   };
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
-    return;
   }
 
   if (leagueKey === "tennis") {
@@ -163,7 +162,7 @@ function loadStats() {
     });
   }
 
-  return; // now safe — bonus already rendered
+  return; 
 }
 
 function renderGroupedStats(container, stats, groupMap) {
