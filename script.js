@@ -69,6 +69,7 @@ function loadStats() {
   };
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
+    return;
   }
 
   if (leagueKey === "tennis") {
