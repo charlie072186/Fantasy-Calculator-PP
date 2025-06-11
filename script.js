@@ -67,6 +67,11 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
+  
+  if (groups[leagueKey]) {
+  renderGroupedStats(container, league.stats, groups[leagueKey]);
+  return;
+}
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
