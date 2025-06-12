@@ -114,7 +114,6 @@
       "Blocked Kick": 2,
       "2pt/XP Return": 2
     },
-   
     "pointsAllowedTiers": [
   { "label": "0", "max": 0, "points": 10 },
   { "label": "1-6", "max": 6, "points": 7 },
