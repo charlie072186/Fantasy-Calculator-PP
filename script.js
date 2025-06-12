@@ -145,10 +145,13 @@ function loadStats() {
     row.innerHTML = html;
     container.appendChild(row);
   });
-
+  if (groups[leagueKey]) {
+    renderGroupedStats(container, league.stats, groups[leagueKey]);
+    return;
+    
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
-    title.textContent = "Bonus:" : "dst" ? "Points Allowed:";
+    title.textContent = "Bonus:";
     bonusContainer.appendChild(title);
     league.bonuses.forEach(bonus => {
       const row = document.createElement("div");
