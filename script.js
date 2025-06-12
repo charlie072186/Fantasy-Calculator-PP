@@ -140,11 +140,9 @@ function loadStats() {
 
   // Default stats
   stats.forEach(([label, points]) => {
-    const row = document.createElement("div");
-    row.className = "stat-row";
-    let html = "";
-
-      // DST tiered Points Allowed logic
+   const row = document.createElement("div");
+  });
+         // DST tiered Points Allowed logic
   if (leagueKey === "dst") {
     const allowed = parseInt(document.getElementById("stat-Points Allowed")?.value);
     if (!isNaN(allowed)) {
@@ -155,6 +153,12 @@ function loadStats() {
       }
     }
   }
+    
+   
+    row.className = "stat-row";
+    let html = "";
+
+ 
 
 
     if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
