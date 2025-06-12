@@ -114,16 +114,7 @@
       "Blocked Kick": 2,
       "2pt/XP Return": 2
     },
-    "bonuses": [
-      { "label": "0 Points Allowed", "points": 10 },
-      { "label": "1-6 Points Allowed", "points": 7 },
-      { "label": "7-13 Points Allowed", "points": 4 },
-      { "label": "14-20 Points Allowed", "points": 1 },
-      { "label": "21-27 Points Allowed", "points": 0 },
-      { "label": "28-34 Points Allowed", "points": -1 },
-      { "label": "35+ Points Allowed", "points": -4 }
-    ]
-  },
+
   "kickers": {
     "name": "Kickers",
     "stats": {
