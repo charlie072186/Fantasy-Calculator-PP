@@ -72,6 +72,16 @@ function loadStats() {
     return;
   }
 
+  if (leagueKey === "dst") {
+  const pointsAllowedRow = document.createElement("div");
+  pointsAllowedRow.className = "stat-row";
+  pointsAllowedRow.innerHTML = `
+    <div class="stat-label">Points Allowed</div>
+    <input type="text" class="stat-input" id="stat-Points Allowed" />
+  `;
+  container.appendChild(pointsAllowedRow);
+}
+
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
@@ -192,6 +202,17 @@ function calculateScore() {
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
+  if (leagueKey === "dst") {
+  const allowed = parseInt(document.getElementById("stat-Points Allowed")?.value);
+  if (!isNaN(allowed)) {
+    const tier = league.pointsAllowedTiers?.find(t => allowed <= t.max);
+    if (tier) {
+      breakdown += `Points Allowed (${allowed}): ${tier.points} pts\n`;
+      total += tier.points;
+    }
+  }
+}
+  
   // NASCAR & INDYCAR scoring logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
