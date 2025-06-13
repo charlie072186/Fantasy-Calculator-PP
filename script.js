@@ -72,18 +72,6 @@ function loadStats() {
     return;
   }
 
-    // Add Points Allowed field for DST
-  if (leagueKey === "dst") {
-    const pointsAllowedRow = document.createElement("div");
-    pointsAllowedRow.className = "stat-row";
-    pointsAllowedRow.innerHTML = `
-      <div class="stat-label">Points Allowed</div>
-      <input type="text" class="stat-input" id="stat-Points Allowed" />
-    `;
-    container.appendChild(pointsAllowedRow);
-  }
-
-
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
@@ -140,26 +128,9 @@ function loadStats() {
 
   // Default stats
   stats.forEach(([label, points]) => {
-   const row = document.createElement("div");
-  });
-         // DST tiered Points Allowed logic
-  if (leagueKey === "dst") {
-    const allowed = parseInt(document.getElementById("stat-Points Allowed")?.value);
-    if (!isNaN(allowed)) {
-      const tier = league.pointsAllowedTiers?.find(t => allowed <= t.max);
-      if (tier) {
-        breakdown += `Points Allowed (${allowed}): ${tier.points} pts\n`;
-        total += tier.points;
-      }
-    }
-  }
-    
-   
+    const row = document.createElement("div");
     row.className = "stat-row";
     let html = "";
-
- 
-
 
     if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
       html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">1 IP = 3 outs; 0.1 IP = 1 out</span></span></div><input type="text" class="stat-input" id="stat-${label}" />`;
