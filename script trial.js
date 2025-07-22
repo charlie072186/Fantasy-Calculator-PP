@@ -67,10 +67,32 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
-  if (groups[leagueKey]) {
-    renderGroupedStats(container, league.stats, groups[leagueKey]);
-    return;
+
+ if (groups[leagueKey]) {
+  renderGroupedStats(container, league.stats, groups[leagueKey]);
+  
+  // Add points allowed input for DST
+  if (leagueKey === "dst" && league.pointsAllowedTiers) {
+    
+    const separator = document.createElement("div");
+    separator.style.height = "20px";
+    container.appendChild(separator);
+    
+    const pointsAllowedDiv = document.createElement("div");
+    pointsAllowedDiv.className = "stat-group";
+    pointsAllowedDiv.innerHTML = `
+      <div class="group-title">Points Allowed</div>
+      <div class="stat-row">
+        <div class="stat-label">Points Allowed</div>
+        <input type="text" class="stat-input" id="stat-Points Allowed" />
+      </div>
+    `;
+    container.appendChild(pointsAllowedDiv);
   }
+  return;
+}
+
+  
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -281,6 +303,18 @@ function calculateScore() {
     breakdown += `Bonus: +${bonusVal}\n`;
     total += bonusVal;
   }
+ 
+  if (leagueKey === "dst") {
+  const pointsAllowed = parseFloat(document.getElementById("stat-Points Allowed")?.value);
+  if (!isNaN(pointsAllowed)) {
+    const tier = league.pointsAllowedTiers.find(t => pointsAllowed <= t.max);
+    if (tier) {
+      breakdown += `Points Allowed (${tier.label}): ${tier.points} pts\n`;
+      total += tier.points;
+    }
+  }
+}
+
 
   // Final score output
   breakdown += `\nTotal: ${format(total)}`;
