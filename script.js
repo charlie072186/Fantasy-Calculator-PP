@@ -73,6 +73,11 @@ function loadStats() {
   
   // Add points allowed input for DST
   if (leagueKey === "dst" && league.pointsAllowedTiers) {
+    
+    const separator = document.createElement("div");
+    separator.style.height = "20px";
+    container.appendChild(separator);
+    
     const pointsAllowedDiv = document.createElement("div");
     pointsAllowedDiv.className = "stat-group";
     pointsAllowedDiv.innerHTML = `
@@ -86,6 +91,8 @@ function loadStats() {
   }
   return;
 }
+
+  
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
