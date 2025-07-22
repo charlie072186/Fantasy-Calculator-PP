@@ -67,25 +67,25 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     }
   };
-  if (groups[leagueKey]) {
-    renderGroupedStats(container, league.stats, groups[leagueKey]);
-    return;
-  }
 
-  if (leagueKey === "dst") {
-  // Add points allowed input
-  const pointsAllowedDiv = document.createElement("div");
-  pointsAllowedDiv.className = "stat-group";
-  pointsAllowedDiv.innerHTML = `
-    <div class="group-title">Points Allowed</div>
-    <div class="stat-row">
-      <div class="stat-label">Points Allowed</div>
-      <input type="text" class="stat-input" id="stat-Points Allowed" />
-    </div>
-  `;
-  container.appendChild(pointsAllowedDiv);
-  return;
+ if (groups[leagueKey]) {
+  renderGroupedStats(container, league.stats, groups[leagueKey]);
+  
+  // Add points allowed input for DST
+  if (leagueKey === "dst" && league.pointsAllowedTiers) {
+    const pointsAllowedDiv = document.createElement("div");
+    pointsAllowedDiv.className = "stat-group";
+    pointsAllowedDiv.innerHTML = `
+      <div class="group-title">Points Allowed</div>
+      <div class="stat-row">
+        <div class="stat-label">Points Allowed</div>
+        <input type="text" class="stat-input" id="stat-Points Allowed" />
+      </div>
+    `;
+    container.appendChild(pointsAllowedDiv);
   }
+  return;
+}
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -296,7 +296,7 @@ function calculateScore() {
     breakdown += `Bonus: +${bonusVal}\n`;
     total += bonusVal;
   }
-
+ 
   if (leagueKey === "dst") {
   const pointsAllowed = parseFloat(document.getElementById("stat-Points Allowed")?.value);
   if (!isNaN(pointsAllowed)) {
@@ -307,6 +307,7 @@ function calculateScore() {
     }
   }
 }
+
 
   // Final score output
   breakdown += `\nTotal: ${format(total)}`;
