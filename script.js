@@ -77,6 +77,10 @@ function loadStats() {
     const separator = document.createElement("div");
     separator.style.height = "20px";
     container.appendChild(separator);
+
+    const tierList = league.pointsAllowedTiers.map(t => 
+      `${t.label.padEnd(6)} → ${t.points.toString().padStart(2)} pts`
+    ).join('\n');
     
     const pointsAllowedDiv = document.createElement("div");
     pointsAllowedDiv.className = "stat-group";
@@ -312,6 +316,8 @@ function calculateScore() {
       breakdown += `Points Allowed (${tier.label}): ${tier.points} pts\n`;
       total += tier.points;
     }
+   } else if (pointsAllowed < 0) {
+    breakdown += "Points Allowed: Invalid (must be ≥0)\n";
   }
 }
 
