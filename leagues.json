@@ -123,15 +123,16 @@
   { "label": "28-34", "max": 34, "points": -1 },
   { "label": "35+", "max": 999, "points": -4 }
 ]
-  },
-
+ },
   "kickers": {
     "name": "Kickers",
     "stats": {
       "FG 0-39 yards": 3,
       "FG 40-49 yards": 4,
       "FG 50+ yards": 5,
-      "XP conversions": 1
+      "XP conversions": 1,
+      "FG Missed": -1,
+      "XP Missed": -1
     }
   },
   "soccer": {
