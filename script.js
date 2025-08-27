@@ -264,7 +264,7 @@ function calculateScore() {
       total += led * 0.25;
     }
 
-    breakdown += `\nTotal: ${format(total)}`;
+    breakdown += `\nTotal FS: ${format(total)}`;
     document.getElementById("breakdown").value = breakdown;
     return;
   }
@@ -328,7 +328,7 @@ function calculateScore() {
 
 
   // Final score output
-  breakdown += `\nTotal: ${format(total)}`;
+  breakdown += `\nTotal FS: ${format(total)}`;
   document.getElementById("breakdown").value = breakdown;
 
   // Extra breakdowns for specific leagues
@@ -402,7 +402,7 @@ function calculateFightTime() {
   const leagueKey = document.getElementById("league").value;
   const perRound = leagueKey === "mma" ? 5 : 3;
   const totalMin = (round - 1) * perRound + min + sec / 60;
-  const result = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal Fight Time = ${totalMin.toFixed(2)} min`;
+  const result = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal FS Fight Time = ${totalMin.toFixed(2)} min`;
   document.getElementById("fight-time-output").value = result;
 }
 
