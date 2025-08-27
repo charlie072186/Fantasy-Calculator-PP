@@ -65,6 +65,11 @@ function loadStats() {
       "Hitting Stats": ["Single", "Double", "Triple", "Home Run"],
       "Run/RBI Stats": ["Run", "RBI"],
       "Other Stats": ["BB", "HBP", "SB"]
+    },
+    kickers: {
+    "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
+    "Extra Points": ["XP conversions"],
+    "Missed Kicks": ["FG Missed", "XP Missed"]
     }
   };
 
