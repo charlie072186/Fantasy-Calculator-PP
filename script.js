@@ -211,6 +211,21 @@ function renderGroupedStats(container, stats, groupMap) {
       if (points === undefined) return;
       const row = document.createElement("div");
       row.className = "stat-row";
+
+      let pointClass = 'neutral-point';
+      let indicatorClass = 'neutral-indicator';
+      let indicatorSymbol = '=';
+      
+      if (points > 0) {
+        pointClass = 'positive-point';
+        indicatorClass = 'positive-indicator';
+        indicatorSymbol = '+';
+      } else if (points < 0) {
+        pointClass = 'negative-point';
+        indicatorClass = 'negative-indicator';
+        indicatorSymbol = '−'; // This is a minus sign, not hyphen
+      }
+      
       row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
       groupDiv.appendChild(row);
     });
