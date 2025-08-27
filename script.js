@@ -70,6 +70,12 @@ function loadStats() {
     "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
     "Extra Points": ["XP conversions"],
     "Missed Kicks": ["FG Missed", "XP Missed"]
+    },
+   soccer: {
+    "Scoring": ["Goal", "Assist", "Goal from PEN"],
+    "Shooting": ["Shot on Target"],
+    "Passing": ["Completed Pass", "Missed Pass"],
+    "Discipline": ["Yellow Card", "Red Card"]
     }
   };
 
