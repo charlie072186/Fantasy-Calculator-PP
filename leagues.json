@@ -135,6 +135,13 @@
       "XP Missed": -1
     }
   },
+  "nhl": {
+    "name": "NHL Time On Ice",
+    "hasTOI": true,
+    "stats": {
+      "Time On Ice": 0
+    }
+  },
   "soccer": {
     "name": "Soccer",
     "stats": {
