@@ -14,6 +14,105 @@ async function loadLeagues() {
   loadStats();
 }
 
+function calculateTOI() {
+  const totalMinutes = parseInt(document.getElementById("toi-total-min").value) || 0;
+  const totalSeconds = parseInt(document.getElementById("toi-total-sec").value) || 0;
+  const otMinutes = parseInt(document.getElementById("toi-ot-min").value) || 0;
+  const otSeconds = parseInt(document.getElementById("toi-ot-sec").value) || 0;
+
+  // Validate inputs
+  if (totalSeconds > 59 || otSeconds > 59) {
+    alert("Seconds must be between 0-59");
+    return;
+  }
+
+  // Convert to decimal minutes
+  const totalDecimal = totalMinutes + (totalSeconds / 60);
+  const otDecimal = otMinutes + (otSeconds / 60);
+  
+  // Calculate first 3 periods TOI (subtract OT)
+  const firstThreePeriodsDecimal = Math.max(0, totalDecimal - otDecimal);
+  
+  // Convert back to minutes:seconds for display
+  const firstThreeMinutes = Math.floor(firstThreePeriodsDecimal);
+  const firstThreeSeconds = Math.round((firstThreePeriodsDecimal - firstThreeMinutes) * 60);
+  
+  // Format the result
+  const result = `Total TOI: ${totalMinutes}:${totalSeconds.toString().padStart(2, '0')}\nOT TOI: ${otMinutes}:${otSeconds.toString().padStart(2, '0')}\nFirst 3 Periods: ${firstThreeMinutes}:${firstThreeSeconds.toString().padStart(2, '0')} = ${firstThreePeriodsDecimal.toFixed(2)}`;
+  
+  document.getElementById("toi-output").value = result;
+  
+  // Also update the main stat input for fantasy scoring
+  document.getElementById("stat-Time On Ice").value = firstThreePeriodsDecimal.toFixed(2);
+}
+
+// Add this function for TOI conversion
+function convertTOI() {
+  const minutes = parseInt(document.getElementById("convert-min").value) || 0;
+  const seconds = parseInt(document.getElementById("convert-sec").value) || 0;
+
+  if (seconds > 59) {
+    alert("Seconds must be between 0-59");
+    return;
+  }
+
+  const decimal = minutes + (seconds / 60);
+  document.getElementById("convert-output").value = `${minutes}:${seconds.toString().padStart(2, '0')} = ${decimal.toFixed(2)}`;
+}
+
+// Add this function to clear TOI inputs
+function clearTOI() {
+  document.getElementById("toi-total-min").value = "";
+  document.getElementById("toi-total-sec").value = "";
+  document.getElementById("toi-ot-min").value = "";
+  document.getElementById("toi-ot-sec").value = "";
+  document.getElementById("toi-output").value = "";
+  document.getElementById("stat-Time On Ice").value = "";
+}
+
+// Add this function to clear conversion inputs
+function clearConversion() {
+  document.getElementById("convert-min").value = "";
+  document.getElementById("convert-sec").value = "";
+  document.getElementById("convert-output").value = "";
+}
+
+// Modify the loadStats function to include TOI
+function loadStats() {
+  const leagueKey = document.getElementById("league").value;
+  const league = leagues[leagueKey];
+  const container = document.getElementById("stats-container");
+  const bonusContainer = document.getElementById("bonus-container");
+  const fightTimeContainer = document.getElementById("fight-time-container");
+  const toiContainer = document.getElementById("toi-container");
+  const extraBox = document.getElementById("extra-breakdown-box");
+
+  container.innerHTML = "";
+  bonusContainer.innerHTML = "";
+  extraBox.innerHTML = "";
+  extraBox.classList.add("hidden");
+  fightTimeContainer.classList.add("hidden");
+  toiContainer.classList.add("hidden");
+
+  // TOI logic
+  if (league.hasTOI) {
+    toiContainer.classList.remove("hidden");
+    // TOI HTML is already in the HTML file, no need to generate dynamically
+  }
+
+  // ... rest of your existing loadStats code remains the same ...
+  // Fight Time logic
+  if (league.hasFightTime) {
+    const rounds = leagueKey === "mma" ? 5 : 12;
+    const fightRoundDiv = document.getElementById("fight-rounds");
+    fightRoundDiv.innerHTML = "<label>Fight ended in:</label><br>";
+    for (let i = 1; i <= rounds; i++) {
+      fightRoundDiv.innerHTML += `<label><input type="radio" name="fightRound" value="${i}"> Round ${i}</label><br>`;
+    }
+    fightTimeContainer.classList.remove("hidden");
+  }
+
+
 function format(val) {
   return val % 1 === 0 ? val.toString() : val.toFixed(2);
 }
