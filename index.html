@@ -40,7 +40,58 @@
         <div class="extra-box-label">Stat Breakdown</div>
         <div id="extra-breakdown-box" class="extra-box"></div>
       </div>
+<div id="toi-container" class="hidden">
+  <h3>NHL Time On Ice Calculator</h3>
+  
+  <div class="stat-group">
+    <div class="group-title">Compute TOI for First 3 Periods</div>
+    
+    <div class="stat-row">
+      <div class="stat-label">Total TOI</div>
+      <input type="number" id="toi-total-min" placeholder="min" min="0" style="width: 60px;">
+      <span>:</span>
+      <input type="number" id="toi-total-sec" placeholder="sec" min="0" max="59" style="width: 60px;">
+    </div>
+    
+    <div class="stat-row">
+      <div class="stat-label">OT TOI (if applicable)</div>
+      <input type="number" id="toi-ot-min" placeholder="min" min="0" style="width: 60px;">
+      <span>:</span>
+      <input type="number" id="toi-ot-sec" placeholder="sec" min="0" max="59" style="width: 60px;">
+    </div>
+    
+    <div class="stat-row">
+      <button onclick="calculateTOI()">Calculate TOI</button>
+      <button onclick="clearTOI()">Clear</button>
+    </div>
+    
+    <textarea id="toi-output" rows="4" readonly style="width: 100%; margin-top: 10px;"></textarea>
+  </div>
 
+  <div class="stat-group">
+    <div class="group-title">Convert "mm:ss" to Decimal</div>
+    
+    <div class="stat-row">
+      <div class="stat-label">Time:</div>
+      <input type="number" id="convert-min" placeholder="min" min="0" style="width: 60px;">
+      <span>:</span>
+      <input type="number" id="convert-sec" placeholder="sec" min="0" max="59" style="width: 60px;">
+    </div>
+    
+    <div class="stat-row">
+      <button onclick="convertTOI()">Convert</button>
+      <button onclick="clearConversion()">Clear</button>
+    </div>
+    
+    <textarea id="convert-output" rows="2" readonly style="width: 100%; margin-top: 10px;"></textarea>
+  </div>
+
+  <!-- This input will be used for the main fantasy score calculation -->
+  <div class="stat-row">
+    <div class="stat-label">Time On Ice (First 3 Periods) — 0 pts</div>
+    <input type="text" class="stat-input" id="stat-Time On Ice" readonly style="background-color: #f0f0f0;">
+  </div>
+</div>
       <!-- Fight Time calculator only for MMA / Boxing -->
       <div id="fight-time-container" class="fight-box hidden">
         <h3>Fight Time Calculator</h3>
