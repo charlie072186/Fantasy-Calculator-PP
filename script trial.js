@@ -65,6 +65,17 @@ function loadStats() {
       "Hitting Stats": ["Single", "Double", "Triple", "Home Run"],
       "Run/RBI Stats": ["Run", "RBI"],
       "Other Stats": ["BB", "HBP", "SB"]
+    },
+    kickers: {
+    "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
+    "Extra Points": ["XP conversions"],
+    "Missed Kicks": ["FG Missed", "XP Missed"]
+    },
+   soccer: {
+    "Scoring": ["Goal", "Assist", "Goal from PEN"],
+    "Shooting": ["Shot on Target"],
+    "Passing": ["Completed Pass", "Missed Pass"],
+    "Discipline": ["Yellow Card", "Red Card"]
     }
   };
 
@@ -77,6 +88,10 @@ function loadStats() {
     const separator = document.createElement("div");
     separator.style.height = "20px";
     container.appendChild(separator);
+
+    const tierList = league.pointsAllowedTiers.map(t => 
+      `${t.label.padEnd(6)} → ${t.points.toString().padStart(2)} pts`
+    ).join('\n');
     
     const pointsAllowedDiv = document.createElement("div");
     pointsAllowedDiv.className = "stat-group";
@@ -196,6 +211,21 @@ function renderGroupedStats(container, stats, groupMap) {
       if (points === undefined) return;
       const row = document.createElement("div");
       row.className = "stat-row";
+
+      let pointClass = 'neutral-point';
+      let indicatorClass = 'neutral-indicator';
+      let indicatorSymbol = '=';
+      
+      if (points > 0) {
+        pointClass = 'positive-point';
+        indicatorClass = 'positive-indicator';
+        indicatorSymbol = '+';
+      } else if (points < 0) {
+        pointClass = 'negative-point';
+        indicatorClass = 'negative-indicator';
+        indicatorSymbol = '−'; // This is a minus sign, not hyphen
+      }
+      
       row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
       groupDiv.appendChild(row);
     });
@@ -255,7 +285,7 @@ function calculateScore() {
       total += led * 0.25;
     }
 
-    breakdown += `\nTotal: ${format(total)}`;
+    breakdown += `\nTotal FS: ${format(total)}`;
     document.getElementById("breakdown").value = breakdown;
     return;
   }
@@ -312,12 +342,14 @@ function calculateScore() {
       breakdown += `Points Allowed (${tier.label}): ${tier.points} pts\n`;
       total += tier.points;
     }
+   } else if (pointsAllowed < 0) {
+    breakdown += "Points Allowed: Invalid (must be ≥0)\n";
   }
 }
 
 
   // Final score output
-  breakdown += `\nTotal: ${format(total)}`;
+  breakdown += `\nTotal FS: ${format(total)}`;
   document.getElementById("breakdown").value = breakdown;
 
   // Extra breakdowns for specific leagues
@@ -391,7 +423,7 @@ function calculateFightTime() {
   const leagueKey = document.getElementById("league").value;
   const perRound = leagueKey === "mma" ? 5 : 3;
   const totalMin = (round - 1) * perRound + min + sec / 60;
-  const result = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal Fight Time = ${totalMin.toFixed(2)} min`;
+  const result = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal FS Fight Time = ${totalMin.toFixed(2)} min`;
   document.getElementById("fight-time-output").value = result;
 }
 
