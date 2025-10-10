@@ -396,4 +396,43 @@ button.clear:hover {
   button {
     width: 100%;
   }
+  #toi-container {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+#toi-container .stat-group {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#toi-container input[type="number"] {
+  padding: 5px;
+  margin: 0 5px;
+  text-align: center;
+}
+
+#toi-container button {
+  padding: 8px 15px;
+  margin: 0 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#toi-container button:hover {
+  background-color: #0056b3;
+}
+
+#toi-output, #convert-output {
+  font-family: monospace;
+  font-size: 14px;
+  resize: vertical;
 }
