@@ -136,10 +136,9 @@
     }
   },
 "nhl": {
-    "name": "NHL Time On Ice",
-    "hasTOI": true,
-    "periods": 3
-  },
+  "name": "NHL Time On Ice",
+  "hasTOI": true
+}
   "soccer": {
     "name": "Soccer",
     "stats": {
