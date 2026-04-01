@@ -107,7 +107,21 @@ function loadStats() {
   return;
 }
 
-  
+  if (leagueKey === "nhl") {
+    const periodDiv = document.createElement("div");
+    periodDiv.className = "stat-group";
+    periodDiv.innerHTML = `<div class="group-title">Time Per Period (MM:SS)</div>`;
+    
+    for (let i = 1; i <= 3; i++) {
+      periodDiv.innerHTML += `
+        <div class="stat-row">
+          <div class="stat-label">Period ${i}</div>
+          <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
+        </div>`;
+    }
+    container.appendChild(periodDiv);
+    return;
+  }
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
