@@ -32,6 +32,24 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
+  if (!league) return;
+
+  // --- ADDED: NHL PERIOD LOGIC AT THE TOP ---
+  if (leagueKey === "nhl") {
+    const periodDiv = document.createElement("div");
+    periodDiv.className = "stat-group";
+    periodDiv.innerHTML = `<div class="group-title">Time Per Period (MM:SS)</div>`;
+    
+    for (let i = 1; i <= 3; i++) {
+      periodDiv.innerHTML += `
+        <div class="stat-row">
+          <div class="stat-label">Period ${i}</div>
+          <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
+        </div>`;
+    }
+    container.appendChild(periodDiv);
+    return;
+  
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
@@ -106,22 +124,6 @@ function loadStats() {
   }
   return;
 }
-
-  if (leagueKey === "nhl") {
-    const periodDiv = document.createElement("div");
-    periodDiv.className = "stat-group";
-    periodDiv.innerHTML = `<div class="group-title">Time Per Period (MM:SS)</div>`;
-    
-    for (let i = 1; i <= 3; i++) {
-      periodDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">Period ${i}</div>
-          <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
-        </div>`;
-    }
-    container.appendChild(periodDiv);
-    return;
-  }
 
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
@@ -258,13 +260,20 @@ function calculateScore() {
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-if (leagueKey === "nhl") {
+  if (!league) return;
+
+// --- NHL TOI CONVERTER BLOCK ---
+  if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let periodBreakdown = "Time On Ice Breakdown:\n";
+    let hasData = false;
 
     for (let i = 1; i <= 3; i++) {
-      const val = document.getElementById(`nhl-p${i}`).value.trim();
+      const input = document.getElementById(`nhl-p${i}`);
+      const val = input ? input.value.trim() : "";
+      
       if (val.includes(":")) {
+        hasData = true;
         const [mins, secs] = val.split(":").map(n => parseFloat(n) || 0);
         const pSeconds = (mins * 60) + secs;
         const pDecimal = mins + (secs / 60);
@@ -274,8 +283,13 @@ if (leagueKey === "nhl") {
       }
     }
 
+    if (!hasData) {
+      document.getElementById("breakdown").value = "Please enter time in MM:SS format.";
+      return;
+    }
+
     const finalMins = Math.floor(totalSeconds / 60);
-    const finalSecs = totalSeconds % 60;
+    const finalSecs = Math.round(totalSeconds % 60);
     const finalDecimal = totalSeconds / 60;
 
     let output = periodBreakdown;
@@ -284,7 +298,7 @@ if (leagueKey === "nhl") {
     output += `Decimal Total: ${format(finalDecimal)}`;
 
     document.getElementById("breakdown").value = output;
-    return; // Exit so it doesn't run standard point math
+    return; 
   }
   
   // NASCAR & INDYCAR scoring logic
