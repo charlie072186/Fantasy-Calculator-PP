@@ -1,20 +1,25 @@
 let leagues = {};
 
 async function loadLeagues() {
-  const res = await fetch("leagues.json");
-  leagues = await res.json();
-  const select = document.getElementById("league");
-  select.innerHTML = "";
-  Object.entries(leagues).forEach(([key, val]) => {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = val.name;
-    select.appendChild(opt);
-  });
-  loadStats();
+  try {
+    const res = await fetch("leagues.json");
+    leagues = await res.json();
+    const select = document.getElementById("league");
+    select.innerHTML = "";
+    Object.entries(leagues).forEach(([key, val]) => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = val.name;
+      select.appendChild(opt);
+    });
+    loadStats();
+  } catch (err) {
+    console.error("Error loading leagues:", err);
+  }
 }
 
 function format(val) {
+  if (val === undefined || isNaN(val)) return "0";
   return val % 1 === 0 ? val.toString() : val.toFixed(2);
 }
 
@@ -26,6 +31,7 @@ function loadStats() {
   const fightTimeContainer = document.getElementById("fight-time-container");
   const extraBox = document.getElementById("extra-breakdown-box");
 
+  // Reset UI
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
   extraBox.innerHTML = "";
@@ -34,7 +40,7 @@ function loadStats() {
 
   if (!league) return;
 
-  // --- ADDED: NHL PERIOD LOGIC AT THE TOP ---
+  // --- NHL TOI PERIOD INPUTS ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
@@ -48,11 +54,13 @@ function loadStats() {
         </div>`;
     }
     container.appendChild(periodDiv);
-    return;
-  
+    return; // Exit so standard logic doesn't run for NHL
+  }
+
+  // --- STANDARD LEAGUE LOGIC ---
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
-    : Object.entries(league.stats);
+    : Object.entries(league.stats || {});
 
   // Fight Time logic
   if (league.hasFightTime) {
@@ -85,120 +93,45 @@ function loadStats() {
       "Other Stats": ["BB", "HBP", "SB"]
     },
     kickers: {
-    "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
-    "Extra Points": ["XP conversions"],
-    "Missed Kicks": ["FG Missed", "XP Missed"]
+      "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
+      "Extra Points": ["XP conversions"],
+      "Missed Kicks": ["FG Missed", "XP Missed"]
     },
-   soccer: {
-    "Scoring": ["Goal", "Assist", "Goal from PEN"],
-    "Shooting": ["Shot on Target"],
-    "Passing": ["Completed Pass", "Missed Pass"],
-    "Discipline": ["Yellow Card", "Red Card"]
+    soccer: {
+      "Scoring": ["Goal", "Assist", "Goal from PEN"],
+      "Shooting": ["Shot on Target"],
+      "Passing": ["Completed Pass", "Missed Pass"],
+      "Discipline": ["Yellow Card", "Red Card"]
     }
   };
 
- if (groups[leagueKey]) {
-  renderGroupedStats(container, league.stats, groups[leagueKey]);
-  
-  // Add points allowed input for DST
-  if (leagueKey === "dst" && league.pointsAllowedTiers) {
-    
-    const separator = document.createElement("div");
-    separator.style.height = "20px";
-    container.appendChild(separator);
-
-    const tierList = league.pointsAllowedTiers.map(t => 
-      `${t.label.padEnd(6)} → ${t.points.toString().padStart(2)} pts`
-    ).join('\n');
-    
-    const pointsAllowedDiv = document.createElement("div");
-    pointsAllowedDiv.className = "stat-group";
-    pointsAllowedDiv.innerHTML = `
-      <div class="group-title">Points Allowed</div>
-      <div class="stat-row">
-        <div class="stat-label">Points Allowed</div>
-        <input type="text" class="stat-input" id="stat-Points Allowed" />
-      </div>
-    `;
-    container.appendChild(pointsAllowedDiv);
-  }
-  return;
-}
-
-  if (leagueKey === "tennis") {
-    const matchDiv = document.createElement("div");
-    matchDiv.className = "stat-group";
-    matchDiv.innerHTML = `
-      <div class="group-title">Match Info</div>
-      <div class="stat-row">
-        <label class="stat-label">
-          <input type="checkbox" class="stat-input" id="stat-Match Played" />
-          Match Played — 10 pts
-        </label>
-      </div>`;
-    container.appendChild(matchDiv);
-
-    const gameSetDiv = document.createElement("div");
-    gameSetDiv.className = "stat-group";
-    gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
-      const points = league.stats[stat];
-      gameSetDiv.innerHTML += `
+  if (groups[leagueKey]) {
+    renderGroupedStats(container, league.stats, groups[leagueKey]);
+    if (leagueKey === "dst" && league.pointsAllowedTiers) {
+      const pointsAllowedDiv = document.createElement("div");
+      pointsAllowedDiv.className = "stat-group";
+      pointsAllowedDiv.innerHTML = `
+        <div class="group-title">Points Allowed</div>
         <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
+          <div class="stat-label">Points Allowed</div>
+          <input type="text" class="stat-input" id="stat-Points Allowed" />
         </div>`;
-    });
-    container.appendChild(gameSetDiv);
-
-    const serveDiv = document.createElement("div");
-    serveDiv.className = "stat-group";
-    serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
-    ["Ace", "Double Fault"].forEach(stat => {
-      const points = league.stats[stat];
-      serveDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
-        </div>`;
-    });
-    container.appendChild(serveDiv);
-    return;
-  }
-
-  if (leagueKey === "nascar" || leagueKey === "indycar") {
-    const custom = document.createElement("div");
-    custom.className = "stat-group";
-    custom.innerHTML = `
-      <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position" /></div>
-      <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position" /></div>
-      ${leagueKey === "nascar" ? `<div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps" /></div>` : ""}
-      <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led" /></div>
-    `;
-    container.appendChild(custom);
-    return;
-  }
-
-  // Default stats
-  stats.forEach(([label, points]) => {
-    const row = document.createElement("div");
-    row.className = "stat-row";
-    let html = "";
-
-    if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
-      html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">1 IP = 3 outs; 0.1 IP = 1 out</span></span></div><input type="text" class="stat-input" id="stat-${label}" />`;
-    } else if (leagueKey === "mlb_pitcher" && label === "Quality Start") {
-      html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">Auto: 6+ IP & ≤3 ER</span></span></div>`;
-    } else if ((label === "Win" || label === "Match Played")) {
-      html = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${points} pts</label>`;
-    } else {
-      html = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      container.appendChild(pointsAllowedDiv);
     }
+  } else {
+    // Default Rendering
+    stats.forEach(([label, points]) => {
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      let html = (label === "Win" || label === "Match Played")
+        ? `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${points} pts</label>`
+        : `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      row.innerHTML = html;
+      container.appendChild(row);
+    });
+  }
 
-    row.innerHTML = html;
-    container.appendChild(row);
-  });
-
+  // Bonuses
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
@@ -212,57 +145,12 @@ function loadStats() {
   }
 }
 
-function renderGroupedStats(container, stats, groupMap) {
-  for (const [groupName, labels] of Object.entries(groupMap)) {
-    const groupDiv = document.createElement("div");
-    groupDiv.className = "stat-group";
-    const groupTitle = document.createElement("div");
-    groupTitle.className = "group-title";
-    groupTitle.textContent = groupName;
-    groupDiv.appendChild(groupTitle);
-    labels.forEach(label => {
-      const points = Array.isArray(stats)
-        ? stats.find(s => s.label === label)?.points
-        : stats[label];
-      if (points === undefined) return;
-      const row = document.createElement("div");
-      row.className = "stat-row";
-
-      let pointClass = 'neutral-point';
-      let indicatorClass = 'neutral-indicator';
-      let indicatorSymbol = '=';
-      
-      if (points > 0) {
-        pointClass = 'positive-point';
-        indicatorClass = 'positive-indicator';
-        indicatorSymbol = '+';
-      } else if (points < 0) {
-        pointClass = 'negative-point';
-        indicatorClass = 'negative-indicator';
-        indicatorSymbol = '−'; // This is a minus sign, not hyphen
-      }
-      
-      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
-      groupDiv.appendChild(row);
-    });
-    container.appendChild(groupDiv);
-  }
-}
 function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
-  const stats = Array.isArray(league.stats)
-    ? league.stats.map(s => [s.label, s.points])
-    : Object.entries(league.stats);
-
-  let total = 0;
-  let breakdown = "";
-  let innings = 0, earnedRuns = 0;
-  const hideZero = document.getElementById("hideZero")?.checked;
-
   if (!league) return;
 
-// --- NHL TOI CONVERTER BLOCK ---
+  // --- NHL TOI CONVERTER ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let periodBreakdown = "Time On Ice Breakdown:\n";
@@ -271,13 +159,11 @@ function calculateScore() {
     for (let i = 1; i <= 3; i++) {
       const input = document.getElementById(`nhl-p${i}`);
       const val = input ? input.value.trim() : "";
-      
       if (val.includes(":")) {
         hasData = true;
         const [mins, secs] = val.split(":").map(n => parseFloat(n) || 0);
         const pSeconds = (mins * 60) + secs;
         const pDecimal = mins + (secs / 60);
-        
         totalSeconds += pSeconds;
         periodBreakdown += `P${i}: ${val} (${format(pDecimal)})\n`;
       }
@@ -298,75 +184,23 @@ function calculateScore() {
     output += `Decimal Total: ${format(finalDecimal)}`;
 
     document.getElementById("breakdown").value = output;
-    return; 
-  }
-  
-  // NASCAR & INDYCAR scoring logic
-  if (leagueKey === "nascar" || leagueKey === "indycar") {
-    const start = parseInt(document.getElementById("stat-Starting Position")?.value);
-    const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
-    const fastest = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-    const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
-
-    if (!isNaN(start) && !isNaN(finish)) {
-      const diff = start - finish;
-      breakdown += `Place Differential: ${diff} pts\n`;
-      total += diff;
-    }
-
-    if (leagueKey === "nascar") {
-      const nascarPoints = [45, 42, 41, 40, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-      if (!isNaN(finish) && finish >= 1 && finish <= 40) {
-        const pts = nascarPoints[finish - 1];
-        breakdown += `Finishing Position (${finish}): ${pts} pts\n`;
-        total += pts;
-      }
-      if (!hideZero || fastest !== 0) {
-        breakdown += `Fastest Laps: ${fastest} × 0.45 = ${format(fastest * 0.45)}\n`;
-        total += fastest * 0.45;
-      }
-    } else if (leagueKey === "indycar") {
-      const indyPoints = [
-        50, 45, 35, 32, 30, 28, 26, 24, 22, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10,
-        9, 8, 7, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5
-      ];
-      if (!isNaN(finish) && finish >= 1 && finish <= 33) {
-        const pts = indyPoints[finish - 1];
-        breakdown += `Finishing Position (${finish}): ${pts} pts\n`;
-        total += pts;
-      }
-    }
-
-    if (!hideZero || led !== 0) {
-      breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
-      total += led * 0.25;
-    }
-
-    breakdown += `\nTotal FS: ${format(total)}`;
-    document.getElementById("breakdown").value = breakdown;
     return;
   }
 
-  // Standard stat scoring
+  // --- STANDARD SCORE CALCULATION ---
+  const stats = Array.isArray(league.stats)
+    ? league.stats.map(s => [s.label, s.points])
+    : Object.entries(league.stats || {});
+
+  let total = 0;
+  let breakdown = "";
+  const hideZero = document.getElementById("hideZero")?.checked;
+
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
     const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value);
     if (isNaN(val)) return;
-
-    if (leagueKey === "mlb_pitcher") {
-      if (label === "Innings Pitched") {
-        innings = val;
-        const full = Math.floor(val);
-        const decimal = val - full;
-        const outs = full * 3 + Math.round(decimal * 10);
-        breakdown += `${label}: ${val} IP (${outs} outs) = ${format(outs)}\n`;
-        total += outs;
-        return;
-      }
-      if (label === "Earned Run") earnedRuns = val;
-      if (label === "Quality Start") return;
-    }
 
     if (!hideZero || val !== 0) {
       breakdown += `${label}: ${val} × ${points} = ${format(val * points)}\n`;
@@ -374,43 +208,28 @@ function calculateScore() {
     total += val * points;
   });
 
-  // Quality Start bonus
-  if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
-    const qsPoints = Array.isArray(league.stats)
-      ? league.stats.find(s => s.label === "Quality Start")?.points || 0
-      : league.stats["Quality Start"] || 0;
-    breakdown += `Quality Start: 1 × ${qsPoints} = ${format(qsPoints)}\n`;
-    total += qsPoints;
-  }
-
-  // Bonus points
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) {
-    const bonusVal = parseFloat(bonus.value);
-    breakdown += `Bonus: +${bonusVal}\n`;
-    total += bonusVal;
-  }
- 
-  if (leagueKey === "dst") {
-  const pointsAllowed = parseFloat(document.getElementById("stat-Points Allowed")?.value);
-  if (!isNaN(pointsAllowed)) {
-    const tier = league.pointsAllowedTiers.find(t => pointsAllowed <= t.max);
-    if (tier) {
-      breakdown += `Points Allowed (${tier.label}): ${tier.points} pts\n`;
-      total += tier.points;
-    }
-   } else if (pointsAllowed < 0) {
-    breakdown += "Points Allowed: Invalid (must be ≥0)\n";
-  }
-}
-
-
-  // Final score output
   breakdown += `\nTotal FS: ${format(total)}`;
   document.getElementById("breakdown").value = breakdown;
-
-  // Extra breakdowns for specific leagues
   showExtraBreakdown(leagueKey);
+}
+
+function renderGroupedStats(container, stats, groupMap) {
+  for (const [groupName, labels] of Object.entries(groupMap)) {
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "stat-group";
+    groupDiv.innerHTML = `<div class="group-title">${groupName}</div>`;
+    labels.forEach(label => {
+      const points = Array.isArray(stats)
+        ? stats.find(s => s.label === label)?.points
+        : stats[label];
+      if (points === undefined) return;
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      groupDiv.appendChild(row);
+    });
+    container.appendChild(groupDiv);
+  }
 }
 
 function showExtraBreakdown(leagueKey) {
@@ -422,74 +241,9 @@ function showExtraBreakdown(leagueKey) {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
-    extraBox.innerHTML = `
-      <h3>Single Stats</h3>
-      Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>
-      P+R+A = ${pts + reb + ast}<br>
-      P+A = ${pts + ast}<br>
-      P+R = ${pts + reb}<br>
-      R+A = ${reb + ast}
-    `;
+    extraBox.innerHTML = `<h3>Single Stats</h3>P+R+A = ${pts + reb + ast}<br>P+A = ${pts + ast}<br>P+R = ${pts + reb}<br>R+A = ${reb + ast}`;
     extraBox.classList.remove("hidden");
   }
-
-  if (leagueKey === "mlb_hitter") {
-    const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
-    const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
-    const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
-    const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
-    const r = parseFloat(document.getElementById("stat-Run")?.value) || 0;
-    const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
-    const hits = s + d + t + hr;
-    extraBox.innerHTML = `
-      <h3>Single Stats Hitter</h3>
-      Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>
-      Runs: ${r}, RBI: ${rbi}<br>
-      Hits+Runs+RBI = ${hits + r + rbi}
-    `;
-    extraBox.classList.remove("hidden");
-  }
-
-  if (leagueKey === "nfl_cfb") {
-    const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
-    const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
-    const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
-    const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
-    const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
-    const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
-
-    extraBox.innerHTML = `
-      <h3>Offense Stats</h3>
-      Pass+Rush Yds = ${passYds + rushYds}<br>
-      Rush+Rec Yds = ${rushYds + recYds}<br>
-      Pass+Rush TDs = ${passTD + rushTD}<br>
-      Rush+Rec TDs = ${rushTD + recTD}
-    `;
-    extraBox.classList.remove("hidden");
-  }
-}
-
-function calculateFightTime() {
-  const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
-  const min = parseInt(document.getElementById("fight-minutes").value) || 0;
-  const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
-  if (!round || sec > 59) {
-    alert("Please select a round and valid time.");
-    return;
-  }
-  const leagueKey = document.getElementById("league").value;
-  const perRound = leagueKey === "mma" ? 5 : 3;
-  const totalMin = (round - 1) * perRound + min + sec / 60;
-  const result = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal FS Fight Time = ${totalMin.toFixed(2)} min`;
-  document.getElementById("fight-time-output").value = result;
-}
-
-function clearFightTime() {
-  document.getElementById("fight-minutes").value = "";
-  document.getElementById("fight-seconds").value = "";
-  document.getElementById("fight-time-output").value = "";
-  const checked = document.querySelector('input[name="fightRound"]:checked');
-  if (checked) checked.checked = false;
 }
 
 function clearInputs() {
@@ -500,11 +254,7 @@ function clearInputs() {
   document.getElementById("breakdown").value = "";
   document.getElementById("extra-breakdown-box").innerHTML = "";
   document.getElementById("extra-breakdown-box").classList.add("hidden");
-  document.getElementById("fight-time-output").value = "";
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) bonus.checked = false;
 }
-
 
 function copyBreakdown() {
   const box = document.getElementById("breakdown");
