@@ -258,6 +258,35 @@ function calculateScore() {
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
+if (leagueKey === "nhl") {
+    let totalSeconds = 0;
+    let periodBreakdown = "Time On Ice Breakdown:\n";
+
+    for (let i = 1; i <= 3; i++) {
+      const val = document.getElementById(`nhl-p${i}`).value.trim();
+      if (val.includes(":")) {
+        const [mins, secs] = val.split(":").map(n => parseFloat(n) || 0);
+        const pSeconds = (mins * 60) + secs;
+        const pDecimal = mins + (secs / 60);
+        
+        totalSeconds += pSeconds;
+        periodBreakdown += `P${i}: ${val} (${format(pDecimal)})\n`;
+      }
+    }
+
+    const finalMins = Math.floor(totalSeconds / 60);
+    const finalSecs = totalSeconds % 60;
+    const finalDecimal = totalSeconds / 60;
+
+    let output = periodBreakdown;
+    output += `------------------\n`;
+    output += `Total Time: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\n`;
+    output += `Decimal Total: ${format(finalDecimal)}`;
+
+    document.getElementById("breakdown").value = output;
+    return; // Exit so it doesn't run standard point math
+  }
+  
   // NASCAR & INDYCAR scoring logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
