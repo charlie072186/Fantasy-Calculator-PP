@@ -36,21 +36,6 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-if (leagueKey === "nhl") {
-    const periodDiv = document.createElement("div");
-    periodDiv.className = "stat-group";
-    periodDiv.innerHTML = `<div class="group-title">Time Per Period (MM:SS)</div>`;
-    for (let i = 1; i <= 3; i++) {
-      periodDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">Period ${i}</div>
-          <input type="text" class="stat-input" id="nhl-p${i}" placeholder="00:00" />
-        </div>`;
-    }
-    container.appendChild(periodDiv);
-    return;
-  }
-  
   // Fight Time logic
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
@@ -259,29 +244,6 @@ function calculateScore() {
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-// --- NHL TOI CONVERTER ---
-  if (leagueKey === "nhl") {
-    let totalSecs = 0;
-    let text = "NHL TOI Breakdown:\n";
-    let hasVal = false;
-    for (let i = 1; i <= 3; i++) {
-      const val = document.getElementById(`nhl-p${i}`).value.trim();
-      if (val.includes(":")) {
-        hasVal = true;
-        const [m, s] = val.split(":").map(Number);
-        totalSecs += (m * 60) + s;
-        text += `P${i}: ${val} (${format(m + s/60)})\n`;
-      }
-    }
-    if (!hasVal) return (breakdownBox.value = "Enter MM:SS time.");
-    const finalM = Math.floor(totalSecs / 60);
-    const finalS = Math.round(totalSecs % 60);
-    text += `------------------\nTotal Time: ${finalM}:${finalS.toString().padStart(2, '0')}\nDecimal Total: ${format(totalSecs / 60)}`;
-    breakdownBox.value = text;
-    return;
-  }
-
-  
   // NASCAR & INDYCAR scoring logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
