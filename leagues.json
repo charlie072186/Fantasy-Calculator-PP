@@ -138,9 +138,7 @@
 "nhl": {
     "name": "NHL Time On Ice",
     "hasTOI": true,
-    "stats": {
-      "Time On Ice": 1
-    }
+    "periods": 3
   },
   "soccer": {
     "name": "Soccer",
