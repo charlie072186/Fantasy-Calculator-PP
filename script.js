@@ -162,7 +162,34 @@ function loadStats() {
     container.appendChild(custom);
     return;
   }
+stats.forEach(([label, points]) => {
+    const input = document.getElementById(`stat-${label}`);
+    if (!input) return;
 
+    let val;
+    const rawValue = input.value.trim();
+
+    // CUSTOM LOGIC: Handle MM:SS to Decimal conversion for NHL TOI
+    if (leagueKey === "nhl" && label === "Time On Ice" && rawValue.includes(":")) {
+      const parts = rawValue.split(":");
+      const minutes = parseFloat(parts[0]) || 0;
+      const seconds = parseFloat(parts[1]) || 0;
+      // Math: Minutes + (Seconds / 60)
+      val = minutes + (seconds / 60);
+    } else {
+      // Standard logic for all other stats
+      val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(rawValue);
+    }
+
+    if (isNaN(val)) return;
+
+  if (!hideZero || val !== 0) {
+      // We use format(val) here so the breakdown shows "1.37" instead of "1:22"
+      breakdown += `${label}: ${format(val)} × ${points} = ${format(val * points)}\n`;
+    }
+    total += val * points;
+  });
+  
   // Default stats
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
