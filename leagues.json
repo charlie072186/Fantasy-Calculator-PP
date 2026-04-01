@@ -56,16 +56,15 @@
       "Knockdown": 10
     },
     "bonuses": [
-  { "label": "1st Round Win", "points": 50 },
-  { "label": "2nd Round Win", "points": 40 },
-  { "label": "3rd Round Win", "points": 30 },
-  { "label": "4th Round Win", "points": 20 },
-  { "label": "5th Round Win", "points": 20 },
-  { "label": "Decision Win", "points": 10 },
-  { "label": "Draw", "points": 0 }
-]
+      { "label": "1st Round Win", "points": 50 },
+      { "label": "2nd Round Win", "points": 40 },
+      { "label": "3rd Round Win", "points": 30 },
+      { "label": "4th Round Win", "points": 20 },
+      { "label": "5th Round Win", "points": 20 },
+      { "label": "Decision Win", "points": 10 },
+      { "label": "Draw", "points": 0 }
+    ]
   },
-  
   "boxing": {
     "name": "Boxing FS",
     "hasFightTime": true,
@@ -115,15 +114,15 @@
       "2pt/XP Return": 2
     },
     "pointsAllowedTiers": [
-  { "label": "0", "max": 0, "points": 10 },
-  { "label": "1-6", "max": 6, "points": 7 },
-  { "label": "7-13", "max": 13, "points": 4 },
-  { "label": "14-20", "max": 20, "points": 1 },
-  { "label": "21-27", "max": 27, "points": 0 },
-  { "label": "28-34", "max": 34, "points": -1 },
-  { "label": "35+", "max": 999, "points": -4 }
-]
- },
+      { "label": "0", "max": 0, "points": 10 },
+      { "label": "1-6", "max": 6, "points": 7 },
+      { "label": "7-13", "max": 13, "points": 4 },
+      { "label": "14-20", "max": 20, "points": 1 },
+      { "label": "21-27", "max": 27, "points": 0 },
+      { "label": "28-34", "max": 34, "points": -1 },
+      { "label": "35+", "max": 999, "points": -4 }
+    ]
+  },
   "kickers": {
     "name": "Kickers",
     "stats": {
@@ -135,10 +134,11 @@
       "XP Missed": -1
     }
   },
-"nhl": {
-  "name": "NHL Time On Ice",
-  "hasTOI": true
-}
+  "nhl": {
+    "name": "NHL Time On Ice",
+    "hasTOI": true,
+    "stats": {}
+  },
   "soccer": {
     "name": "Soccer",
     "stats": {
