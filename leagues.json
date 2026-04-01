@@ -10,7 +10,6 @@
       "Turnover": -1
     }
   },
-
   "mlb_pitcher": {
     "name": "MLB Pitcher FS",
     "stats": {
@@ -21,7 +20,6 @@
       "Innings Pitched": 3
     }
   },
-
   "mlb_hitter": {
     "name": "MLB Hitter FS",
     "stats": {
@@ -36,7 +34,6 @@
       "SB": 5
     }
   },
-
   "tennis": {
     "name": "Tennis FS",
     "stats": {
@@ -49,7 +46,6 @@
       "Double Fault": -0.5
     }
   },
-
   "mma": {
     "name": "MMA",
     "hasFightTime": true,
@@ -59,7 +55,6 @@
       "Takedown": 5,
       "Knockdown": 10
     },
-
     "bonuses": [
   { "label": "1st Round Win", "points": 50 },
   { "label": "2nd Round Win", "points": 40 },
@@ -70,7 +65,7 @@
   { "label": "Draw", "points": 0 }
 ]
   },
-
+  
   "boxing": {
     "name": "Boxing FS",
     "hasFightTime": true,
@@ -79,7 +74,6 @@
       "Knockdown on Opponent": 12,
       "Being Knocked by Opponent": -12
     },
-
     "bonuses": [
       { "label": "Win Rounds 1-2", "points": 100 },
       { "label": "Win Rounds 3-6", "points": 75 },
@@ -88,7 +82,6 @@
       { "label": "Decision Win", "points": 20 }
     ]
   },
-
   "nfl_cfb": {
     "name": "Football Offensive FS",
     "stats": [
@@ -105,10 +98,8 @@
       { "label": "Offensive Fumble Recovery TD", "points": 6 },
       { "label": "Kick/Punt/Field Goal Return TD", "points": 6 }
     ],
-
     "bonuses": []
   },
-
   "dst": {
     "name": "Defense/Special Teams",
     "stats": {
@@ -123,7 +114,6 @@
       "Blocked Kick": 2,
       "2pt/XP Return": 2
     },
-
     "pointsAllowedTiers": [
   { "label": "0", "max": 0, "points": 10 },
   { "label": "1-6", "max": 6, "points": 7 },
@@ -134,7 +124,6 @@
   { "label": "35+", "max": 999, "points": -4 }
 ]
  },
-
   "kickers": {
     "name": "Kickers",
     "stats": {
@@ -146,7 +135,13 @@
       "XP Missed": -1
     }
   },
-
+  "nhl": {
+    "name": "NHL Time On Ice",
+    "hasTOI": true,
+    "stats": {
+      "Time On Ice": 0
+    }
+  },
   "soccer": {
     "name": "Soccer",
     "stats": {
@@ -160,7 +155,6 @@
       "Red Card": -2
     }
   },
-
   "nascar": {
     "name": "Nascar FS",
     "stats": [
@@ -170,7 +164,6 @@
       { "label": "Laps Led", "points": 0.25 }
     ]
   },
-
   "indycar": {
     "name": "Indycar FS",
     "stats": [
@@ -178,3 +171,5 @@
       { "label": "Finishing Position", "points": 0 },
       { "label": "Laps Led", "points": 0.25 }
     ]
+  }
+}
