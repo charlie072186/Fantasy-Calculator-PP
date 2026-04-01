@@ -29,13 +29,10 @@ function loadStats() {
   const container = document.getElementById("stats-container");
   const bonusContainer = document.getElementById("bonus-container");
   const fightTimeContainer = document.getElementById("fight-time-container");
-  const extraBox = document.getElementById("extra-breakdown-box");
 
   // Reset UI
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
-  extraBox.innerHTML = "";
-  extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
   if (!league) return;
@@ -56,18 +53,18 @@ function loadStats() {
     return;
   }
 
-  // Fight Time logic
+  // --- MMA/BOXING FIGHT TIME UI ---
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
-    fightRoundDiv.innerHTML = "<label>Fight ended in:</label><br>";
+    fightRoundDiv.innerHTML = "<strong>Fight ended in:</strong><br>";
     for (let i = 1; i <= rounds; i++) {
       fightRoundDiv.innerHTML += `<label><input type="radio" name="fightRound" value="${i}"> Round ${i}</label><br>`;
     }
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // --- RENDERING STATS ---
+  // --- RENDERING STANDARD STATS ---
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats || {});
@@ -82,7 +79,7 @@ function loadStats() {
     container.appendChild(row);
   });
 
-  // Points Allowed for DST
+  // DST Points Allowed Special Input
   if (leagueKey === "dst" && league.pointsAllowedTiers) {
     const paDiv = document.createElement("div");
     paDiv.className = "stat-group";
@@ -91,7 +88,7 @@ function loadStats() {
     container.appendChild(paDiv);
   }
 
-  // Bonuses
+  // Bonuses (MMA/Boxing/NFL)
   if (league.bonuses?.length) {
     const title = document.createElement("h3");
     title.textContent = "Bonus:";
@@ -109,7 +106,10 @@ function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
+  let total = 0;
+  let breakdown = "";
 
+  // --- NHL TOI CONVERTER ---
   if (leagueKey === "nhl") {
     let totalSecs = 0;
     let text = "NHL TOI Breakdown:\n";
@@ -126,16 +126,27 @@ function calculateScore() {
     if (!hasVal) return (breakdownBox.value = "Enter MM:SS time.");
     const finalM = Math.floor(totalSecs / 60);
     const finalS = Math.round(totalSecs % 60);
-    text += `------------------\nTotal: ${finalM}:${finalS.toString().padStart(2, '0')}\nDecimal: ${format(totalSecs / 60)}`;
+    text += `------------------\nTotal Time: ${finalM}:${finalS.toString().padStart(2, '0')}\nDecimal: ${format(totalSecs / 60)}`;
     breakdownBox.value = text;
     return;
   }
 
-  // Standard calculation
-  let total = 0;
-  let breakdown = "";
-  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
+  // --- FIGHT TIME CALCULATION (MMA/Boxing) ---
+  if (league.hasFightTime) {
+    const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
+    const min = parseInt(document.getElementById("fight-minutes").value) || 0;
+    const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
+    
+    if (round) {
+      const perRound = leagueKey === "mma" ? 5 : 3;
+      const totalFightMin = (round - 1) * perRound + min + sec / 60;
+      breakdown += `Fight Duration: ${totalFightMin.toFixed(2)} min\n`;
+      // If your league counts time as points, you'd add to total here.
+    }
+  }
 
+  // --- STANDARD STAT CALCULATION ---
+  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
@@ -160,14 +171,25 @@ function calculateScore() {
 
   // Bonus Logic
   const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) total += parseFloat(bonus.value);
+  if (bonus) {
+    const bPts = parseFloat(bonus.value);
+    breakdown += `Bonus: ${bPts} pts\n`;
+    total += bPts;
+  }
 
-  breakdownBox.value = breakdown + `\nTotal FS: ${format(total)}`;
+  breakdown += `\nTotal FS: ${format(total)}`;
+  breakdownBox.value = breakdown;
 }
 
 function clearInputs() {
   document.querySelectorAll(".stat-input").forEach(i => i.value = "");
   document.getElementById("breakdown").value = "";
+  document.getElementById("fight-minutes").value = "";
+  document.getElementById("fight-seconds").value = "";
+  const checkedRound = document.querySelector('input[name="fightRound"]:checked');
+  if (checkedRound) checkedRound.checked = false;
+  const checkedBonus = document.querySelector('input[name="bonus"]:checked');
+  if (checkedBonus) checkedBonus.checked = false;
 }
 
 function copyBreakdown() {
