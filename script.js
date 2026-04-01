@@ -12,6 +12,10 @@ async function loadLeagues() {
       opt.textContent = val.name;
       select.appendChild(opt);
     });
+
+    // CRITICAL: This line makes the UI change when you select MMA/Boxing
+    select.onchange = loadStats;
+
     loadStats();
   } catch (err) {
     console.error("Critical Error: JSON syntax is broken. Check your commas!", err);
@@ -126,22 +130,23 @@ function calculateScore() {
     if (!hasVal) return (breakdownBox.value = "Enter MM:SS time.");
     const finalM = Math.floor(totalSecs / 60);
     const finalS = Math.round(totalSecs % 60);
-    text += `------------------\nTotal Time: ${finalM}:${finalS.toString().padStart(2, '0')}\nDecimal: ${format(totalSecs / 60)}`;
+    text += `------------------\nTotal Time: ${finalM}:${finalS.toString().padStart(2, '0')}\nDecimal Total: ${format(totalSecs / 60)}`;
     breakdownBox.value = text;
     return;
   }
 
   // --- FIGHT TIME CALCULATION (MMA/Boxing) ---
   if (league.hasFightTime) {
-    const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
+    const roundRadio = document.querySelector('input[name="fightRound"]:checked');
+    const round = roundRadio ? parseInt(roundRadio.value) : null;
     const min = parseInt(document.getElementById("fight-minutes").value) || 0;
     const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
     
     if (round) {
       const perRound = leagueKey === "mma" ? 5 : 3;
-      const totalFightMin = (round - 1) * perRound + min + sec / 60;
+      const totalFightMin = (round - 1) * perRound + min + (sec / 60);
       breakdown += `Fight Duration: ${totalFightMin.toFixed(2)} min\n`;
-      // If your league counts time as points, you'd add to total here.
+      // total += totalFightMin; // Uncomment this if you want minutes to equal points
     }
   }
 
@@ -197,5 +202,13 @@ function copyBreakdown() {
   box.select();
   document.execCommand("copy");
 }
+
+// Added back Enter key support
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    calculateScore();
+  }
+});
 
 window.onload = loadLeagues;
