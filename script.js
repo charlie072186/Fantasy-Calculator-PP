@@ -242,7 +242,20 @@ function calculateScore() {
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
-  
+
+      const bonus = document.querySelector('input[name="bonus"]:checked');
+  if (bonus) {
+    const bVal = parseFloat(bonus.value);
+    breakdown += `Bonus: ${bVal} pts = ${bVal}\n`;
+    total += bVal;
+  }
+
+  breakdown += `\nTOTAL FS = ${format(total)}`;
+  document.getElementById("breakdown").value = breakdown;
+  showExtraBreakdown(leagueKey);
+}
+
+    
   let total = 0;
   let breakdown = "";
   let innings = 0, earnedRuns = 0;
@@ -259,17 +272,6 @@ function calculateScore() {
     total += val * points;
   });
 
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) {
-    const bVal = parseFloat(bonus.value);
-    breakdown += `Bonus: ${bVal} pts = ${bVal}\n`;
-    total += bVal;
-  }
-
-  breakdown += `\nTOTAL FS = ${format(total)}`;
-  document.getElementById("breakdown").value = breakdown;
-  showExtraBreakdown(leagueKey);
-}
 
   // NASCAR & INDYCAR scoring logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
