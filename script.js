@@ -239,6 +239,13 @@ function calculateScore() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
+  stats.forEach(([label, points]) => {
+    const input = document.getElementById(`stat-${label}`);
+    if (!input) return;
+  
+  const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value);
+    if (isNaN(val)) return;
+  
   let total = 0;
   let breakdown = "";
   let innings = 0, earnedRuns = 0;
