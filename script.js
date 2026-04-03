@@ -239,28 +239,6 @@ function calculateScore() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats);
 
-  stats.forEach(([label, points]) => {
-    const input = document.getElementById(`stat-${label}`);
-    if (!input) return;
-  
-  const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value);
-    if (isNaN(val)) return;
-
-    if (!hideZero || val !== 0) {
-      const pLabel = Math.abs(points) === 1 ? "pt" : "pts";
-      // THIS MATCHES YOUR SCREENSHOT FORMAT
-      breakdown += `${label}: ${points} ${pLabel} (${val}) = ${format(val * points)}\n`;
-    }
-    total += val * points;
-  });
-
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) {
-    const bVal = parseFloat(bonus.value);
-    breakdown += `Bonus: ${bVal} pts = ${bVal}\n`;
-    total += bVal;
-  }
-  
   let total = 0;
   let breakdown = "";
   let innings = 0, earnedRuns = 0;
