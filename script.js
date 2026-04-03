@@ -260,6 +260,11 @@ function calculateScore() {
     breakdown += `Bonus: ${bVal} pts = ${bVal}\n`;
     total += bVal;
   }
+
+  breakdown += `\nTOTAL FS = ${format(total)}`;
+  document.getElementById("breakdown").value = breakdown;
+  showExtraBreakdown(leagueKey);
+}
   
   let total = 0;
   let breakdown = "";
