@@ -243,6 +243,11 @@ function calculateScore() {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
   
+  let total = 0;
+  let breakdown = "";
+  let innings = 0, earnedRuns = 0;
+  const hideZero = document.getElementById("hideZero")?.checked;
+
   const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value);
     if (isNaN(val)) return;
 
@@ -265,11 +270,6 @@ function calculateScore() {
   document.getElementById("breakdown").value = breakdown;
   showExtraBreakdown(leagueKey);
 }
-  
-  let total = 0;
-  let breakdown = "";
-  let innings = 0, earnedRuns = 0;
-  const hideZero = document.getElementById("hideZero")?.checked;
 
   // NASCAR & INDYCAR scoring logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
