@@ -57,14 +57,13 @@ function loadStats() {
   const fightTimeContainer = document.getElementById("fight-time-container");
   const extraBox = document.getElementById("extra-breakdown-box");
 
-  // Clear everything first
   container.innerHTML = "";
   bonusContainer.innerHTML = "";
   extraBox.innerHTML = "";
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- 1. ESPORTS SPECIAL UI (Compact Grid + 7 Maps) ---
+  // --- 1. ESPORTS SPECIAL UI ---
   if (league.isEsports) {
     const esportsDiv = document.createElement("div");
     esportsDiv.className = "stat-group";
@@ -97,7 +96,7 @@ function loadStats() {
     return;
   }
 
-  // --- 2. NHL TOI UPGRADE (P1-P3 + OT) ---
+  // --- 2. NHL TOI LOGIC ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
@@ -110,7 +109,7 @@ function loadStats() {
     return; 
   }
 
-  // --- 3. FIGHT TIME UI (BOXING/MMA) ---
+  // --- 3. FIGHT TIME UI ---
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -121,7 +120,7 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // --- 4. GROUPED LEAGUES (NFL, MLB HITTER, SOCCER, DST, KICKERS) ---
+  // --- 4. GROUPED LEAGUES ---
   const groups = {
     nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
     dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
@@ -132,7 +131,6 @@ function loadStats() {
 
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
-    // DST Points Allowed specific input
     if (leagueKey === "dst" && league.pointsAllowedTiers) {
       const paDiv = document.createElement("div");
       paDiv.className = "stat-group";
@@ -151,23 +149,15 @@ function loadStats() {
     const gameSetDiv = document.createElement("div");
     gameSetDiv.className = "stat-group";
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
+    ["Game Won", "Game Loss", "Set Won", "Set Loss", "Ace", "Double Fault"].forEach(stat => {
       const points = league.stats[stat];
       gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
     container.appendChild(gameSetDiv);
-    const serveDiv = document.createElement("div");
-    serveDiv.className = "stat-group";
-    serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
-    ["Ace", "Double Fault"].forEach(stat => {
-      const points = league.stats[stat];
-      serveDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
-    });
-    container.appendChild(serveDiv);
     return;
   }
 
-  // --- 6. NASCAR/INDYCAR SPECIAL UI ---
+  // --- 6. NASCAR/INDY SPECIAL UI ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -180,7 +170,6 @@ function loadStats() {
     return;
   }
 
-  // --- 7. DEFAULT RENDER (With Tooltips for Pitchers) ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
@@ -227,7 +216,6 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // ESPORTS MATH
   if (league.isEsports) {
     const player = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
@@ -241,7 +229,6 @@ function calculateScore() {
     return;
   }
 
-  // NHL MATH
   if (leagueKey === "nhl") {
     let totalSeconds = 0; let text = "Time On Ice Breakdown:\n";
     ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"].forEach((id, index) => {
@@ -256,28 +243,32 @@ function calculateScore() {
     return;
   }
 
-  // STANDARD MATH
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-  // NASCAR/INDY MATH
+  // --- MOTORSPORTS LOGIC ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
     if (start && finish) { total += (start - finish); breakdown += `Place Differential: ${start - finish} pts\n`; }
+    
     if (leagueKey === "nascar") {
         const pointsArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
-        if (finish >=1 && finish <= 40) { total += pointsArr[finish-1]; breakdown += `Finishing Position (${finish}): ${pointsArr[finish-1]} pts\n`; }
+        if (finish >= 1 && finish <= 40) { total += pointsArr[finish-1]; breakdown += `Finishing Position (${finish}): ${pointsArr[finish-1]} pts\n`; }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
         total += fast * 0.45; breakdown += `Fastest Laps: ${fast} x 0.45 = ${format(fast*0.45)}\n`;
+    } else {
+        const indyPoints = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
+        if (finish >= 1 && finish <= 33) { total += indyPoints[finish-1]; breakdown += `Finishing Position (${finish}): ${indyPoints[finish-1]} pts\n`; }
     }
     total += led * 0.25; breakdown += `Laps Led: ${led} x 0.25 = ${format(led*0.25)}\n`;
     breakdownBox.value = breakdown + `\nTotal FS: ${format(total)}`;
     return;
   }
 
+  // --- STANDARD CALCULATION ---
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
@@ -315,7 +306,6 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
-// FIGHT TIME CALCULATION
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
   const min = parseInt(document.getElementById("fight-minutes").value) || 0;
@@ -330,14 +320,14 @@ function calculateFightTime() {
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = ""; extraBox.classList.add("hidden");
+  
   if (leagueKey === "nba") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
     const ast = parseFloat(document.getElementById("stat-Assist")?.value) || 0;
     extraBox.innerHTML = `<h3>Single Stats</h3>Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>P+R+A = ${pts + reb + ast}<br>P+A = ${pts + ast}<br>P+R = ${pts + reb}<br>R+A = ${reb + ast}`;
     extraBox.classList.remove("hidden");
-  }
-  if (leagueKey === "mlb_hitter") {
+  } else if (leagueKey === "mlb_hitter") {
     const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
     const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
     const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
@@ -346,6 +336,15 @@ function showExtraBreakdown(leagueKey) {
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
     const hits = s + d + t + hr;
     extraBox.innerHTML = `<h3>Single Stats Hitter</h3>Hits: ${hits}, Runs: ${r}, RBI: ${rbi}<br>Hits+Runs+RBI = ${hits + r + rbi}`;
+    extraBox.classList.remove("hidden");
+  } else if (leagueKey === "nfl_cfb") {
+    const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
+    const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
+    const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
+    const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
+    const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
+    const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+    extraBox.innerHTML = `<h3>Offense Stats</h3>Pass+Rush Yds: ${passYds + rushYds}<br>Rush+Rec Yds: ${rushYds + recYds}<br>Pass+Rush TDs: ${passTD + rushTD}<br>Rush+Rec TDs: ${rushTD + recTD}`;
     extraBox.classList.remove("hidden");
   }
 }
@@ -361,7 +360,6 @@ function clearInputs() {
 
 function copyBreakdown() { const box = document.getElementById("breakdown"); box.select(); document.execCommand("copy"); }
 
-// ENTER KEY TRIGGER
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
