@@ -312,11 +312,12 @@ function calculateScore() {
     total += qsPoints;
   }
 
-  // --- UPDATED BONUS LOGIC ---
+  // --- IMPROVED BONUS LOGIC ---
   const bonusRadio = document.querySelector('input[name="bonus"]:checked');
   if (bonusRadio) {
     const bPts = parseFloat(bonusRadio.value);
-    const bLabel = bonusRadio.parentElement.textContent.split(" — ")[0]; 
+    // Find the text inside the <label> specifically, excluding the radio button itself
+    const bLabel = bonusRadio.closest('label').innerText.split(" — ")[0].trim(); 
     breakdown += `${bLabel}: +${bPts}\n`;
     total += bPts;
   }
