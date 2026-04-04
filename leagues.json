@@ -1,7 +1,7 @@
 {
   "nba": {
     "name": "NBA FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Points": 1,
       "Rebound": 1.2,
@@ -13,7 +13,7 @@
   },
   "mlb_pitcher": {
     "name": "MLB Pitcher FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Win": 6,
       "Quality Start": 4,
@@ -24,7 +24,7 @@
   },
   "mlb_hitter": {
     "name": "MLB Hitter FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Single": 3,
       "Double": 5,
@@ -39,7 +39,7 @@
   },
   "tennis": {
     "name": "Tennis FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Match Played": 10,
       "Game Won": 1,
@@ -52,7 +52,7 @@
   },
   "mma": {
     "name": "MMA",
-    "category": "Tsports",
+    "category": "tsports",
     "hasFightTime": true,
     "stats": {
       "Significant Strikes": 0.5,
@@ -73,7 +73,7 @@
   
   "boxing": {
     "name": "Boxing FS",
-    "category": "Tsports",
+    "category": "tsports",
     "hasFightTime": true,
     "stats": {
       "Punch Landed": 0.5,
@@ -90,7 +90,7 @@
   },
   "nfl_cfb": {
     "name": "Football Offensive FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": [
       { "label": "Passing Yards", "points": 0.04 },
       { "label": "Passing TDs", "points": 4 },
@@ -109,7 +109,7 @@
   },
   "dst": {
     "name": "Defense/Special Teams",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Sack": 1,
       "Interception": 2,
@@ -134,7 +134,7 @@
  },
   "kickers": {
     "name": "Kickers",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "FG 0-39 yards": 3,
       "FG 40-49 yards": 4,
@@ -147,7 +147,7 @@
 
  "nhl": {
     "name": "NHL Time On Ice",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Period 1": 1,
       "Period 2": 1,
@@ -157,7 +157,7 @@
 
   "soccer": {
     "name": "Soccer",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": {
       "Goal": 5,
       "Assist": 4,
@@ -171,7 +171,7 @@
   },
   "nascar": {
     "name": "Nascar FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": [
       { "label": "Starting Position", "points": 0 },
       { "label": "Finishing Position", "points": 0 },
@@ -181,7 +181,7 @@
   },
   "indycar": {
     "name": "Indycar FS",
-    "category": "Tsports",
+    "category": "tsports",
     "stats": [
       { "label": "Starting Position", "points": 0 },
       { "label": "Finishing Position", "points": 0 },
