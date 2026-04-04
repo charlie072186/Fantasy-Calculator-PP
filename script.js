@@ -32,13 +32,11 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- NHL UPGRADE (Now with Overtime) ---
+  // --- NHL UPGRADE START ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
-    periodDiv.innerHTML = `<div class="group-title">Time On Ice (MM:SS)</div>`;
-    
-    // Periods 1-3
+    periodDiv.innerHTML = `<div class="group-title">TIME ON ICE (MM:SS)</div>`;
     for (let i = 1; i <= 3; i++) {
       periodDiv.innerHTML += `
         <div class="stat-row">
@@ -46,23 +44,22 @@ function loadStats() {
           <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
         </div>`;
     }
-    
-    // Overtime Input
+    // Added OT row
     periodDiv.innerHTML += `
-      <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; pt: 10px;">
+      <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
         <div class="stat-label">Overtime (OT)</div>
         <input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" />
       </div>`;
-      
     container.appendChild(periodDiv);
     return; 
   }
+  // --- NHL UPGRADE END ---
 
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats || {});
 
-  // Fight Time logic
+  // Original Fight Time logic
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -73,7 +70,7 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // Grouped leagues (NFL, DST, MLB, Kickers, Soccer)
+  // Original Grouped leagues logic
   const groups = {
     nfl_cfb: {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -124,12 +121,12 @@ function loadStats() {
     return;
   }
 
+  // Original Tennis logic
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
     matchDiv.innerHTML = `<div class="group-title">Match Info</div><div class="stat-row"><label class="stat-label"><input type="checkbox" class="stat-input" id="stat-Match Played" /> Match Played — 10 pts</label></div>`;
     container.appendChild(matchDiv);
-
     const gameSetDiv = document.createElement("div");
     gameSetDiv.className = "stat-group";
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
@@ -138,7 +135,6 @@ function loadStats() {
       gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
     container.appendChild(gameSetDiv);
-
     const serveDiv = document.createElement("div");
     serveDiv.className = "stat-group";
     serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
@@ -150,6 +146,7 @@ function loadStats() {
     return;
   }
 
+  // Original NASCAR/Indycar logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -162,6 +159,7 @@ function loadStats() {
     return;
   }
 
+  // Original Default Rendering logic (with tooltips)
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
@@ -215,43 +213,43 @@ function renderGroupedStats(container, stats, groupMap) {
 function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
-  
-  // --- NHL CALCULATION (Updated for Overtime) ---
+  const breakdownBox = document.getElementById("breakdown");
+
+  // --- NHL CALCULATION UPGRADE ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let text = "Time On Ice Breakdown:\n";
     let hasVal = false;
-    
-    // IDs to check: nhl-p1, nhl-p2, nhl-p3, and nhl-ot
     const ids = ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"];
     const labels = ["Period 1", "Period 2", "Period 3", "Overtime"];
-
     ids.forEach((id, index) => {
-      const val = document.getElementById(id).value.trim();
+      const input = document.getElementById(id);
+      const val = input ? input.value.trim() : "";
       if (val.includes(":")) {
         hasVal = true;
-        const [m, s] = val.split(":").map(Number);
+        const parts = val.split(":");
+        const m = parseInt(parts[0]) || 0;
+        const s = parseInt(parts[1]) || 0;
         totalSeconds += (m * 60) + s;
         text += `${labels[index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
       }
     });
-
     if (hasVal) {
       const finalMins = Math.floor(totalSeconds / 60);
       const finalSecs = Math.round(totalSeconds % 60);
-      text += `--------------------------\nTotal TOI: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSeconds / 60).toFixed(2)}`;
-      document.getElementById("breakdown").value = text;
+      text += `------------------------------------\nTotal TOI: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSeconds / 60).toFixed(2)}`;
+      breakdownBox.value = text;
       return;
     }
   }
 
+  // --- ORIGINAL CALCULATION LOGIC ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0;
   let breakdown = "";
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-  // NASCAR & INDYCAR
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
@@ -341,11 +339,11 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
+// REST OF THE FUNCTIONS RESTORED EXACTLY
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = "";
   extraBox.classList.add("hidden");
-
   if (leagueKey === "nba") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
@@ -353,7 +351,6 @@ function showExtraBreakdown(leagueKey) {
     extraBox.innerHTML = `<h3>Single Stats</h3>Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>P+R+A = ${pts + reb + ast}<br>P+A = ${pts + ast}<br>P+R = ${pts + reb}<br>R+A = ${reb + ast}`;
     extraBox.classList.remove("hidden");
   }
-
   if (leagueKey === "mlb_hitter") {
     const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
     const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
@@ -365,7 +362,6 @@ function showExtraBreakdown(leagueKey) {
     extraBox.innerHTML = `<h3>Single Stats Hitter</h3>Hits: ${s}+${d}+${t}+${hr} = ${hits}<br>Runs: ${r}, RBI: ${rbi}<br>Hits+Runs+RBI = ${hits + r + rbi}`;
     extraBox.classList.remove("hidden");
   }
-
   if (leagueKey === "nfl_cfb") {
     const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
     const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
