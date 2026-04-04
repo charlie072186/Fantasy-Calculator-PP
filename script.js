@@ -32,11 +32,11 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // NEW: NHL Special UI for Periods
+  // --- NEW: NHL UPGRADE ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
-    periodDiv.innerHTML = `<div class="group-title">Time Per Period (MM:SS)</div>`;
+    periodDiv.innerHTML = `<div class="group-title">Time On Ice (MM:SS)</div>`;
     for (let i = 1; i <= 3; i++) {
       periodDiv.innerHTML += `
         <div class="stat-row">
@@ -45,14 +45,14 @@ function loadStats() {
         </div>`;
     }
     container.appendChild(periodDiv);
-    return; // Exit early so it doesn't try to load stats that aren't there
+    return; 
   }
 
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats || {});
 
-  // Fight Time logic (MMA/Boxing)
+  // Fight Time logic
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -63,7 +63,7 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // Grouped leagues (NFL, MLB, Soccer)
+  // Grouped leagues
   const groups = {
     nfl_cfb: {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -117,14 +117,7 @@ function loadStats() {
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
-    matchDiv.innerHTML = `
-      <div class="group-title">Match Info</div>
-      <div class="stat-row">
-        <label class="stat-label">
-          <input type="checkbox" class="stat-input" id="stat-Match Played" />
-          Match Played — 10 pts
-        </label>
-      </div>`;
+    matchDiv.innerHTML = `<div class="group-title">Match Info</div><div class="stat-row"><label class="stat-label"><input type="checkbox" class="stat-input" id="stat-Match Played" /> Match Played — 10 pts</label></div>`;
     container.appendChild(matchDiv);
 
     const gameSetDiv = document.createElement("div");
@@ -132,11 +125,7 @@ function loadStats() {
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
     ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
       const points = league.stats[stat];
-      gameSetDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
-        </div>`;
+      gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
     container.appendChild(gameSetDiv);
 
@@ -145,11 +134,7 @@ function loadStats() {
     serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
     ["Ace", "Double Fault"].forEach(stat => {
       const points = league.stats[stat];
-      serveDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">${stat} — ${points} pts</div>
-          <input type="text" class="stat-input" id="stat-${stat}" />
-        </div>`;
+      serveDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
     container.appendChild(serveDiv);
     return;
@@ -162,8 +147,7 @@ function loadStats() {
       <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position" /></div>
       <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position" /></div>
       ${leagueKey === "nascar" ? `<div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps" /></div>` : ""}
-      <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led" /></div>
-    `;
+      <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led" /></div>`;
     container.appendChild(custom);
     return;
   }
@@ -207,9 +191,7 @@ function renderGroupedStats(container, stats, groupMap) {
     groupTitle.textContent = groupName;
     groupDiv.appendChild(groupTitle);
     labels.forEach(label => {
-      const points = Array.isArray(stats)
-        ? stats.find(s => s.label === label)?.points
-        : stats[label];
+      const points = Array.isArray(stats) ? stats.find(s => s.label === label)?.points : stats[label];
       if (points === undefined) return;
       const row = document.createElement("div");
       row.className = "stat-row";
@@ -224,50 +206,40 @@ function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
   
-  // NEW: NHL CALCULATION LOGIC
+  // --- NEW: NHL CALCULATION ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
-    let periodBreakdown = "Time On Ice Breakdown:\n";
-    let hasData = false;
-
+    let text = "Time On Ice Breakdown:\n";
+    let hasVal = false;
     for (let i = 1; i <= 3; i++) {
       const val = document.getElementById(`nhl-p${i}`).value.trim();
       if (val.includes(":")) {
-        hasData = true;
-        const [mins, secs] = val.split(":").map(n => parseFloat(n) || 0);
-        const pSeconds = (mins * 60) + secs;
-        const pDecimal = mins + (secs / 60);
-        totalSeconds += pSeconds;
-        periodBreakdown += `P${i}: ${val} (${format(pDecimal)})\n`;
+        hasVal = true;
+        const [m, s] = val.split(":").map(Number);
+        totalSeconds += (m * 60) + s;
+        text += `Period ${i}: ${val} (${(m + s/60).toFixed(2)})\n`;
       }
     }
-
-    if (hasData) {
-        const finalMins = Math.floor(totalSeconds / 60);
-        const finalSecs = Math.round(totalSeconds % 60);
-        const finalDecimal = totalSeconds / 60;
-        let output = periodBreakdown + `------------------\nTotal Time: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\nDecimal Total: ${format(finalDecimal)}`;
-        document.getElementById("breakdown").value = output;
-        return;
+    if (hasVal) {
+      const finalMins = Math.floor(totalSeconds / 60);
+      const finalSecs = Math.round(totalSeconds % 60);
+      text += `--------------------------\nTotal TOI: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSeconds / 60).toFixed(2)}`;
+      document.getElementById("breakdown").value = text;
+      return;
     }
   }
 
-  const stats = Array.isArray(league.stats)
-    ? league.stats.map(s => [s.label, s.points])
-    : Object.entries(league.stats || {});
-
+  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0;
   let breakdown = "";
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-  // NASCAR & INDYCAR
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
     const fastest = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
-
     if (!isNaN(start) && !isNaN(finish)) {
       const diff = start - finish;
       breakdown += `Place Differential: ${diff} pts\n`;
@@ -301,7 +273,6 @@ function calculateScore() {
     return;
   }
 
-  // Standard stat scoring
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
@@ -336,19 +307,15 @@ function calculateScore() {
 
   const bonus = document.querySelector('input[name="bonus"]:checked');
   if (bonus) {
-    const bonusVal = parseFloat(bonus.value);
-    breakdown += `Bonus: +${bonusVal}\n`;
-    total += bonusVal;
+    total += parseFloat(bonus.value);
+    breakdown += `Bonus: +${bonus.value}\n`;
   }
  
   if (leagueKey === "dst") {
-    const pointsAllowed = parseFloat(document.getElementById("stat-Points Allowed")?.value);
-    if (!isNaN(pointsAllowed)) {
-      const tier = league.pointsAllowedTiers.find(t => pointsAllowed <= t.max);
-      if (tier) {
-        breakdown += `Points Allowed (${tier.label}): ${tier.points} pts\n`;
-        total += tier.points;
-      }
+    const pa = parseFloat(document.getElementById("stat-Points Allowed")?.value);
+    if (!isNaN(pa)) {
+      const tier = league.pointsAllowedTiers.find(t => pa <= t.max);
+      if (tier) { breakdown += `Points Allowed: ${tier.points} pts\n`; total += tier.points; }
     }
   }
 
@@ -357,7 +324,6 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
-// REST OF THE FUNCTIONS (showExtraBreakdown, calculateFightTime, clearInputs, etc.) remain the same
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = "";
@@ -411,7 +377,7 @@ function calculateFightTime() {
 }
 
 function clearInputs() {
-  document.querySelectorAll(".stat-input").forEach(input => {
+  document.querySelectorAll(".stat-input, .nhl-period").forEach(input => {
     if (input.type === "checkbox") input.checked = false;
     else input.value = "";
   });
