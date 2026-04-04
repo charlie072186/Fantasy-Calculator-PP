@@ -188,7 +188,7 @@
       { "label": "Laps Led", "points": 0.25 }
     ]
   },
-    "cs2/lol/val": {
+    "cs2/val": {
     "name": "CS2/VAL",
     "category": "esports",
     "isEsports": true
