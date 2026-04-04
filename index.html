@@ -12,6 +12,12 @@
     <div class="main-center">
       <div class="container">
         <h1>Fantasy Score Calculator</h1>
+
+        <div class="category-tabs">
+  <button class="tab-btn active" onclick="setCategory('traditional')">Traditional Sports</button>
+  <button class="tab-btn" onclick="setCategory('esports')">Esports</button>
+</div>
+        
         <label for="league">Select League:</label>
         <select id="league" onchange="loadStats()"></select>
 
