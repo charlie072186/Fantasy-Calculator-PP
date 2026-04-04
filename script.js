@@ -1,10 +1,10 @@
 let leagues = {};
-let currentCategory = 'tsports'; // Default view
+let currentCategory = 'tsports'; // Default view changed to tsports
 
 async function loadLeagues() {
   const res = await fetch("leagues.json");
   leagues = await res.json();
-  populateDropdown(); // Use filtering function instead of simple load
+  populateDropdown(); 
 }
 
 // Function to switch between Tsports and Esports
@@ -24,7 +24,7 @@ function populateDropdown() {
   select.innerHTML = "";
 
   Object.entries(leagues).forEach(([key, val]) => {
-    // Only show if category matches (defaulting to Tsports if tag is missing)
+    // If category is missing, we default it to tsports so old leagues still show up
     const leagueCat = val.category || 'tsports'; 
     if (leagueCat === currentCategory) {
       const opt = document.createElement("option");
@@ -34,7 +34,7 @@ function populateDropdown() {
     }
   });
   
-  loadStats(); // Trigger UI build for the first league in the list
+  loadStats(); 
 }
 
 function format(val) {
@@ -44,7 +44,7 @@ function format(val) {
 function loadStats() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
-  if (!league) return; // Guard if no league is selected in category
+  if (!league) return;
 
   const container = document.getElementById("stats-container");
   const bonusContainer = document.getElementById("bonus-container");
@@ -57,7 +57,7 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- NHL TOI LOGIC ---
+  // --- NHL TOI UPGRADE ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
@@ -82,7 +82,6 @@ function loadStats() {
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats || {});
 
-  // Fight Time logic
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -93,7 +92,6 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // Grouped leagues logic
   const groups = {
     nfl_cfb: {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
