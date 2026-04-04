@@ -136,6 +136,12 @@
     }
   },
 
+  "nhl": {
+    "name": "NHL Time On Ice",
+    "hasTOI": true,
+    "stats": {}
+  },
+
   "soccer": {
     "name": "Soccer",
     "stats": {
