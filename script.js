@@ -32,11 +32,13 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- NEW: NHL UPGRADE ---
+  // --- NHL UPGRADE (Now with Overtime) ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
     periodDiv.innerHTML = `<div class="group-title">Time On Ice (MM:SS)</div>`;
+    
+    // Periods 1-3
     for (let i = 1; i <= 3; i++) {
       periodDiv.innerHTML += `
         <div class="stat-row">
@@ -44,14 +46,14 @@ function loadStats() {
           <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
         </div>`;
     }
-
+    
     // Overtime Input
     periodDiv.innerHTML += `
       <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; pt: 10px;">
         <div class="stat-label">Overtime (OT)</div>
         <input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" />
       </div>`;
-    
+      
     container.appendChild(periodDiv);
     return; 
   }
@@ -71,7 +73,7 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // Grouped leagues
+  // Grouped leagues (NFL, DST, MLB, Kickers, Soccer)
   const groups = {
     nfl_cfb: {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -214,20 +216,26 @@ function calculateScore() {
   const leagueKey = document.getElementById("league").value;
   const league = leagues[leagueKey];
   
-  // --- NEW: NHL CALCULATION ---
+  // --- NHL CALCULATION (Updated for Overtime) ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let text = "Time On Ice Breakdown:\n";
     let hasVal = false;
-    for (let i = 1; i <= 3; i++) {
-      const val = document.getElementById(`nhl-p${i}`).value.trim();
+    
+    // IDs to check: nhl-p1, nhl-p2, nhl-p3, and nhl-ot
+    const ids = ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"];
+    const labels = ["Period 1", "Period 2", "Period 3", "Overtime"];
+
+    ids.forEach((id, index) => {
+      const val = document.getElementById(id).value.trim();
       if (val.includes(":")) {
         hasVal = true;
         const [m, s] = val.split(":").map(Number);
         totalSeconds += (m * 60) + s;
-        text += `Period ${i}: ${val} (${(m + s/60).toFixed(2)})\n`;
+        text += `${labels[index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
       }
-    }
+    });
+
     if (hasVal) {
       const finalMins = Math.floor(totalSeconds / 60);
       const finalSecs = Math.round(totalSeconds % 60);
@@ -243,6 +251,7 @@ function calculateScore() {
   let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
+  // NASCAR & INDYCAR
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value);
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value);
