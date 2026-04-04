@@ -44,6 +44,14 @@ function loadStats() {
           <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
         </div>`;
     }
+
+    // Overtime Input
+    periodDiv.innerHTML += `
+      <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; pt: 10px;">
+        <div class="stat-label">Overtime (OT)</div>
+        <input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" />
+      </div>`;
+    
     container.appendChild(periodDiv);
     return; 
   }
