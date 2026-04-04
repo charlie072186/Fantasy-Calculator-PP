@@ -32,7 +32,7 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- NHL UPGRADE START ---
+  // --- NHL UPGRADE ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
@@ -44,7 +44,7 @@ function loadStats() {
           <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
         </div>`;
     }
-    // Added OT row
+    // OT row with distinct ID
     periodDiv.innerHTML += `
       <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
         <div class="stat-label">Overtime (OT)</div>
@@ -53,13 +53,11 @@ function loadStats() {
     container.appendChild(periodDiv);
     return; 
   }
-  // --- NHL UPGRADE END ---
 
   const stats = Array.isArray(league.stats)
     ? league.stats.map(s => [s.label, s.points])
     : Object.entries(league.stats || {});
 
-  // Original Fight Time logic
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -70,7 +68,6 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // Original Grouped leagues logic
   const groups = {
     nfl_cfb: {
       "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
@@ -121,7 +118,6 @@ function loadStats() {
     return;
   }
 
-  // Original Tennis logic
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
@@ -146,7 +142,6 @@ function loadStats() {
     return;
   }
 
-  // Original NASCAR/Indycar logic
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -159,7 +154,6 @@ function loadStats() {
     return;
   }
 
-  // Original Default Rendering logic (with tooltips)
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
     row.className = "stat-row";
@@ -215,13 +209,16 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // --- NHL CALCULATION UPGRADE ---
+  // --- NHL CALCULATION (OT FIX) ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let text = "Time On Ice Breakdown:\n";
     let hasVal = false;
+    
+    // We target P1, P2, P3, and OT specifically
     const ids = ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"];
     const labels = ["Period 1", "Period 2", "Period 3", "Overtime"];
+    
     ids.forEach((id, index) => {
       const input = document.getElementById(id);
       const val = input ? input.value.trim() : "";
@@ -234,6 +231,7 @@ function calculateScore() {
         text += `${labels[index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
       }
     });
+
     if (hasVal) {
       const finalMins = Math.floor(totalSeconds / 60);
       const finalSecs = Math.round(totalSeconds % 60);
@@ -243,7 +241,6 @@ function calculateScore() {
     }
   }
 
-  // --- ORIGINAL CALCULATION LOGIC ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0;
   let breakdown = "";
@@ -339,7 +336,6 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
-// REST OF THE FUNCTIONS RESTORED EXACTLY
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = "";
