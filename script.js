@@ -1,5 +1,5 @@
 let leagues = {};
-let currentCategory = 'traditional'; // Default view
+let currentCategory = 'tsports'; // Default view
 
 async function loadLeagues() {
   const res = await fetch("leagues.json");
@@ -7,12 +7,12 @@ async function loadLeagues() {
   populateDropdown(); // Use filtering function instead of simple load
 }
 
-// Function to switch between Traditional and Esports
+// Function to switch between Tsports and Esports
 function setCategory(cat) {
   currentCategory = cat;
   
   // Update button UI
-  document.getElementById('btn-traditional').classList.toggle('active', cat === 'traditional');
+  document.getElementById('btn-tsports').classList.toggle('active', cat === 'tsports');
   document.getElementById('btn-esports').classList.toggle('active', cat === 'esports');
 
   populateDropdown();
@@ -24,8 +24,8 @@ function populateDropdown() {
   select.innerHTML = "";
 
   Object.entries(leagues).forEach(([key, val]) => {
-    // Only show if category matches (defaulting to traditional if tag is missing)
-    const leagueCat = val.category || 'traditional'; 
+    // Only show if category matches (defaulting to Tsports if tag is missing)
+    const leagueCat = val.category || 'tsports'; 
     if (leagueCat === currentCategory) {
       const opt = document.createElement("option");
       opt.value = key;
