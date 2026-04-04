@@ -1,5 +1,5 @@
 let leagues = {};
-let currentCategory = 'Tsports'; // Default view
+let currentCategory = 'tsports'; // Default view
 
 async function loadLeagues() {
   const res = await fetch("leagues.json");
