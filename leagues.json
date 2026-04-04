@@ -188,13 +188,20 @@
       { "label": "Laps Led", "points": 0.25 }
     ]
   },
-  "lol": {
-    "name": "League of Legends",
+    "lol": {
+    "name": "LoL",
     "category": "esports",
-    "stats": {
-      "Kills": 3,
-      "Deaths": -1,
-      "Assists": 2
-    }
+    "isEsports": true
+  },
+  "valorant": {
+    "name": "VAL",
+    "category": "esports",
+    "isEsports": true
+  },
+  "cs2": {
+    "name": "CS2",
+    "category": "esports",
+    "isEsports": true
+  }
   }
 }
