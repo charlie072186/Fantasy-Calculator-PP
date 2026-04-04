@@ -32,7 +32,6 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- NHL UPGRADE ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
@@ -44,7 +43,6 @@ function loadStats() {
           <input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" />
         </div>`;
     }
-    // OT row with distinct ID
     periodDiv.innerHTML += `
       <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
         <div class="stat-label">Overtime (OT)</div>
@@ -209,13 +207,10 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // --- NHL CALCULATION (OT FIX) ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let text = "Time On Ice Breakdown:\n";
     let hasVal = false;
-    
-    // We target P1, P2, P3, and OT specifically
     const ids = ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"];
     const labels = ["Period 1", "Period 2", "Period 3", "Overtime"];
     
@@ -317,10 +312,13 @@ function calculateScore() {
     total += qsPoints;
   }
 
-  const bonus = document.querySelector('input[name="bonus"]:checked');
-  if (bonus) {
-    total += parseFloat(bonus.value);
-    breakdown += `Bonus: +${bonus.value}\n`;
+  // --- UPDATED BONUS LOGIC ---
+  const bonusRadio = document.querySelector('input[name="bonus"]:checked');
+  if (bonusRadio) {
+    const bPts = parseFloat(bonusRadio.value);
+    const bLabel = bonusRadio.parentElement.textContent.split(" — ")[0]; 
+    breakdown += `${bLabel}: +${bPts}\n`;
+    total += bPts;
   }
  
   if (leagueKey === "dst") {
