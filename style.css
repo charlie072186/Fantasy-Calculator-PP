@@ -436,3 +436,30 @@ button.clear:hover {
   font-size: 14px;
   resize: vertical;
 }
+  /* Fixes the "Too Far Away" problem for Esports */
+.esports-row {
+    justify-content: flex-start !important; 
+    gap: 15px;
+}
+
+.esports-row .stat-label {
+    min-width: 80px; /* Aligns the labels neatly */
+    text-align: left;
+}
+
+.esp-info {
+    width: 200px !important; /* Makes Player/Team names a reasonable length */
+}
+
+/* Makes Map stats more concise and aligned */
+.esp-map {
+    width: 80px !important; 
+    text-align: center;
+}
+
+.map-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Puts maps side-by-side to save space */
+    gap: 10px;
+    margin-top: 10px;
+}
