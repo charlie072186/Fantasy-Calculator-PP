@@ -62,25 +62,29 @@ function loadStats() {
   if (extraBox) { extraBox.innerHTML = ""; extraBox.classList.add("hidden"); }
   if (fightTimeContainer) fightTimeContainer.classList.add("hidden");
 
-  // --- NEW: ESPORTS SPECIAL UI ---
+  // --- ESPORTS SPECIAL UI (Maps 1-7 + Compact Styling) ---
   if (league.isEsports) {
     const esportsDiv = document.createElement("div");
     esportsDiv.className = "stat-group";
     esportsDiv.innerHTML = `
       <div class="group-title">Match Details</div>
-      <div class="stat-row">Player: <input type="text" class="stat-input esp-info" id="esp-player" placeholder="Player Name" /></div>
-      <div class="stat-row">Team: <input type="text" class="stat-input esp-info" id="esp-team" placeholder="Player Team" /></div>
-      <div class="stat-row">Opponent: <input type="text" class="stat-input esp-info" id="esp-opp" placeholder="Opponent Team" /></div>
+      <div class="stat-row esports-row">Player: <input type="text" class="stat-input esp-info" id="esp-player" placeholder="Player Name" /></div>
+      <div class="stat-row esports-row">Team: <input type="text" class="stat-input esp-info" id="esp-team" placeholder="Player Team" /></div>
+      <div class="stat-row esports-row">Opponent: <input type="text" class="stat-input esp-info" id="esp-opp" placeholder="Opponent Team" /></div>
       <div class="group-title" style="margin-top:15px">Map Stats</div>
+      <div class="map-grid"></div>
     `;
-    for (let i = 1; i <= 5; i++) {
-      esportsDiv.innerHTML += `
-        <div class="stat-row">
-          <div class="stat-label">Map ${i} Stat</div>
+    
+    container.appendChild(esportsDiv);
+    const grid = esportsDiv.querySelector('.map-grid');
+    
+    for (let i = 1; i <= 7; i++) {
+      grid.innerHTML += `
+        <div class="stat-row esports-row">
+          <div class="stat-label">Map ${i}:</div>
           <input type="number" class="stat-input esp-map" id="esp-m${i}" placeholder="0" />
         </div>`;
     }
-    container.appendChild(esportsDiv);
     return;
   }
 
@@ -97,7 +101,7 @@ function loadStats() {
     return; 
   }
 
-  // --- STANDARD LOGIC (NFL, NBA, BOXING, etc.) ---
+  // --- STANDARD LOGIC ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   
   if (league.hasFightTime) {
@@ -112,7 +116,6 @@ function loadStats() {
     if (fightTimeContainer) fightTimeContainer.classList.remove("hidden");
   }
 
-  // Grouped logic restored
   const groups = {
     nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
     dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
@@ -160,7 +163,6 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // --- ESPORTS CALCULATION ---
   if (league.isEsports) {
     const player = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
@@ -168,18 +170,17 @@ function calculateScore() {
     let total = 0;
     let text = `Player: ${player}\nTeam: ${team} vs ${opp}\n--------------------------\n`;
     
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 7; i++) {
       const val = parseFloat(document.getElementById(`esp-m${i}`).value) || 0;
       if (val > 0) {
         text += `Map ${i}: ${val}\n`;
         total += val;
       }
     }
-    breakdownBox.value = text + `--------------------------\nTotal Stat: ${total}`;
+    breakdownBox.value = text + `--------------------------\nTotal Kills/Headshots: ${total}`;
     return;
   }
 
-  // --- NHL CALCULATION ---
   if (leagueKey === "nhl") {
     let totalSeconds = 0;
     let text = "Time On Ice Breakdown:\n";
@@ -197,7 +198,6 @@ function calculateScore() {
     return;
   }
 
-  // --- STANDARD CALCULATION ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0;
   let breakdown = "";
