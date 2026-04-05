@@ -243,7 +243,7 @@ function calculateScore() {
     const ot = document.getElementById("nhl-ot")?.value.trim();
     if (reg && reg.includes(":")) {
       const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
-      text += `Regulation: ${reg} (${(m + s/60).toFixed(2)})\n`;
+      text += `All 3 periods: ${reg} (${(m + s/60).toFixed(2)})\n`;
     }
     if (ot && ot.includes(":")) {
       const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
