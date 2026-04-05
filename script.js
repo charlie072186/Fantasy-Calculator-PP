@@ -231,11 +231,11 @@ function calculateScore() {
 
   if (leagueKey === "nhl") {
     let totalSeconds = 0; let text = "Time On Ice Breakdown:\n";
-    ["nhl-full game", "nhl-ot"].forEach((id, index) => {
+    ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"].forEach((id, index) => {
       const val = document.getElementById(id)?.value.trim();
       if (val && val.includes(":")) {
         const [m, s] = val.split(":").map(Number); totalSeconds += (m * 60) + s;
-        text += `${["Full game", "OT"][index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
+        text += `${["P1", "P2", "P3", "OT"][index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
       }
     });
     const finalMins = Math.floor(totalSeconds / 60); const finalSecs = Math.round(totalSeconds % 60);
