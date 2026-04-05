@@ -70,8 +70,8 @@ function loadStats() {
     esportsDiv.innerHTML = `
       <div class="group-title">Match Details</div>
       <div class="stat-row" style="justify-content: flex-start; gap: 10px; margin-bottom: 5px;">
-        <div class="stat-label" style="min-width: 80px;">Player:</div>
-        <input type="text" class="stat-input esp-info" id="esp-player" placeholder="Player Name" style="width: 200px;" />
+        <div class="stat-label" style="min-width: 80px;">IGN:</div>
+        <input type="text" class="stat-input esp-info" id="esp-player" placeholder="Enter IGN" style="width: 200px;" />
       </div>
       <div class="stat-row" style="justify-content: flex-start; gap: 10px; margin-bottom: 5px;">
         <div class="stat-label" style="min-width: 80px;">Team:</div>
@@ -90,7 +90,7 @@ function loadStats() {
       grid.innerHTML += `
         <div class="stat-row" style="justify-content: flex-start; gap: 5px;">
           <div class="stat-label" style="min-width: 60px;">Map ${i}:</div>
-          <input type="number" class="stat-input esp-map" id="esp-m${i}" placeholder="0" style="width: 60px; text-align: center;" />
+          <input type="text" class="stat-input esp-map" id="esp-m${i}" placeholder="0" style="width: 60px; text-align: center;" />
         </div>`;
     }
     return;
@@ -109,7 +109,7 @@ function loadStats() {
     return; 
   }
 
-  // --- 3. FIGHT TIME UI ---
+  // --- 3. FIGHT TIME UI (Boxing/MMA) ---
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -120,22 +120,52 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // --- 4. GROUPED LEAGUES ---
+  // --- 4. GROUPED LEAGUES UI (NFL, MLB, Soccer, DST, Kickers) ---
   const groups = {
-    nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
-    dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
-    mlb_hitter: { "Hitting Stats": ["Single", "Double", "Triple", "Home Run"], "Run/RBI Stats": ["Run", "RBI"], "Other Stats": ["BB", "HBP", "SB"] },
-    kickers: { "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"], "Extra Points": ["XP conversions"], "Missed Kicks": ["FG Missed", "XP Missed"] },
-    soccer: { "Scoring": ["Goal", "Assist", "Goal from PEN"], "Shooting": ["Shot on Target"], "Passing": ["Completed Pass", "Missed Pass"], "Discipline": ["Yellow Card", "Red Card"] }
+    nfl_cfb: {
+      "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
+      "Rushing": ["Rushing Yards", "Rushing TDs"],
+      "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"],
+      "Turnovers": ["Fumbles Lost"],
+      "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"]
+    },
+    dst: {
+      "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
+      "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"],
+      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
+    },
+    mlb_hitter: {
+      "Hitting Stats": ["Single", "Double", "Triple", "Home Run"],
+      "Run/RBI Stats": ["Run", "RBI"],
+      "Other Stats": ["BB", "HBP", "SB"]
+    },
+    kickers: {
+      "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
+      "Extra Points": ["XP conversions"],
+      "Missed Kicks": ["FG Missed", "XP Missed"]
+    },
+    soccer: {
+      "Scoring": ["Goal", "Assist", "Goal from PEN"],
+      "Shooting": ["Shot on Target"],
+      "Passing": ["Completed Pass", "Missed Pass"],
+      "Discipline": ["Yellow Card", "Red Card"]
+    }
   };
 
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
     if (leagueKey === "dst" && league.pointsAllowedTiers) {
-      const paDiv = document.createElement("div");
-      paDiv.className = "stat-group";
-      paDiv.innerHTML = `<div class="group-title">Points Allowed</div><div class="stat-row"><div class="stat-label">Points Allowed</div><input type="text" class="stat-input" id="stat-Points Allowed" /></div>`;
-      container.appendChild(paDiv);
+      const separator = document.createElement("div"); separator.style.height = "20px";
+      container.appendChild(separator);
+      const pointsAllowedDiv = document.createElement("div");
+      pointsAllowedDiv.className = "stat-group";
+      pointsAllowedDiv.innerHTML = `
+        <div class="group-title">Points Allowed</div>
+        <div class="stat-row">
+          <div class="stat-label">Points Allowed</div>
+          <input type="text" class="stat-input" id="stat-Points Allowed" />
+        </div>`;
+      container.appendChild(pointsAllowedDiv);
     }
     return;
   }
@@ -149,7 +179,7 @@ function loadStats() {
     const gameSetDiv = document.createElement("div");
     gameSetDiv.className = "stat-group";
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss", "Ace", "Double Fault"].forEach(stat => {
+    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
       const points = league.stats[stat];
       gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
@@ -157,7 +187,7 @@ function loadStats() {
     return;
   }
 
-  // --- 6. NASCAR/INDY SPECIAL UI ---
+  // --- 6. NASCAR/INDYCAR SPECIAL UI ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -170,6 +200,7 @@ function loadStats() {
     return;
   }
 
+  // --- 7. DEFAULT RENDER (With Tooltips) ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
@@ -201,11 +232,17 @@ function renderGroupedStats(container, stats, groupMap) {
   for (const [groupName, labels] of Object.entries(groupMap)) {
     const groupDiv = document.createElement("div");
     groupDiv.className = "stat-group";
-    groupDiv.innerHTML = `<div class="group-title">${groupName}</div>`;
+    const groupTitle = document.createElement("div");
+    groupTitle.className = "group-title";
+    groupTitle.textContent = groupName;
+    groupDiv.appendChild(groupTitle);
     labels.forEach(label => {
       const points = Array.isArray(stats) ? stats.find(s => s.label === label)?.points : stats[label];
       if (points === undefined) return;
-      groupDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      groupDiv.appendChild(row);
     });
     container.appendChild(groupDiv);
   }
@@ -216,11 +253,12 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
+  // ESPORTS CALCULATION (IGN & Match)
   if (league.isEsports) {
     const player = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
     const opp = document.getElementById("esp-opp").value || "N/A";
-    let total = 0; let text = `Player: ${player}\nTeam: ${team} vs ${opp}\n--------------------------\n`;
+    let total = 0; let text = `IGN: ${player}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
     for (let i = 1; i <= 7; i++) {
       const val = parseFloat(document.getElementById(`esp-m${i}`).value) || 0;
       if (val > 0) { text += `Map ${i}: ${val}\n`; total += val; }
@@ -229,6 +267,7 @@ function calculateScore() {
     return;
   }
 
+  // NHL CALCULATION
   if (leagueKey === "nhl") {
     let totalSeconds = 0; let text = "Time On Ice Breakdown:\n";
     ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"].forEach((id, index) => {
@@ -247,19 +286,18 @@ function calculateScore() {
   let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
   const hideZero = document.getElementById("hideZero")?.checked;
 
-  // --- MOTORSPORTS LOGIC ---
+  // NASCAR/INDY MATH (Restored Indy Array)
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
     if (start && finish) { total += (start - finish); breakdown += `Place Differential: ${start - finish} pts\n`; }
-    
     if (leagueKey === "nascar") {
         const pointsArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
         if (finish >= 1 && finish <= 40) { total += pointsArr[finish-1]; breakdown += `Finishing Position (${finish}): ${pointsArr[finish-1]} pts\n`; }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
         total += fast * 0.45; breakdown += `Fastest Laps: ${fast} x 0.45 = ${format(fast*0.45)}\n`;
-    } else {
+    } else if (leagueKey === "indycar") {
         const indyPoints = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
         if (finish >= 1 && finish <= 33) { total += indyPoints[finish-1]; breakdown += `Finishing Position (${finish}): ${indyPoints[finish-1]} pts\n`; }
     }
@@ -268,7 +306,7 @@ function calculateScore() {
     return;
   }
 
-  // --- STANDARD CALCULATION ---
+  // STANDARD SCORING
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
@@ -306,6 +344,7 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
+// FIGHT TIME CALCULATION
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
   const min = parseInt(document.getElementById("fight-minutes").value) || 0;
@@ -338,13 +377,13 @@ function showExtraBreakdown(leagueKey) {
     extraBox.innerHTML = `<h3>Single Stats Hitter</h3>Hits: ${hits}, Runs: ${r}, RBI: ${rbi}<br>Hits+Runs+RBI = ${hits + r + rbi}`;
     extraBox.classList.remove("hidden");
   } else if (leagueKey === "nfl_cfb") {
-    const passYds = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
-    const rushYds = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
-    const recYds = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
-    const passTD = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
-    const rushTD = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
-    const recTD = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
-    extraBox.innerHTML = `<h3>Offense Stats</h3>Pass+Rush Yds: ${passYds + rushYds}<br>Rush+Rec Yds: ${rushYds + recYds}<br>Pass+Rush TDs: ${passTD + rushTD}<br>Rush+Rec TDs: ${rushTD + recTD}`;
+    const pY = parseFloat(document.getElementById("stat-Passing Yards")?.value) || 0;
+    const rY = parseFloat(document.getElementById("stat-Rushing Yards")?.value) || 0;
+    const reY = parseFloat(document.getElementById("stat-Receiving Yards")?.value) || 0;
+    const pT = parseFloat(document.getElementById("stat-Passing TDs")?.value) || 0;
+    const rT = parseFloat(document.getElementById("stat-Rushing TDs")?.value) || 0;
+    const reT = parseFloat(document.getElementById("stat-Receiving TDs")?.value) || 0;
+    extraBox.innerHTML = `<h3>Offense Stats</h3>Pass+Rush Yds: ${pY + rY}<br>Rush+Rec Yds: ${rY + reY}<br>Pass+Rush TDs: ${pT + rT}<br>Rush+Rec TDs: ${rT + reT}`;
     extraBox.classList.remove("hidden");
   }
 }
@@ -354,12 +393,12 @@ function clearInputs() {
   document.getElementById("breakdown").value = "";
   document.getElementById("fight-time-output").value = "";
   document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-  const extra = document.getElementById("extra-breakdown-box");
-  if(extra) { extra.innerHTML = ""; extra.classList.add("hidden"); }
+  if(document.getElementById("extra-breakdown-box")) document.getElementById("extra-breakdown-box").classList.add("hidden");
 }
 
 function copyBreakdown() { const box = document.getElementById("breakdown"); box.select(); document.execCommand("copy"); }
 
+// ENTER KEY TRIGGER
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
