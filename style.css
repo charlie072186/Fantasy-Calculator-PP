@@ -464,13 +464,26 @@ button.clear:hover {
     margin-top: 10px;
 }
 
-  /* Removes up/down arrows from number inputs */
+/* Compact styling for Esports inputs */
+.esports-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.esports-row {
+    justify-content: flex-start !important;
+    gap: 10px;
+}
+.esports-row .stat-label {
+    min-width: 80px;
+    text-align: left;
+}
+/* Removes arrows/spinners if any number inputs remain */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 input[type=number] {
   -moz-appearance: textfield;
 }
