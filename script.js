@@ -63,7 +63,7 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- 1. ESPORTS SPECIAL UI ---
+  // --- 1. ESPORTS SPECIAL UI (IGN/Match, 7 Maps, No Spinners) ---
   if (league.isEsports) {
     const esportsDiv = document.createElement("div");
     esportsDiv.className = "stat-group";
@@ -96,15 +96,20 @@ function loadStats() {
     return;
   }
 
-  // --- 2. NHL TOI LOGIC ---
+  // --- 2. NHL TOI UPGRADE (Regulation + OT Only) ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
-    periodDiv.innerHTML = `<div class="group-title">TIME ON ICE (MM:SS)</div>`;
-    for (let i = 1; i <= 3; i++) {
-      periodDiv.innerHTML += `<div class="stat-row"><div class="stat-label">Period ${i}</div><input type="text" class="stat-input nhl-period" id="nhl-p${i}" placeholder="00:00" /></div>`;
-    }
-    periodDiv.innerHTML += `<div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;"><div class="stat-label">Overtime (OT)</div><input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" /></div>`;
+    periodDiv.innerHTML = `
+      <div class="group-title">TIME ON ICE (MM:SS)</div>
+      <div class="stat-row">
+        <div class="stat-label">Regulation</div>
+        <input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" />
+      </div>
+      <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
+        <div class="stat-label">Overtime (OT)</div>
+        <input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" />
+      </div>`;
     container.appendChild(periodDiv);
     return; 
   }
@@ -120,52 +125,22 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // --- 4. GROUPED LEAGUES UI (NFL, MLB, Soccer, DST, Kickers) ---
+  // --- 4. GROUPED LEAGUES (NFL, MLB, Soccer, DST, Kickers) ---
   const groups = {
-    nfl_cfb: {
-      "Passing": ["Passing Yards", "Passing TDs", "Interceptions"],
-      "Rushing": ["Rushing Yards", "Rushing TDs"],
-      "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"],
-      "Turnovers": ["Fumbles Lost"],
-      "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"]
-    },
-    dst: {
-      "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"],
-      "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"],
-      "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"]
-    },
-    mlb_hitter: {
-      "Hitting Stats": ["Single", "Double", "Triple", "Home Run"],
-      "Run/RBI Stats": ["Run", "RBI"],
-      "Other Stats": ["BB", "HBP", "SB"]
-    },
-    kickers: {
-      "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"],
-      "Extra Points": ["XP conversions"],
-      "Missed Kicks": ["FG Missed", "XP Missed"]
-    },
-    soccer: {
-      "Scoring": ["Goal", "Assist", "Goal from PEN"],
-      "Shooting": ["Shot on Target"],
-      "Passing": ["Completed Pass", "Missed Pass"],
-      "Discipline": ["Yellow Card", "Red Card"]
-    }
+    nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
+    dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
+    mlb_hitter: { "Hitting Stats": ["Single", "Double", "Triple", "Home Run"], "Run/RBI Stats": ["Run", "RBI"], "Other Stats": ["BB", "HBP", "SB"] },
+    kickers: { "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"], "Extra Points": ["XP conversions"], "Missed Kicks": ["FG Missed", "XP Missed"] },
+    soccer: { "Scoring": ["Goal", "Assist", "Goal from PEN"], "Shooting": ["Shot on Target"], "Passing": ["Completed Pass", "Missed Pass"], "Discipline": ["Yellow Card", "Red Card"] }
   };
 
   if (groups[leagueKey]) {
     renderGroupedStats(container, league.stats, groups[leagueKey]);
     if (leagueKey === "dst" && league.pointsAllowedTiers) {
-      const separator = document.createElement("div"); separator.style.height = "20px";
-      container.appendChild(separator);
-      const pointsAllowedDiv = document.createElement("div");
-      pointsAllowedDiv.className = "stat-group";
-      pointsAllowedDiv.innerHTML = `
-        <div class="group-title">Points Allowed</div>
-        <div class="stat-row">
-          <div class="stat-label">Points Allowed</div>
-          <input type="text" class="stat-input" id="stat-Points Allowed" />
-        </div>`;
-      container.appendChild(pointsAllowedDiv);
+      const paDiv = document.createElement("div");
+      paDiv.className = "stat-group";
+      paDiv.innerHTML = `<div class="group-title">Points Allowed</div><div class="stat-row"><div class="stat-label">Points Allowed</div><input type="text" class="stat-input" id="stat-Points Allowed" /></div>`;
+      container.appendChild(paDiv);
     }
     return;
   }
@@ -179,7 +154,7 @@ function loadStats() {
     const gameSetDiv = document.createElement("div");
     gameSetDiv.className = "stat-group";
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
+    ["Game Won", "Game Loss", "Set Won", "Set Loss", "Ace", "Double Fault"].forEach(stat => {
       const points = league.stats[stat];
       gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
@@ -187,7 +162,7 @@ function loadStats() {
     return;
   }
 
-  // --- 6. NASCAR/INDYCAR SPECIAL UI ---
+  // --- 6. NASCAR/INDY SPECIAL UI ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -200,7 +175,7 @@ function loadStats() {
     return;
   }
 
-  // --- 7. DEFAULT RENDER (With Tooltips) ---
+  // --- 7. DEFAULT RENDER (Tooltips + Checkboxes) ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
@@ -232,17 +207,11 @@ function renderGroupedStats(container, stats, groupMap) {
   for (const [groupName, labels] of Object.entries(groupMap)) {
     const groupDiv = document.createElement("div");
     groupDiv.className = "stat-group";
-    const groupTitle = document.createElement("div");
-    groupTitle.className = "group-title";
-    groupTitle.textContent = groupName;
-    groupDiv.appendChild(groupTitle);
+    groupDiv.innerHTML = `<div class="group-title">${groupName}</div>`;
     labels.forEach(label => {
       const points = Array.isArray(stats) ? stats.find(s => s.label === label)?.points : stats[label];
       if (points === undefined) return;
-      const row = document.createElement("div");
-      row.className = "stat-row";
-      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
-      groupDiv.appendChild(row);
+      groupDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
     });
     container.appendChild(groupDiv);
   }
@@ -253,12 +222,12 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // ESPORTS CALCULATION (IGN & Match)
+  // ESPORTS (IGN/Match Update)
   if (league.isEsports) {
-    const player = document.getElementById("esp-player").value || "N/A";
+    const ign = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
     const opp = document.getElementById("esp-opp").value || "N/A";
-    let total = 0; let text = `IGN: ${player}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
+    let total = 0; let text = `IGN: ${ign}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
     for (let i = 1; i <= 7; i++) {
       const val = parseFloat(document.getElementById(`esp-m${i}`).value) || 0;
       if (val > 0) { text += `Map ${i}: ${val}\n`; total += val; }
@@ -267,46 +236,50 @@ function calculateScore() {
     return;
   }
 
-  // NHL CALCULATION
+  // NHL (Simplified Regulation + OT)
   if (leagueKey === "nhl") {
-    let totalSeconds = 0; let text = "Time On Ice Breakdown:\n";
-    ["nhl-p1", "nhl-p2", "nhl-p3", "nhl-ot"].forEach((id, index) => {
-      const val = document.getElementById(id)?.value.trim();
-      if (val && val.includes(":")) {
-        const [m, s] = val.split(":").map(Number); totalSeconds += (m * 60) + s;
-        text += `${["P1", "P2", "P3", "OT"][index]}: ${val} (${(m + s/60).toFixed(2)})\n`;
-      }
-    });
-    const finalMins = Math.floor(totalSeconds / 60); const finalSecs = Math.round(totalSeconds % 60);
-    breakdownBox.value = text + `------------------------------------\nTotal TOI: ${finalMins}:${finalSecs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSeconds / 60).toFixed(2)}`;
+    let totalSec = 0; let text = "Time On Ice Breakdown:\n";
+    const reg = document.getElementById("nhl-reg")?.value.trim();
+    const ot = document.getElementById("nhl-ot")?.value.trim();
+    if (reg && reg.includes(":")) {
+      const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
+      text += `Regulation: ${reg} (${(m + s/60).toFixed(2)})\n`;
+    }
+    if (ot && ot.includes(":")) {
+      const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
+      text += `Overtime: ${ot} (${(m + s/60).toFixed(2)})\n`;
+    }
+    const mins = Math.floor(totalSec / 60); const secs = Math.round(totalSec % 60);
+    breakdownBox.value = text + `------------------------------------\nTotal TOI: ${mins}:${secs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSec / 60).toFixed(2)}`;
     return;
   }
 
-  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
-  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
-  const hideZero = document.getElementById("hideZero")?.checked;
-
-  // NASCAR/INDY MATH (Restored Indy Array)
+  // NASCAR/INDY MATH
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
-    if (start && finish) { total += (start - finish); breakdown += `Place Differential: ${start - finish} pts\n`; }
+    let totalMotor = 0; let breakdownMotor = "";
+    if (start && finish) { totalMotor += (start - finish); breakdownMotor += `Place Differential: ${start - finish} pts\n`; }
     if (leagueKey === "nascar") {
-        const pointsArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
-        if (finish >= 1 && finish <= 40) { total += pointsArr[finish-1]; breakdown += `Finishing Position (${finish}): ${pointsArr[finish-1]} pts\n`; }
+        const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
+        if (finish >= 1 && finish <= 40) { totalMotor += pArr[finish-1]; breakdownMotor += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-        total += fast * 0.45; breakdown += `Fastest Laps: ${fast} x 0.45 = ${format(fast*0.45)}\n`;
-    } else if (leagueKey === "indycar") {
-        const indyPoints = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
-        if (finish >= 1 && finish <= 33) { total += indyPoints[finish-1]; breakdown += `Finishing Position (${finish}): ${indyPoints[finish-1]} pts\n`; }
+        totalMotor += fast * 0.45; breakdownMotor += `Fastest Laps: ${fast} x 0.45 = ${format(fast*0.45)}\n`;
+    } else {
+        const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
+        if (finish >= 1 && finish <= 33) { totalMotor += indyP[finish-1]; breakdownMotor += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`; }
     }
-    total += led * 0.25; breakdown += `Laps Led: ${led} x 0.25 = ${format(led*0.25)}\n`;
-    breakdownBox.value = breakdown + `\nTotal FS: ${format(total)}`;
+    totalMotor += led * 0.25; breakdownMotor += `Laps Led: ${led} x 0.25 = ${format(led*0.25)}\n`;
+    breakdownBox.value = breakdownMotor + `\nTotal FS: ${format(totalMotor)}`;
     return;
   }
 
-  // STANDARD SCORING
+  // STANDARD MATH (MLB, NBA, NFL)
+  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
+  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
+  const hideZero = document.getElementById("hideZero")?.checked;
+
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
@@ -344,14 +317,13 @@ function calculateScore() {
   showExtraBreakdown(leagueKey);
 }
 
-// FIGHT TIME CALCULATION
 function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
   const min = parseInt(document.getElementById("fight-minutes").value) || 0;
   const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
   if (!round) { alert("Please select a round."); return; }
   const leagueKey = document.getElementById("league").value;
-  const perRound = leagueKey === "mma" ? 5 : 3;
+  const perRound = (leagueKey === "mma") ? 5 : 3;
   const totalMin = (round - 1) * perRound + min + sec / 60;
   document.getElementById("fight-time-output").value = `Fight Ended: Round ${round} @ ${min}:${sec.toString().padStart(2, "0")}\nTotal FS Fight Time = ${totalMin.toFixed(2)} min`;
 }
@@ -359,7 +331,6 @@ function calculateFightTime() {
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = ""; extraBox.classList.add("hidden");
-  
   if (leagueKey === "nba") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
@@ -393,12 +364,12 @@ function clearInputs() {
   document.getElementById("breakdown").value = "";
   document.getElementById("fight-time-output").value = "";
   document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-  if(document.getElementById("extra-breakdown-box")) document.getElementById("extra-breakdown-box").classList.add("hidden");
+  const extra = document.getElementById("extra-breakdown-box");
+  if(extra) { extra.innerHTML = ""; extra.classList.add("hidden"); }
 }
 
 function copyBreakdown() { const box = document.getElementById("breakdown"); box.select(); document.execCommand("copy"); }
 
-// ENTER KEY TRIGGER
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
