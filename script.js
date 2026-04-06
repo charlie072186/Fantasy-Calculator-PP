@@ -103,7 +103,7 @@ function loadStats() {
     periodDiv.innerHTML = `
       <div class="group-title">TIME ON ICE (MM:SS)</div>
       <div class="stat-row">
-        <div class="stat-label">Regulation</div>
+        <div class="stat-label">Full Game</div>
         <input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" />
       </div>
       <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
