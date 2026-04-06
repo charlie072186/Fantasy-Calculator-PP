@@ -224,10 +224,10 @@ function calculateScore() {
   const breakdownBox = document.getElementById("breakdown");
 
   if (league.isEsports) {
-    const ign = document.getElementById("esp-player").value || "N/A";
+    const player = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
     const opp = document.getElementById("esp-opp").value || "N/A";
-    let total = 0; let text = `IGN: ${ign}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
+    let total = 0; let text = `IGN: ${player}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
     for (let i = 1; i <= 7; i++) {
       const val = parseFloat(document.getElementById(`esp-m${i}`).value) || 0;
       if (val > 0) { text += `Map ${i}: ${val}\n`; total += val; }
@@ -256,7 +256,7 @@ function calculateScore() {
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
 
-  // --- MOTORSPORTS MATH (REVERTED TO ORIGINAL FORMAT) ---
+  // --- NASCAR/INDY MATH (ORIGINAL FORMAT) ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
@@ -271,40 +271,33 @@ function calculateScore() {
     if (leagueKey === "nascar") {
         const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
         if (finish >= 1 && finish <= 40) { 
-            const fPts = pArr[finish-1];
-            total += fPts;
-            breakdown += `Finishing Position (${finish}): ${fPts} pts\n`;
+            total += pArr[finish-1];
+            breakdown += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`;
         }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-        if(fast !== 0) {
-            total += fast * 0.45;
-            breakdown += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
-        }
-    } else if (leagueKey === "indycar") {
+        total += fast * 0.45;
+        breakdown += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
+    } else {
         const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
         if (finish >= 1 && finish <= 33) { 
-            const fPts = indyP[finish-1];
-            total += fPts;
-            breakdown += `Finishing Position (${finish}): ${fPts} pts\n`;
+            total += indyP[finish-1];
+            breakdown += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`;
         }
     }
-    
-    if(led !== 0) {
-        total += led * 0.25;
-        breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
-    }
-    breakdownBox.value = breakdown + `\nTOTAL FS = ${format(total)}`;
+    total += led * 0.25;
+    breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
+    breakdownBox.value = breakdown + `\nTOTAL FS: ${format(total)}`;
     return;
   }
 
-  // --- UNIVERSAL STAT CALCULATION ---
+  // --- UNIVERSAL FORMATTING LOGIC ---
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
     const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
     
     if (val !== 0) {
-      // --- REVERTED INNINGS PITCHED FORMAT ---
+      // --- MLB PITCHER IP (ORIGINAL FORMAT) ---
       if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
         innings = val; const full = Math.floor(val); 
         const outs = full * 3 + Math.round((val - full) * 10);
@@ -315,7 +308,7 @@ function calculateScore() {
       
       if (leagueKey === "mlb_pitcher" && label === "Earned Run") earnedRuns = val;
       
-      // Standard Format: Label: Points pt(s) (Count) = Total
+      // NEW UNIVERSAL FORMAT: Label: Points pt(s) (Count) = Total
       breakdown += `${label}: ${points} pt${points === 1 ? '' : 's'} (${val}) = ${format(val * points)}\n`;
       total += val * points;
     }
@@ -372,13 +365,9 @@ function showExtraBreakdown(leagueKey) {
     extraBox.innerHTML = `<h3>Single Stats</h3>Pts: ${pts}, Rebs: ${reb}, Asts: ${ast}<br>P+R+A = ${pts + reb + ast}<br>P+A = ${pts + ast}<br>P+R = ${pts + reb}<br>R+A = ${reb + ast}`;
     extraBox.classList.remove("hidden");
   } else if (leagueKey === "mlb_hitter") {
-    const s = parseFloat(document.getElementById("stat-Single")?.value) || 0;
-    const d = parseFloat(document.getElementById("stat-Double")?.value) || 0;
-    const t = parseFloat(document.getElementById("stat-Triple")?.value) || 0;
-    const hr = parseFloat(document.getElementById("stat-Home Run")?.value) || 0;
+    const hits = (parseFloat(document.getElementById("stat-Single")?.value) || 0) + (parseFloat(document.getElementById("stat-Double")?.value) || 0) + (parseFloat(document.getElementById("stat-Triple")?.value) || 0) + (parseFloat(document.getElementById("stat-Home Run")?.value) || 0);
     const r = parseFloat(document.getElementById("stat-Run")?.value) || 0;
     const rbi = parseFloat(document.getElementById("stat-RBI")?.value) || 0;
-    const hits = s + d + t + hr;
     extraBox.innerHTML = `<h3>Single Stats Hitter</h3>Hits: ${hits}, Runs: ${r}, RBI: ${rbi}<br>Hits+Runs+RBI = ${hits + r + rbi}`;
     extraBox.classList.remove("hidden");
   } else if (leagueKey === "nfl_cfb") {
