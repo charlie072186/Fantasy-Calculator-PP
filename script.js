@@ -63,7 +63,6 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // --- 1. ESPORTS SPECIAL UI (IGN/Match, 7 Maps, No Spinners) ---
   if (league.isEsports) {
     const esportsDiv = document.createElement("div");
     esportsDiv.className = "stat-group";
@@ -96,14 +95,13 @@ function loadStats() {
     return;
   }
 
-  // --- 2. NHL TOI UPGRADE (Regulation + OT Only) ---
   if (leagueKey === "nhl") {
     const periodDiv = document.createElement("div");
     periodDiv.className = "stat-group";
     periodDiv.innerHTML = `
       <div class="group-title">TIME ON ICE (MM:SS)</div>
       <div class="stat-row">
-        <div class="stat-label">Full Game</div>
+        <div class="stat-label">Regulation</div>
         <input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" />
       </div>
       <div class="stat-row" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
@@ -114,7 +112,6 @@ function loadStats() {
     return; 
   }
 
-  // --- 3. FIGHT TIME UI (Boxing/MMA) ---
   if (league.hasFightTime) {
     const rounds = leagueKey === "mma" ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
@@ -125,7 +122,6 @@ function loadStats() {
     fightTimeContainer.classList.remove("hidden");
   }
 
-  // --- 4. GROUPED LEAGUES (NFL, MLB, Soccer, DST, Kickers) ---
   const groups = {
     nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
     dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
@@ -145,7 +141,6 @@ function loadStats() {
     return;
   }
 
-  // --- 5. TENNIS SPECIAL UI ---
   if (leagueKey === "tennis") {
     const matchDiv = document.createElement("div");
     matchDiv.className = "stat-group";
@@ -154,15 +149,22 @@ function loadStats() {
     const gameSetDiv = document.createElement("div");
     gameSetDiv.className = "stat-group";
     gameSetDiv.innerHTML = `<div class="group-title">Game & Set</div>`;
-    ["Game Won", "Game Loss", "Set Won", "Set Loss", "Ace", "Double Fault"].forEach(stat => {
+    ["Game Won", "Game Loss", "Set Won", "Set Loss"].forEach(stat => {
       const points = league.stats[stat];
       gameSetDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
     });
     container.appendChild(gameSetDiv);
+    const serveDiv = document.createElement("div");
+    serveDiv.className = "stat-group";
+    serveDiv.innerHTML = `<div class="group-title">Serve Stats</div>`;
+    ["Ace", "Double Fault"].forEach(stat => {
+      const points = league.stats[stat];
+      serveDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${stat} — ${points} pts</div><input type="text" class="stat-input" id="stat-${stat}" /></div>`;
+    });
+    container.appendChild(serveDiv);
     return;
   }
 
-  // --- 6. NASCAR/INDY SPECIAL UI ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
@@ -175,7 +177,6 @@ function loadStats() {
     return;
   }
 
-  // --- 7. DEFAULT RENDER (Tooltips + Checkboxes) ---
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
@@ -211,7 +212,10 @@ function renderGroupedStats(container, stats, groupMap) {
     labels.forEach(label => {
       const points = Array.isArray(stats) ? stats.find(s => s.label === label)?.points : stats[label];
       if (points === undefined) return;
-      groupDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      groupDiv.appendChild(row);
     });
     container.appendChild(groupDiv);
   }
@@ -222,7 +226,6 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
-  // ESPORTS (IGN/Match Update)
   if (league.isEsports) {
     const ign = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
@@ -236,14 +239,13 @@ function calculateScore() {
     return;
   }
 
-  // NHL (Simplified Regulation + OT)
   if (leagueKey === "nhl") {
     let totalSec = 0; let text = "Time On Ice Breakdown:\n";
     const reg = document.getElementById("nhl-reg")?.value.trim();
     const ot = document.getElementById("nhl-ot")?.value.trim();
     if (reg && reg.includes(":")) {
       const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
-      text += `All 3 periods: ${reg} (${(m + s/60).toFixed(2)})\n`;
+      text += `Regulation: ${reg} (${(m + s/60).toFixed(2)})\n`;
     }
     if (ot && ot.includes(":")) {
       const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
@@ -254,66 +256,100 @@ function calculateScore() {
     return;
   }
 
-  // NASCAR/INDY MATH
+  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
+  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
+
+  // --- MOTORSPORTS LOGIC (FIXED FORMAT) ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
-    let totalMotor = 0; let breakdownMotor = "";
-    if (start && finish) { totalMotor += (start - finish); breakdownMotor += `Place Differential: ${start - finish} pts\n`; }
+    
+    if (start && finish) { 
+        const diff = start - finish;
+        total += diff;
+        breakdown += `Place Differential: 1 pt (${diff}) = ${diff}\n`; 
+    }
+    
     if (leagueKey === "nascar") {
         const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
-        if (finish >= 1 && finish <= 40) { totalMotor += pArr[finish-1]; breakdownMotor += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; }
+        if (finish >= 1 && finish <= 40) { 
+            const fPts = pArr[finish-1];
+            total += fPts;
+            breakdown += `Finishing Position: ${fPts} pts (1) = ${fPts}\n`;
+        }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-        totalMotor += fast * 0.45; breakdownMotor += `Fastest Laps: ${fast} x 0.45 = ${format(fast*0.45)}\n`;
-    } else {
+        if(fast !== 0) {
+            total += fast * 0.45;
+            breakdown += `Fastest Laps: 0.45 pt (${fast}) = ${format(fast * 0.45)}\n`;
+        }
+    } else if (leagueKey === "indycar") {
         const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
-        if (finish >= 1 && finish <= 33) { totalMotor += indyP[finish-1]; breakdownMotor += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`; }
+        if (finish >= 1 && finish <= 33) { 
+            const fPts = indyP[finish-1];
+            total += fPts;
+            breakdown += `Finishing Position: ${fPts} pts (1) = ${fPts}\n`;
+        }
     }
-    totalMotor += led * 0.25; breakdownMotor += `Laps Led: ${led} x 0.25 = ${format(led*0.25)}\n`;
-    breakdownBox.value = breakdownMotor + `\nTotal FS: ${format(totalMotor)}`;
+    
+    if(led !== 0) {
+        total += led * 0.25;
+        breakdown += `Laps Led: 0.25 pt (${led}) = ${format(led * 0.25)}\n`;
+    }
+    breakdownBox.value = breakdown + `\nTOTAL FS = ${format(total)}`;
     return;
   }
 
-  // STANDARD MATH (MLB, NBA, NFL)
-  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
-  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
-  const hideZero = document.getElementById("hideZero")?.checked;
-
+  // --- UNIVERSAL STAT CALCULATION ---
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
     const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
+    
     if (val !== 0) {
       if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
-        innings = val; const full = Math.floor(val); const outs = full * 3 + Math.round((val - full) * 10);
-        breakdown += `${label}: ${val} IP (${outs} outs) = ${format(outs)}\n`; total += outs; return;
+        innings = val; const full = Math.floor(val); 
+        const outs = full * 3 + Math.round((val - full) * 10);
+        breakdown += `${label}: 1 pt (${outs}) = ${format(outs)}\n`; 
+        total += outs; 
+        return;
       }
+      
       if (leagueKey === "mlb_pitcher" && label === "Earned Run") earnedRuns = val;
-      breakdown += `${label}: ${val} x ${points} = ${format(val * points)}\n`; total += val * points;
+      
+      // Label: Point pt(s) (Count) = Total
+      breakdown += `${label}: ${points} pt${points === 1 ? '' : 's'} (${val}) = ${format(val * points)}\n`;
+      total += val * points;
     }
   });
 
+  // --- AUTO-BONUSES (Quality Start & Points Allowed Tiers) ---
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     const qsPoints = Array.isArray(league.stats) ? league.stats.find(s => s.label === "Quality Start")?.points || 0 : league.stats["Quality Start"] || 0;
-    breakdown += `Quality Start: +${qsPoints}\n`; total += qsPoints;
+    breakdown += `Quality Start: ${qsPoints} pts (1) = ${qsPoints}\n`; 
+    total += qsPoints;
   }
 
   const bonusRadio = document.querySelector('input[name="bonus"]:checked');
   if (bonusRadio) {
+    const bPts = parseFloat(bonusRadio.value);
     const bLabel = bonusRadio.closest('label').innerText.split(" — ")[0].trim(); 
-    breakdown += `${bLabel}: +${bonusRadio.value}\n`; total += parseFloat(bonusRadio.value);
+    breakdown += `${bLabel}: ${bPts} pts (1) = ${bPts}\n`; 
+    total += bPts;
   }
 
   if (leagueKey === "dst") {
     const pa = parseFloat(document.getElementById("stat-Points Allowed")?.value);
     if (!isNaN(pa)) {
       const tier = league.pointsAllowedTiers.find(t => pa <= t.max);
-      if (tier) { breakdown += `Points Allowed: ${tier.points} pts\n`; total += tier.points; }
+      if (tier) { 
+        breakdown += `Points Allowed: ${tier.points} pts (1) = ${tier.points}\n`; 
+        total += tier.points; 
+      }
     }
   }
 
-  breakdownBox.value = breakdown + `\nTotal FS: ${format(total)}`;
+  breakdownBox.value = breakdown + `\nTOTAL FS = ${format(total)}`;
   showExtraBreakdown(leagueKey);
 }
 
@@ -331,6 +367,7 @@ function calculateFightTime() {
 function showExtraBreakdown(leagueKey) {
   const extraBox = document.getElementById("extra-breakdown-box");
   extraBox.innerHTML = ""; extraBox.classList.add("hidden");
+  
   if (leagueKey === "nba") {
     const pts = parseFloat(document.getElementById("stat-Points")?.value) || 0;
     const reb = parseFloat(document.getElementById("stat-Rebound")?.value) || 0;
