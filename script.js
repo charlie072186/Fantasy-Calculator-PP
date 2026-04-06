@@ -212,10 +212,7 @@ function renderGroupedStats(container, stats, groupMap) {
     labels.forEach(label => {
       const points = Array.isArray(stats) ? stats.find(s => s.label === label)?.points : stats[label];
       if (points === undefined) return;
-      const row = document.createElement("div");
-      row.className = "stat-row";
-      row.innerHTML = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
-      groupDiv.appendChild(row);
+      groupDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
     });
     container.appendChild(groupDiv);
   }
@@ -259,7 +256,7 @@ function calculateScore() {
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
 
-  // --- MOTORSPORTS LOGIC (FIXED FORMAT) ---
+  // --- MOTORSPORTS MATH (REVERTED TO ORIGINAL FORMAT) ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
@@ -268,7 +265,7 @@ function calculateScore() {
     if (start && finish) { 
         const diff = start - finish;
         total += diff;
-        breakdown += `Place Differential: 1 pt (${diff}) = ${diff}\n`; 
+        breakdown += `Place Differential: ${diff} pts\n`; 
     }
     
     if (leagueKey === "nascar") {
@@ -276,25 +273,25 @@ function calculateScore() {
         if (finish >= 1 && finish <= 40) { 
             const fPts = pArr[finish-1];
             total += fPts;
-            breakdown += `Finishing Position: ${fPts} pts (1) = ${fPts}\n`;
+            breakdown += `Finishing Position (${finish}): ${fPts} pts\n`;
         }
         const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
         if(fast !== 0) {
             total += fast * 0.45;
-            breakdown += `Fastest Laps: 0.45 pt (${fast}) = ${format(fast * 0.45)}\n`;
+            breakdown += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
         }
     } else if (leagueKey === "indycar") {
         const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
         if (finish >= 1 && finish <= 33) { 
             const fPts = indyP[finish-1];
             total += fPts;
-            breakdown += `Finishing Position: ${fPts} pts (1) = ${fPts}\n`;
+            breakdown += `Finishing Position (${finish}): ${fPts} pts\n`;
         }
     }
     
     if(led !== 0) {
         total += led * 0.25;
-        breakdown += `Laps Led: 0.25 pt (${led}) = ${format(led * 0.25)}\n`;
+        breakdown += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
     }
     breakdownBox.value = breakdown + `\nTOTAL FS = ${format(total)}`;
     return;
@@ -307,23 +304,23 @@ function calculateScore() {
     const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
     
     if (val !== 0) {
+      // --- REVERTED INNINGS PITCHED FORMAT ---
       if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
         innings = val; const full = Math.floor(val); 
         const outs = full * 3 + Math.round((val - full) * 10);
-        breakdown += `${label}: 1 pt (${outs}) = ${format(outs)}\n`; 
+        breakdown += `${label}: ${val} IP (${outs} outs) = ${format(outs)}\n`; 
         total += outs; 
         return;
       }
       
       if (leagueKey === "mlb_pitcher" && label === "Earned Run") earnedRuns = val;
       
-      // Label: Point pt(s) (Count) = Total
+      // Standard Format: Label: Points pt(s) (Count) = Total
       breakdown += `${label}: ${points} pt${points === 1 ? '' : 's'} (${val}) = ${format(val * points)}\n`;
       total += val * points;
     }
   });
 
-  // --- AUTO-BONUSES (Quality Start & Points Allowed Tiers) ---
   if (leagueKey === "mlb_pitcher" && innings >= 6 && earnedRuns <= 3) {
     const qsPoints = Array.isArray(league.stats) ? league.stats.find(s => s.label === "Quality Start")?.points || 0 : league.stats["Quality Start"] || 0;
     breakdown += `Quality Start: ${qsPoints} pts (1) = ${qsPoints}\n`; 
