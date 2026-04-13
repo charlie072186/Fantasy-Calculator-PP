@@ -146,7 +146,7 @@
   },
 
  "nhl": {
-    "name": "NHL Time On Ice",
+    "name": "NHL",
     "category": "tsports",
     "stats": {
       "Full game": 1
