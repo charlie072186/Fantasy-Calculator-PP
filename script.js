@@ -64,14 +64,10 @@ function loadStats() {
   extraBox.classList.add("hidden");
   fightTimeContainer.classList.add("hidden");
 
-  // Toggle Header visibility
-  if (leagueKey === "nhl" || league.isEsports) {
-    if (scoreHeader) scoreHeader.style.display = "none";
-  } else {
-    if (scoreHeader) scoreHeader.style.display = "block";
-  }
+  // Default Header Visibility
+  if (scoreHeader) scoreHeader.style.display = (league.isEsports) ? "none" : "block";
 
-  // --- 1. ESPORTS SPECIAL UI ---
+  // --- 1. ESPORTS UI ---
   if (league.isEsports) {
     const esportsDiv = document.createElement("div");
     esportsDiv.className = "stat-group";
@@ -104,54 +100,46 @@ function loadStats() {
     return;
   }
 
-  // --- 2. NHL SPECIAL UI (TOI + Skater/Goalie Selection) ---
+  // --- 2. NHL 3-WAY TOGGLE UI ---
   if (leagueKey === "nhl") {
     const nhlDiv = document.createElement("div");
     nhlDiv.className = "stat-group";
     nhlDiv.innerHTML = `
-      <div class="group-title">TIME ON ICE (MM:SS)</div>
-      <div class="stat-row">
-        <div class="stat-label">Regulation</div>
-        <input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" />
+      <div class="group-title">Select NHL Mode</div>
+      <div class="stat-row" style="justify-content: center; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="nhlType" value="skater" checked onclick="toggleNHLFields('skater')"> Skater FS</label>
+        <label><input type="radio" name="nhlType" value="goalie" onclick="toggleNHLFields('goalie')"> Goalie FS</label>
+        <label><input type="radio" name="nhlType" value="toi" onclick="toggleNHLFields('toi')"> TOI Converter</label>
       </div>
-      <div class="stat-row" style="margin-top: 10px; border-bottom: 1px solid #444; padding-bottom: 10px;">
-        <div class="stat-label">Overtime (OT)</div>
-        <input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" />
-      </div>
-      <div class="group-title" style="margin-top:15px">NHL Fantasy Scorer</div>
-      <div class="stat-row" style="justify-content: center; gap: 20px; margin-bottom: 15px;">
-        <label><input type="radio" name="nhlType" value="skater" checked onclick="toggleNHLFields('skater')"> Skater</label>
-        <label><input type="radio" name="nhlType" value="goalie" onclick="toggleNHLFields('goalie')"> Goalie</label>
+      <div id="nhl-toi-fields" class="hidden">
+        <div class="group-title" style="border-top: 1px solid #444; padding-top: 10px;">TIME ON ICE (MM:SS)</div>
+        <div class="stat-row"><div class="stat-label">Regulation</div><input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" /></div>
+        <div class="stat-row"><div class="stat-label">Overtime (OT)</div><input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" /></div>
       </div>
       <div id="nhl-skater-fields"></div>
       <div id="nhl-goalie-fields" class="hidden"></div>
     `;
     container.appendChild(nhlDiv);
 
-    // Render Skater Stats
     const skaterFields = document.getElementById("nhl-skater-fields");
     Object.entries(league.skater_stats || {}).forEach(([label, pts]) => {
       skaterFields.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
     });
 
-    // Render Goalie Stats
     const goalieFields = document.getElementById("nhl-goalie-fields");
     Object.entries(league.goalie_stats || {}).forEach(([label, pts]) => {
       const row = document.createElement("div");
       row.className = "stat-row";
-      if (label === "Win") {
-        row.innerHTML = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${pts} pts</label>`;
-      } else {
-        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
-      }
+      if (label === "Win") row.innerHTML = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${pts} pts</label>`;
+      else row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
       goalieFields.appendChild(row);
     });
-    return; 
+    return;
   }
 
-  // --- 3. FIGHT TIME UI ---
+  // --- 3. FIGHT TIME / MMA ---
   if (league.hasFightTime) {
-    const rounds = leagueKey === "mma" ? 5 : 12;
+    const rounds = (leagueKey === "mma") ? 5 : 12;
     const fightRoundDiv = document.getElementById("fight-rounds");
     fightRoundDiv.innerHTML = "<label>Fight ended in:</label><br>";
     for (let i = 1; i <= rounds; i++) {
@@ -193,6 +181,7 @@ function loadStats() {
     return;
   }
 
+  // Default Stats Render
   const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
   stats.forEach(([label, points]) => {
     const row = document.createElement("div");
@@ -202,7 +191,7 @@ function loadStats() {
       html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">1 IP = 3 outs; 0.1 IP = 1 out</span></span></div><input type="text" class="stat-input" id="stat-${label}" />`;
     } else if (leagueKey === "mlb_pitcher" && label === "Quality Start") {
       html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">Auto: 6+ IP & ≤3 ER</span></span></div>`;
-    } else if ((label === "Win" || label === "Match Played")) {
+    } else if (label === "Win" || label === "Match Played") {
       html = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${points} pts</label>`;
     } else {
       html = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
@@ -221,8 +210,11 @@ function loadStats() {
 }
 
 function toggleNHLFields(type) {
-  document.getElementById("nhl-skater-fields").classList.toggle("hidden", type === "goalie");
-  document.getElementById("nhl-goalie-fields").classList.toggle("hidden", type === "skater");
+  const scoreHeader = document.getElementById("score-header");
+  document.getElementById("nhl-skater-fields").classList.toggle("hidden", type !== "skater");
+  document.getElementById("nhl-goalie-fields").classList.toggle("hidden", type !== "goalie");
+  document.getElementById("nhl-toi-fields").classList.toggle("hidden", type !== "toi");
+  if (scoreHeader) scoreHeader.style.display = (type === "toi") ? "none" : "block";
 }
 
 function renderGroupedStats(container, stats, groupMap) {
@@ -244,11 +236,12 @@ function calculateScore() {
   const league = leagues[leagueKey];
   const breakdownBox = document.getElementById("breakdown");
 
+  // --- ESPORTS ---
   if (league.isEsports) {
-    const player = document.getElementById("esp-player").value || "N/A";
+    const ign = document.getElementById("esp-player").value || "N/A";
     const team = document.getElementById("esp-team").value || "N/A";
     const opp = document.getElementById("esp-opp").value || "N/A";
-    let total = 0; let text = `IGN: ${player}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
+    let total = 0; let text = `IGN: ${ign}\nMatch: ${team} vs ${opp}\n--------------------------\n`;
     for (let i = 1; i <= 7; i++) {
       const val = parseFloat(document.getElementById(`esp-m${i}`).value) || 0;
       if (val > 0) { text += `Map ${i}: ${val}\n`; total += val; }
@@ -257,66 +250,68 @@ function calculateScore() {
     return;
   }
 
-  // NHL Logic (TOI + FS)
+  // --- NHL ---
   if (leagueKey === "nhl") {
-    let totalSec = 0; let text = "NHL Statistics Breakdown:\n";
-    const reg = document.getElementById("nhl-reg")?.value.trim();
-    const ot = document.getElementById("nhl-ot")?.value.trim();
-    if (reg && reg.includes(":")) {
-      const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
-      text += `Regulation TOI: ${reg} (${(m + s/60).toFixed(2)})\n`;
-    }
-    if (ot && ot.includes(":")) {
-      const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
-      text += `Overtime TOI: ${ot} (${(m + s/60).toFixed(2)})\n`;
-    }
-    
     const nhlType = document.querySelector('input[name="nhlType"]:checked').value;
-    const statsToUse = nhlType === "skater" ? league.skater_stats : league.goalie_stats;
-    let fsTotal = 0;
-    
+    if (nhlType === "toi") {
+      let totalSec = 0; let text = "Time On Ice Breakdown:\n";
+      const reg = document.getElementById("nhl-reg")?.value.trim();
+      const ot = document.getElementById("nhl-ot")?.value.trim();
+      if (reg && reg.includes(":")) {
+        const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
+        text += `Regulation: ${reg} (${(m + s/60).toFixed(2)})\n`;
+      }
+      if (ot && ot.includes(":")) {
+        const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
+        text += `Overtime: ${ot} (${(m + s/60).toFixed(2)})\n`;
+      }
+      const mins = Math.floor(totalSec / 60); const secs = Math.round(totalSec % 60);
+      breakdownBox.value = text + `------------------------------------\nTotal TOI: ${mins}:${secs.toString().padStart(2, '0')}\nDecimal Total: ${(totalSec / 60).toFixed(2)}`;
+      return;
+    }
+    const statsToUse = (nhlType === "skater") ? league.skater_stats : league.goalie_stats;
+    let fsTotal = 0; let text = `${nhlType.toUpperCase()} FS Breakdown:\n`;
     Object.entries(statsToUse).forEach(([label, points]) => {
       const input = document.getElementById(`stat-${label}`);
       if (!input) return;
       const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
       if (val !== 0) {
-        text += `${label}: ${points} pts (${val}) = ${format(val * points)}\n`;
+        text += `${label}: ${points} pt${points === 1 ? '' : 's'} (${val}) = ${format(val * points)}\n`;
         fsTotal += val * points;
       }
     });
-
-    const mins = Math.floor(totalSec / 60); const secs = Math.round(totalSec % 60);
-    breakdownBox.value = text + `------------------------------------\nTotal TOI: ${mins}:${secs.toString().padStart(2, '0')} (${(totalSec/60).toFixed(2)})\nTOTAL FS = ${format(fsTotal)}`;
+    breakdownBox.value = text + `\nTOTAL FS = ${format(fsTotal)}`;
     return;
   }
 
-  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
-  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
-
+  // --- MOTORSPORTS ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
-    let totalM = 0; let breakdownM = "";
-    if (start && finish) { totalM += (start - finish); breakdownM += `Place Differential: ${start - finish} pts\n`; }
+    let totalM = 0; let bM = "";
+    if (start && finish) { totalM += (start - finish); bM += `Place Differential: ${start - finish} pts\n`; }
     if (leagueKey === "nascar") {
-        const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
-        if (finish >= 1 && finish <= 40) { totalM += pArr[finish-1]; breakdownM += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; }
-        const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-        totalM += fast * 0.45; breakdownM += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
+      const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
+      if (finish >= 1 && finish <= 40) { totalM += pArr[finish-1]; bM += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; }
+      const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
+      totalM += fast * 0.45; bM += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
     } else {
-        const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
-        if (finish >= 1 && finish <= 33) { totalM += indyP[finish-1]; breakdownM += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`; }
+      const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
+      if (finish >= 1 && finish <= 33) { totalM += indyP[finish-1]; bM += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`; }
     }
-    totalM += led * 0.25; breakdownM += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
-    breakdownBox.value = breakdownM + `\nTOTAL FS: ${format(totalM)}`;
+    totalM += led * 0.25; bM += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
+    breakdownBox.value = bM + `\nTOTAL FS: ${format(totalM)}`;
     return;
   }
 
+  // --- UNIVERSAL STANDARD ---
+  const stats = Array.isArray(league.stats) ? league.stats.map(s => [s.label, s.points]) : Object.entries(league.stats || {});
+  let total = 0; let breakdown = ""; let innings = 0, earnedRuns = 0;
   stats.forEach(([label, points]) => {
     const input = document.getElementById(`stat-${label}`);
     if (!input) return;
-    const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
+    const val = (input.type === "checkbox") ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
     if (val !== 0) {
       if (leagueKey === "mlb_pitcher" && label === "Innings Pitched") {
         innings = val; const full = Math.floor(val); const outs = full * 3 + Math.round((val - full) * 10);
@@ -335,8 +330,8 @@ function calculateScore() {
   const bonusRadio = document.querySelector('input[name="bonus"]:checked');
   if (bonusRadio) {
     const bPts = parseFloat(bonusRadio.value);
-    const bLabel = bonusRadio.closest('label').innerText.split(" — ")[0].trim(); 
-    breakdown += `${bLabel}: ${bPts} pts (1) = ${bPts}\n`; total += bPts;
+    const bL = bonusRadio.closest('label').innerText.split(" — ")[0].trim(); 
+    breakdown += `${bL}: ${bPts} pts (1) = ${bPts}\n`; total += bPts;
   }
 
   if (leagueKey === "dst") {
@@ -355,7 +350,7 @@ function calculateFightTime() {
   const round = parseInt(document.querySelector('input[name="fightRound"]:checked')?.value);
   const min = parseInt(document.getElementById("fight-minutes").value) || 0;
   const sec = parseInt(document.getElementById("fight-seconds").value) || 0;
-  if (!round) { alert("Please select a round."); return; }
+  if (!round) return;
   const leagueKey = document.getElementById("league").value;
   const perRound = (leagueKey === "mma") ? 5 : 3;
   const totalMin = (round - 1) * perRound + min + sec / 60;
@@ -396,10 +391,7 @@ function showExtraBreakdown(leagueKey) {
 function clearInputs() {
   document.querySelectorAll(".stat-input, .nhl-period, .esp-info, .esp-map, #fight-minutes, #fight-seconds").forEach(i => { i.value = ""; if(i.type === "checkbox") i.checked = false; });
   document.getElementById("breakdown").value = "";
-  document.getElementById("fight-time-output").value = "";
-  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-  const extra = document.getElementById("extra-breakdown-box");
-  if(extra) { extra.innerHTML = ""; extra.classList.add("hidden"); }
+  document.querySelectorAll('input[type="radio"]').forEach(r => { if(r.name === "bonus") r.checked = false; });
 }
 
 function copyBreakdown() { const box = document.getElementById("breakdown"); box.select(); document.execCommand("copy"); }
