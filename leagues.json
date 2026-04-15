@@ -12,12 +12,16 @@
     }
   },
  "mlb": {
-  "name": "MLB",
+  "name": "MLB Hitter",
   "category": "tsports",
   "hitter_stats": {
     "Single": 3, "Double": 5, "Triple": 8, "Home Run": 10,
     "Run": 2, "RBI": 2, "BB": 2, "HBP": 2, "SB": 5
-  },
+    }
+},
+  "mlb": {
+  "name": "MLB Pitcher",
+  "category": "tsports",
   "pitcher_stats": {
     "Innings Pitched": 1, 
     "Strikeout": 3, 
