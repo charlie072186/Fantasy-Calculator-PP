@@ -11,32 +11,21 @@
       "Turnover": -1
     }
   },
-  "mlb_pitcher": {
-    "name": "MLB Pitcher FS",
-    "category": "tsports",
-    "stats": {
-      "Win": 6,
-      "Quality Start": 4,
-      "Earned Run": -3,
-      "Strikeout": 3,
-      "Innings Pitched": 3
-    }
+ "mlb": {
+  "name": "MLB",
+  "category": "tsports",
+  "hitter_stats": {
+    "Single": 3, "Double": 5, "Triple": 8, "Home Run": 10,
+    "Run": 2, "RBI": 2, "BB": 2, "HBP": 2, "SB": 5
   },
-  "mlb_hitter": {
-    "name": "MLB Hitter FS",
-    "category": "tsports",
-    "stats": {
-      "Single": 3,
-      "Double": 5,
-      "Triple": 8,
-      "Home Run": 10,
-      "Run": 2,
-      "RBI": 2,
-      "BB": 2,
-      "HBP": 2,
-      "SB": 5
-    }
-  },
+  "pitcher_stats": {
+    "Innings Pitched": 1, 
+    "Strikeout": 3, 
+    "Win": 6, 
+    "Earned Run": -3,
+    "Quality Start": 4
+  }
+},
   "tennis": {
     "name": "Tennis FS",
     "category": "tsports",
