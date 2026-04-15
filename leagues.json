@@ -146,12 +146,23 @@
   },
 
  "nhl": {
-    "name": "NHL",
-    "category": "tsports",
-    "stats": {
-      "Full game": 1
-    }
+  "name": "NHL",
+  "category": "tsports",
+  "hasTOI": true,
+  "skater_stats": {
+    "Goals": 6,
+    "Assists": 4,
+    "Power Play Points": 0.5,
+    "Shots On Goal": 1,
+    "Hits": 0.5,
+    "Blocked Shots": 1
   },
+  "goalie_stats": {
+    "Win": 6,
+    "Save": 0.6,
+    "Goal Against": -3
+  }
+},
 
   "soccer": {
     "name": "Soccer",
