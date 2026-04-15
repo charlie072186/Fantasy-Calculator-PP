@@ -11,25 +11,32 @@
       "Turnover": -1
     }
   },
- "mlb": {
-  "name": "MLB Hitter",
-  "category": "tsports",
-  "hitter_stats": {
-    "Single": 3, "Double": 5, "Triple": 8, "Home Run": 10,
-    "Run": 2, "RBI": 2, "BB": 2, "HBP": 2, "SB": 5
+  "mlb_pitcher": {
+    "name": "MLB Pitcher FS",
+    "category": "tsports",
+    "stats": {
+      "Win": 6,
+      "Quality Start": 4,
+      "Earned Run": -3,
+      "Strikeout": 3,
+      "Innings Pitched": 3
     }
-},
-  "mlb": {
-  "name": "MLB Pitcher",
-  "category": "tsports",
-  "pitcher_stats": {
-    "Innings Pitched": 1, 
-    "Strikeout": 3, 
-    "Win": 6, 
-    "Earned Run": -3,
-    "Quality Start": 4
-  }
-},
+  },
+  "mlb_hitter": {
+    "name": "MLB Hitter FS",
+    "category": "tsports",
+    "stats": {
+      "Single": 3,
+      "Double": 5,
+      "Triple": 8,
+      "Home Run": 10,
+      "Run": 2,
+      "RBI": 2,
+      "BB": 2,
+      "HBP": 2,
+      "SB": 5
+    }
+  },
   "tennis": {
     "name": "Tennis FS",
     "category": "tsports",
@@ -138,24 +145,13 @@
     }
   },
 
-"nhl": {
-  "name": "NHL",
-  "category": "tsports",
-  "hasTOI": true,
-  "skater_stats": {
-    "Goals": 6,
-    "Assists": 4,
-    "Power Play Points": 0.5,
-    "Shots On Goal": 1,
-    "Hits": 0.5,
-    "Blocked Shots": 1
+ "nhl": {
+    "name": "NHL",
+    "category": "tsports",
+    "stats": {
+      "Full game": 1
+    }
   },
-  "goalie_stats": {
-    "Win": 6,
-    "Save": 0.6,
-    "Goal Against": -3
-  }
-},
 
   "soccer": {
     "name": "Soccer",
