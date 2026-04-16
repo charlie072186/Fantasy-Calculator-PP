@@ -168,14 +168,14 @@ function loadStats() {
     return;
   }
 
-  // --- 5. NASCAR / INDY ---
+  // --- 5. NASCAR / INDY (ALIGNED) ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const custom = document.createElement("div");
     custom.className = "stat-group";
     custom.innerHTML = `
       <div class="stat-row"><div class="stat-label">Starting Position</div><input type="text" class="stat-input" id="stat-Starting Position" /></div>
       <div class="stat-row"><div class="stat-label">Finishing Position</div><input type="text" class="stat-input" id="stat-Finishing Position" /></div>
-      ${leagueKey === "nascar" ? `<div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps" /></div>` : ""}
+      <div class="stat-row"><div class="stat-label">Fastest Laps × 0.45</div><input type="text" class="stat-input" id="stat-Fastest Laps" /></div>
       <div class="stat-row"><div class="stat-label">Laps Led × 0.25</div><input type="text" class="stat-input" id="stat-Laps Led" /></div>`;
     container.appendChild(custom);
     return;
@@ -284,23 +284,39 @@ function calculateScore() {
     return;
   }
 
-  // --- MOTORSPORTS ---
+  // --- MOTORSPORTS (ALIGNED WITH NASCAR POINTS) ---
   if (leagueKey === "nascar" || leagueKey === "indycar") {
     const start = parseInt(document.getElementById("stat-Starting Position")?.value) || 0;
     const finish = parseInt(document.getElementById("stat-Finishing Position")?.value) || 0;
     const led = parseFloat(document.getElementById("stat-Laps Led")?.value) || 0;
+    const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
+
     let totalM = 0; let bM = "";
-    if (start && finish) { totalM += (start - finish); bM += `Place Differential: ${start - finish} pts\n`; }
-    if (leagueKey === "nascar") {
-      const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
-      if (finish >= 1 && finish <= 40) { totalM += pArr[finish-1]; bM += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; }
-      const fast = parseFloat(document.getElementById("stat-Fastest Laps")?.value) || 0;
-      totalM += fast * 0.45; bM += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
-    } else {
-      const indyP = [50,45,35,32,30,28,26,24,22,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,5,5,5,5,5,5,5,5];
-      if (finish >= 1 && finish <= 33) { totalM += indyP[finish-1]; bM += `Finishing Position (${finish}): ${indyP[finish-1]} pts\n`; }
+    
+    // Place Differential
+    if (start && finish) { 
+      totalM += (start - finish); 
+      bM += `Place Differential: ${start - finish} pts\n`; 
     }
-    totalM += led * 0.25; bM += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
+
+    // Aligned Finishing Points Array (1st to 40th)
+    const pArr = [45,42,41,40,39,38,37,36,35,34,32,31,30,29,28,27,26,25,24,23,21,20,19,18,17,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1];
+    
+    if (finish >= 1 && finish <= 40) { 
+        totalM += pArr[finish-1]; 
+        bM += `Finishing Position (${finish}): ${pArr[finish-1]} pts\n`; 
+    } else if (finish > 40) {
+        bM += `Finishing Position (${finish}): 0 pts\n`;
+    }
+
+    // Fastest Laps (both now use 0.45)
+    totalM += fast * 0.45; 
+    bM += `Fastest Laps: ${fast} × 0.45 = ${format(fast * 0.45)}\n`;
+    
+    // Laps Led (both now use 0.25)
+    totalM += led * 0.25; 
+    bM += `Laps Led: ${led} × 0.25 = ${format(led * 0.25)}\n`;
+
     breakdownBox.value = bM + `\nTOTAL FS: ${format(totalM)}`;
     return;
   }
