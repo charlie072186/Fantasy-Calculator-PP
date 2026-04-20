@@ -112,7 +112,7 @@ function loadStats() {
       </div>
       <div id="nhl-toi-fields" class="hidden">
         <div class="group-title" style="border-top: 1px solid #444; padding-top: 10px;">TIME ON ICE (MM:SS)</div>
-        <div class="stat-row"><div class="stat-label">Regulation</div><input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" /></div>
+        <div class="stat-row"><div class="stat-label">Full Game</div><input type="text" class="stat-input nhl-period" id="nhl-reg" placeholder="00:00" /></div>
         <div class="stat-row"><div class="stat-label">Overtime (OT)</div><input type="text" class="stat-input nhl-period" id="nhl-ot" placeholder="00:00" /></div>
       </div>
       <div id="nhl-skater-fields"></div>
@@ -258,7 +258,7 @@ function calculateScore() {
       const ot = document.getElementById("nhl-ot")?.value.trim();
       if (reg && reg.includes(":")) {
         const [m, s] = reg.split(":").map(Number); totalSec += (m * 60) + s;
-        text += `Regulation: ${reg} (${(m + s/60).toFixed(2)})\n`;
+        text += `Full Game: ${reg} (${(m + s/60).toFixed(2)})\n`;
       }
       if (ot && ot.includes(":")) {
         const [m, s] = ot.split(":").map(Number); totalSec += (m * 60) + s;
