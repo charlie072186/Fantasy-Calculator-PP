@@ -136,6 +136,40 @@ function loadStats() {
     return;
   }
 
+  // --- 2b. SOCCER 2-WAY TOGGLE UI ---
+  if (league.isSplitSoccer) {
+    const soccerDiv = document.createElement("div");
+    soccerDiv.className = "stat-group";
+    soccerDiv.innerHTML = `
+      <div class="group-title">Select Soccer Mode</div>
+      <div class="stat-row" style="justify-content: center; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="soccerType" value="outfield" checked onclick="toggleSoccerFields('outfield')"> Outfield FS</label>
+        <label><input type="radio" name="soccerType" value="goalie" onclick="toggleSoccerFields('goalie')"> Goalie FS</label>
+      </div>
+      <div id="soccer-outfield-fields"></div>
+      <div id="soccer-goalie-fields" class="hidden"></div>
+    `;
+    container.appendChild(soccerDiv);
+
+    const outfieldFields = document.getElementById("soccer-outfield-fields");
+    Object.entries(league.outfield_stats || {}).forEach(([label, pts]) => {
+      outfieldFields.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
+    });
+
+    const goalieFields = document.getElementById("soccer-goalie-fields");
+    Object.entries(league.goalie_stats || {}).forEach(([label, pts]) => {
+      const row = document.createElement("div");
+      row.className = "stat-row";
+      if (label === "Clean Sheet") {
+        row.innerHTML = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${pts} pts</label>`;
+      } else {
+        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
+      }
+      goalieFields.appendChild(row);
+    });
+    return;
+  }
+
   // --- 3. FIGHT TIME / MMA ---
   if (league.hasFightTime) {
     const rounds = (leagueKey === "mma") ? 5 : 12;
@@ -152,8 +186,7 @@ function loadStats() {
     nfl_cfb: { "Passing": ["Passing Yards", "Passing TDs", "Interceptions"], "Rushing": ["Rushing Yards", "Rushing TDs"], "Receiving": ["Receiving Yards", "Receiving TDs", "Receptions"], "Turnovers": ["Fumbles Lost"], "Misc": ["2 Point Conversions", "Offensive Fumble Recovery TD", "Kick/Punt/Field Goal Return TD"] },
     dst: { "Standard Defensive Stats": ["Sack", "Interception", "Fumble Recovery"], "Return TDs": ["Punt/Kickoff/FG Return for TD", "Interception Return TD", "Fumble Recovery TD", "Blocked Punt or FG Return TD"], "Special Teams / Misc": ["Safety", "Blocked Kick", "2pt/XP Return"] },
     mlb_hitter: { "Hitting Stats": ["Single", "Double", "Triple", "Home Run"], "Run/RBI Stats": ["Run", "RBI"], "Other Stats": ["BB", "HBP", "SB"] },
-    kickers: { "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"], "Extra Points": ["XP conversions"], "Missed Kicks": ["FG Missed", "XP Missed"] },
-    soccer: { "Scoring": ["Goal", "Assist", "Goal from PEN"], "Shooting": ["Shot on Target"], "Passing": ["Completed Pass", "Missed Pass"], "Discipline": ["Yellow Card", "Red Card"] }
+    kickers: { "Field Goals": ["FG 0-39 yards", "FG 40-49 yards", "FG 50+ yards"], "Extra Points": ["XP conversions"], "Missed Kicks": ["FG Missed", "XP Missed"] }
   };
 
   if (groups[leagueKey]) {
@@ -216,6 +249,11 @@ function toggleNHLFields(type) {
   if (scoreHeader) scoreHeader.style.display = (type === "toi") ? "none" : "block";
 }
 
+function toggleSoccerFields(type) {
+  document.getElementById("soccer-outfield-fields").classList.toggle("hidden", type !== "outfield");
+  document.getElementById("soccer-goalie-fields").classList.toggle("hidden", type !== "goalie");
+}
+
 function renderGroupedStats(container, stats, groupMap) {
   for (const [groupName, labels] of Object.entries(groupMap)) {
     const groupDiv = document.createElement("div");
@@ -270,6 +308,25 @@ function calculateScore() {
     }
     const statsToUse = (nhlType === "skater") ? league.skater_stats : league.goalie_stats;
     let fsTotal = 0; let text = `${nhlType.toUpperCase()} FS Breakdown:\n`;
+    Object.entries(statsToUse).forEach(([label, points]) => {
+      const input = document.getElementById(`stat-${label}`);
+      if (!input) return;
+      const val = input.type === "checkbox" ? (input.checked ? 1 : 0) : parseFloat(input.value) || 0;
+      if (val !== 0) {
+        text += `${label}: ${points} pt${points === 1 ? '' : 's'} (${val}) = ${format(val * points)}\n`;
+        fsTotal += val * points;
+      }
+    });
+    breakdownBox.value = text + `\nTOTAL FS = ${format(fsTotal)}`;
+    return;
+  }
+
+  // --- SOCCER SPLIT ---
+  if (league.isSplitSoccer) {
+    const soccerType = document.querySelector('input[name="soccerType"]:checked').value;
+    const statsToUse = (soccerType === "outfield") ? league.outfield_stats : league.goalie_stats;
+    let fsTotal = 0; let text = `SOCCER ${soccerType.toUpperCase()} FS Breakdown:\n`;
+    
     Object.entries(statsToUse).forEach(([label, points]) => {
       const input = document.getElementById(`stat-${label}`);
       if (!input) return;
@@ -405,7 +462,7 @@ function showExtraBreakdown(leagueKey) {
 function clearInputs() {
   document.querySelectorAll(".stat-input, .nhl-period, .esp-info, .esp-map, #fight-minutes, #fight-seconds").forEach(i => { i.value = ""; if(i.type === "checkbox") i.checked = false; });
   document.getElementById("breakdown").value = "";
-  document.querySelectorAll('input[type="radio"]').forEach(r => { if(r.name === "bonus") r.checked = false; });
+  document.querySelectorAll('input[type="radio"]').forEach(r => { if(r.name === "bonus" || r.name === "soccerType" || r.name === "nhlType") return; r.checked = false; });
 }
 
 function copyBreakdown() { const box = document.getElementById("breakdown"); box.select(); document.execCommand("copy"); }
