@@ -136,7 +136,7 @@ function loadStats() {
     return;
   }
 
-  // --- 2b. SOCCER 2-WAY TOGGLE UI ---
+  // --- 2b. SOCCER 2-WAY TOGGLE UI WITH SEGREGATED OUTFIELD ---
   if (league.isSplitSoccer) {
     const soccerDiv = document.createElement("div");
     soccerDiv.className = "stat-group";
@@ -152,9 +152,25 @@ function loadStats() {
     container.appendChild(soccerDiv);
 
     const outfieldFields = document.getElementById("soccer-outfield-fields");
-    Object.entries(league.outfield_stats || {}).forEach(([label, pts]) => {
-      outfieldFields.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
-    });
+    const soccerGroups = {
+      "Scoring": ["Goal Scored", "Assist"],
+      "Shooting": ["Shot", "Shot on Target"],
+      "Passing": ["Passes Attempted", "Crosses", "Shots Assisted"],
+      "Defending": ["Clearances", "Tackles Attempted", "Attempted Dribbles"],
+      "Discipline": ["Yellow Cards", "Red Cards", "Fouls"]
+    };
+
+    for (const [groupName, labels] of Object.entries(soccerGroups)) {
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "stat-group";
+      groupDiv.innerHTML = `<div class="group-title">${groupName}</div>`;
+      labels.forEach(label => {
+        const points = league.outfield_stats[label];
+        if (points === undefined) return;
+        groupDiv.innerHTML += `<div class="stat-row"><div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" /></div>`;
+      });
+      outfieldFields.appendChild(groupDiv);
+    }
 
     const goalieFields = document.getElementById("soccer-goalie-fields");
     Object.entries(league.goalie_stats || {}).forEach(([label, pts]) => {
