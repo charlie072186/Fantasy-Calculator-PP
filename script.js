@@ -153,11 +153,10 @@ function loadStats() {
 
     const outfieldFields = document.getElementById("soccer-outfield-fields");
     const soccerGroups = {
-      "Scoring": ["Goal Scored", "Assist"],
+      "Scoring": ["Goal Scored", "Assist", "Shots Assisted"],
       "Shooting": ["Shot", "Shot on Target"],
-      "Passing": ["Passes Attempted", "Crosses", "Shots Assisted"],
-      "Defending": ["Clearances", "Tackles Attempted", "Attempted Dribbles"],
-      "Discipline": ["Yellow Cards", "Red Cards", "Fouls"]
+      "Passing": ["Passes Attempted", "Crosses"],
+      "Defending / Discipline": ["Clearances", "Tackles Attempted", "Attempted Dribbles", "Yellow Cards", "Red Cards", "Fouls"]
     };
 
     for (const [groupName, labels] of Object.entries(soccerGroups)) {
@@ -176,7 +175,7 @@ function loadStats() {
     Object.entries(league.goalie_stats || {}).forEach(([label, pts]) => {
       const row = document.createElement("div");
       row.className = "stat-row";
-      if (label === "Clean Sheet" || label === "Starting Score")) {
+      if (label === "Clean Sheet" || label === "Starting Score") {
         row.innerHTML = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${pts} pts</label>`;
       } else {
         row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
