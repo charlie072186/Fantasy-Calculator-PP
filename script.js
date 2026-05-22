@@ -176,7 +176,7 @@ function loadStats() {
     Object.entries(league.goalie_stats || {}).forEach(([label, pts]) => {
       const row = document.createElement("div");
       row.className = "stat-row";
-      if (label === "Clean Sheet") {
+      if (label === "Clean Sheet" || label === "Starting Score")) {
         row.innerHTML = `<label class="stat-label"><input type="checkbox" class="stat-input" id="stat-${label}" />${label} — ${pts} pts</label>`;
       } else {
         row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
