@@ -61,16 +61,15 @@
       "Knockdown": 10
     },
     "bonuses": [
-  { "label": "1st Round Win", "points": 50 },
-  { "label": "2nd Round Win", "points": 40 },
-  { "label": "3rd Round Win", "points": 30 },
-  { "label": "4th Round Win", "points": 20 },
-  { "label": "5th Round Win", "points": 20 },
-  { "label": "Decision Win", "points": 10 },
-  { "label": "Draw", "points": 0 }
-]
+      { "label": "1st Round Win", "points": 50 },
+      { "label": "2nd Round Win", "points": 40 },
+      { "label": "3rd Round Win", "points": 30 },
+      { "label": "4th Round Win", "points": 20 },
+      { "label": "5th Round Win", "points": 20 },
+      { "label": "Decision Win", "points": 10 },
+      { "label": "Draw", "points": 0 }
+    ]
   },
-  
   "boxing": {
     "name": "Boxing FS",
     "category": "tsports",
@@ -123,15 +122,15 @@
       "2pt/XP Return": 2
     },
     "pointsAllowedTiers": [
-  { "label": "0", "max": 0, "points": 10 },
-  { "label": "1-6", "max": 6, "points": 7 },
-  { "label": "7-13", "max": 13, "points": 4 },
-  { "label": "14-20", "max": 20, "points": 1 },
-  { "label": "21-27", "max": 27, "points": 0 },
-  { "label": "28-34", "max": 34, "points": -1 },
-  { "label": "35+", "max": 999, "points": -4 }
-]
- },
+      { "label": "0", "max": 0, "points": 10 },
+      { "label": "1-6", "max": 6, "points": 7 },
+      { "label": "7-13", "max": 13, "points": 4 },
+      { "label": "14-20", "max": 20, "points": 1 },
+      { "label": "21-27", "max": 27, "points": 0 },
+      { "label": "28-34", "max": 34, "points": -1 },
+      { "label": "35+", "max": 999, "points": -4 }
+    ]
+  },
   "kickers": {
     "name": "Kickers",
     "category": "tsports",
@@ -144,38 +143,48 @@
       "XP Missed": -1
     }
   },
-
- "nhl": {
-  "name": "NHL",
-  "category": "tsports",
-  "hasTOI": true,
-  "skater_stats": {
-    "Goals": 6,
-    "Assists": 4,
-    "Power Play Points": 0.5,
-    "Shots On Goal": 1,
-    "Hits": 0.5,
-    "Blocked Shots": 1
+  "nhl": {
+    "name": "NHL",
+    "category": "tsports",
+    "hasTOI": true,
+    "skater_stats": {
+      "Goals": 6,
+      "Assists": 4,
+      "Power Play Points": 0.5,
+      "Shots On Goal": 1,
+      "Hits": 0.5,
+      "Blocked Shots": 1
+    },
+    "goalie_stats": {
+      "Win": 6,
+      "Save": 0.6,
+      "Goal Against": -3
+    }
   },
-  "goalie_stats": {
-    "Win": 6,
-    "Save": 0.6,
-    "Goal Against": -3
-  }
-},
-
   "soccer": {
     "name": "Soccer",
     "category": "tsports",
-    "stats": {
-      "Goal": 5,
-      "Assist": 4,
-      "Goal from PEN": 3,
-      "Shot on Target": 2,
-      "Completed Pass": 0.1,
-      "Missed Pass": -0.1,
-      "Yellow Card": -1,
-      "Red Card": -2
+    "isSplitSoccer": true,
+    "outfield_stats": {
+      "Goal Scored": 10,
+      "Assist": 5,
+      "Shot": 1,
+      "Shot on Target": 1,
+      "Passes Attempted": 0.05,
+      "Shots Assisted": 0.5,
+      "Clearances": 1,
+      "Tackles Attempted": 1,
+      "Attempted Dribbles": 1,
+      "Crosses": 0.5,
+      "Yellow Cards": -1,
+      "Red Cards": -2,
+      "Fouls": -0.5
+    },
+    "goalie_stats": {
+      "Starting Score": 5,
+      "Saves": 2,
+      "Goals Conceded": -2,
+      "Clean Sheet": 5
     }
   },
   "nascar": {
@@ -197,7 +206,7 @@
       { "label": "Laps Led", "points": 0.25 }
     ]
   },
-    "cs2/val": {
+  "cs2/val": {
     "name": "CS2/VAL",
     "category": "esports",
     "isEsports": true
