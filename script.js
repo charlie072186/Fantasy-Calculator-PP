@@ -159,7 +159,7 @@ function loadStats() {
       "Scoring": ["Goal Scored", "Assist"],
       "Shooting": ["Shot", "Shot on Target"],
       "Passing": ["Passes Attempted", "Crosses", "Shots Assisted"],
-      "Defending" : ["Clearances", "Tackles Attempted", "Attempted Dribbles"],
+      "Possession & Duels" : ["Clearances", "Tackles Attempted", "Attempted Dribbles"],
       "Discipline" : ["Yellow Cards", "Red Cards", "Fouls"]
     };
 
