@@ -130,7 +130,7 @@ function loadStats() {
       const row = document.createElement("div");
       row.className = "stat-row";
       if (label === "Win") {
-        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width:auto;" />`;
+        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width: 60px; height: 20px; margin: 0; padding: 0;" />`;
       } else {
         row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
       }
@@ -179,7 +179,7 @@ function loadStats() {
       const row = document.createElement("div");
       row.className = "stat-row";
       if (label === "Clean Sheet" || label === "Starting Score") {
-        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width:auto;" />`;
+        row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width: 60px; height: 20px; margin: 0; padding: 0;" />`;
       } else {
         row.innerHTML = `<div class="stat-label">${label} — ${pts} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
       }
@@ -242,7 +242,7 @@ function loadStats() {
     } else if (leagueKey === "mlb_pitcher" && label === "Quality Start") {
       html = `<div class="stat-label">${label}<span class="tooltip">ℹ️<span class="tooltiptext">Auto: 6+ IP & ≤3 ER</span></span></div>`;
     } else if (label === "Win" || label === "Match Played") {
-      html = `<div class="stat-label">${label} — ${points} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width:auto;" />`;
+      html = `<div class="stat-label">${label} — ${points} pts</div><input type="checkbox" class="stat-input" id="stat-${label}" style="width: 60px; height: 20px; margin: 0; padding: 0;" />`;
     } else {
       html = `<div class="stat-label">${label} — ${points} pts</div><input type="text" class="stat-input" id="stat-${label}" />`;
     }
