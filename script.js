@@ -156,10 +156,11 @@ function loadStats() {
 
     const outfieldFields = document.getElementById("soccer-outfield-fields");
     const soccerGroups = {
-      "Scoring": ["Goal Scored", "Assist", "Shots Assisted"],
+      "Scoring": ["Goal Scored", "Assist"],
       "Shooting": ["Shot", "Shot on Target"],
-      "Passing": ["Passes Attempted", "Crosses"],
-      "Defending / Discipline": ["Clearances", "Tackles Attempted", "Attempted Dribbles", "Yellow Cards", "Red Cards", "Fouls"]
+      "Passing": ["Passes Attempted", "Crosses", "Shots Assisted"],
+      "Defending" : ["Clearances", "Tackles Attempted", "Attempted Dribbles"],
+      "Discipline" : ["Yellow Cards", "Red Cards", "Fouls"]
     };
 
     for (const [groupName, labels] of Object.entries(soccerGroups)) {
